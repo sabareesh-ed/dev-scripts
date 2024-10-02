@@ -186,7 +186,7 @@ const swiper2 = new Swiper(".swiper2", {
 const swiper3 = new Swiper(".swiper3", {
   direction: "horizontal",
   loop: false,
-  spaceBetween: 0, // Set default space between to 0 for desktop
+  spaceBetween: 4, // Set default space between to 0 for desktop
   slidesPerView: "auto", // Show all slides with auto width
   slidesPerGroup: 1,
   centeredSlides: true, // Ensure the active slide is centered
