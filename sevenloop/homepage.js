@@ -61,7 +61,7 @@ $(document).ready(function () {
   const swiper1 = new Swiper(".swiper1", {
     direction: "horizontal",
     loop: false,
-    spaceBetween: 4,
+    spaceBetween: 2,
     speed: 300,
     slidesPerView: 1, // Default for desktop
     slidesPerGroup: 1, // Default for desktop
