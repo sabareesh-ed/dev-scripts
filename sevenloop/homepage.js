@@ -673,12 +673,17 @@ $(document).ready(function () {
     startCountdown(targetDate);
   });
   
-  function formatNumber(num) {
-    return num < 10 ? `0${num}` : num;
-  }
+  document.addEventListener("DOMContentLoaded", () => {
+    // Select all elements that might contain numbers
+    const allElements = document.querySelectorAll("*");
   
-  // Example usage:
-  let numberElement = document.getElementById("number");
-  let num = 5; // or any number
+    allElements.forEach(element => {
+      // Check if the content of the element is a number
+      if (!isNaN(element.textContent.trim()) && element.textContent.trim() !== "") {
+        let num = parseInt(element.textContent.trim(), 10);
+        // Format the number with a leading zero if it is a single digit
+        element.textContent = num < 10 ? `0${num}` : num;
+      }
+    });
+  });
   
-  numberElement.innerText = formatNumber(num);
