@@ -673,3 +673,12 @@ $(document).ready(function () {
     startCountdown(targetDate);
   });
   
+  function formatNumber(num) {
+    return num < 10 ? `0${num}` : num;
+  }
+  
+  // Example usage:
+  let numberElement = document.getElementById("number");
+  let num = 5; // or any number
+  
+  numberElement.innerText = formatNumber(num);
