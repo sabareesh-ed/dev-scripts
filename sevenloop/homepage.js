@@ -21,7 +21,7 @@ $(document).ready(function () {
       // Animate the paragraph (keep the existing behavior)
       gsap.to(paragraph, { opacity: 1, y: 0, duration: 0.6, ease: "power1.out" });
     }
-  
+    
     // Function to fade out both heading and paragraph when .w--current is removed
     function fadeOutHeadingAndParagraph(index) {
       let heading = $(".hero_heading").eq(index); // Targeting the corresponding nth .hero_heading
