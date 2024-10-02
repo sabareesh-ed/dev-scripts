@@ -14,6 +14,8 @@ $(document).ready(function () {
           gsap.to($(this), { opacity: 0, duration: 0.5, ease: "power1.out" });
         }
       });
+
+      //change
   
       // Show the heading corresponding to the current .hero_progress_active
       gsap.to(heading, { opacity: 1, duration: 0.6, ease: "power1.out" });
@@ -21,7 +23,7 @@ $(document).ready(function () {
       // Animate the paragraph (keep the existing behavior)
       gsap.to(paragraph, { opacity: 1, y: 0, duration: 0.6, ease: "power1.out" });
     }
-    
+
     // Function to fade out both heading and paragraph when .w--current is removed
     function fadeOutHeadingAndParagraph(index) {
       let heading = $(".hero_heading").eq(index); // Targeting the corresponding nth .hero_heading
