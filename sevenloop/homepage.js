@@ -62,7 +62,7 @@ $(document).ready(function () {
     direction: "horizontal",
     loop: false,
     spaceBetween: 2,
-    speed: 500,
+    speed: 1000,
     slidesPerView: 1, // Default for desktop
     slidesPerGroup: 1, // Default for desktop
     centeredSlides: false,
