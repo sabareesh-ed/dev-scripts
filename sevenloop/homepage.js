@@ -15,7 +15,8 @@ $(document).ready(function () {
         }
       });
 
-      //change
+
+      //change gh
   
       // Show the heading corresponding to the current .hero_progress_active
       gsap.to(heading, { opacity: 1, duration: 0.6, ease: "power1.out" });
