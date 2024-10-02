@@ -58,56 +58,56 @@ $(document).ready(function () {
     });
   });
   
-  // const swiper1 = new Swiper(".swiper1", {
-  //   direction: "horizontal",
-  //   loop: false,
-  //   spaceBetween: 4,
-  //   speed: 300,
-  //   slidesPerView: 1, // Default for desktop
-  //   slidesPerGroup: 1, // Default for desktop
-  //   centeredSlides: false,
-  //   allowTouchMove: true,
-  //   navigation: {
-  //     nextEl: ".capa_button_next",
-  //     prevEl: ".capa_button_prev",
-  //   },
-  //   pagination: {
-  //     el: ".capa_slider_component .swiper-pagination",
-  //     type: "fraction",
-  //   },
-  //   breakpoints: {
-  //     // For mobile (480px and below)
-  //     480: {
-  //       slidesPerView: 1, // Show 1 slide per view on mobile
-  //       slidesPerGroup: 1, // Move 1 slide per swipe on mobile
-  //       allowTouchMove: true, // Ensure touch is enabled on mobile
-  //     },
-  //     // For tablets (768px and below)
-  //     768: {
-  //       slidesPerView: 1, // Show 1 slide per view on tablet
-  //       slidesPerGroup: 1, // Move 1 slide per swipe on tablet
-  //     },
-  //     // Desktop (default)
-  //     992: {
-  //       slidesPerView: 2, // Show 2 slides per view on desktop
-  //       slidesPerGroup: 2, // Move 2 slides per swipe on desktop
-  //     },
-  //   },
-  //   on: {
-  //     // Remove unwanted margins after initialization
-  //     init: function () {
-  //       document.querySelector(".swiper1").style.marginLeft = "0";
-  //       document.querySelector(".swiper1").style.marginRight = "0";
+  const swiper1 = new Swiper(".swiper1", {
+    direction: "horizontal",
+    loop: false,
+    spaceBetween: 4,
+    speed: 300,
+    slidesPerView: 1, // Default for desktop
+    slidesPerGroup: 1, // Default for desktop
+    centeredSlides: false,
+    allowTouchMove: true,
+    navigation: {
+      nextEl: ".capa_button_next",
+      prevEl: ".capa_button_prev",
+    },
+    pagination: {
+      el: ".capa_slider_component .swiper-pagination",
+      type: "fraction",
+    },
+    breakpoints: {
+      // For mobile (480px and below)
+      480: {
+        slidesPerView: 1, // Show 1 slide per view on mobile
+        slidesPerGroup: 1, // Move 1 slide per swipe on mobile
+        allowTouchMove: true, // Ensure touch is enabled on mobile
+      },
+      // For tablets (768px and below)
+      768: {
+        slidesPerView: 1, // Show 1 slide per view on tablet
+        slidesPerGroup: 1, // Move 1 slide per swipe on tablet
+      },
+      // Desktop (default)
+      992: {
+        slidesPerView: 2, // Show 2 slides per view on desktop
+        slidesPerGroup: 2, // Move 2 slides per swipe on desktop
+      },
+    },
+    on: {
+      // Remove unwanted margins after initialization
+      init: function () {
+        document.querySelector(".swiper1").style.marginLeft = "0";
+        document.querySelector(".swiper1").style.marginRight = "0";
   
-  //       // Check button opacity when swiper initializes
-  //       toggleButtonOpacity(this);
-  //     },
-  //     // Adjust button opacity on each slide change
-  //     slideChange: function () {
-  //       toggleButtonOpacity(this);
-  //     },
-  //   },
-  // });
+        // Check button opacity when swiper initializes
+        toggleButtonOpacity(this);
+      },
+      // Adjust button opacity on each slide change
+      slideChange: function () {
+        toggleButtonOpacity(this);
+      },
+    },
+  });
   
   // Function to toggle button opacity
   function toggleButtonOpacity(swiper) {
