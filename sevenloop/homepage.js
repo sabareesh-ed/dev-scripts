@@ -299,18 +299,19 @@ document.addEventListener("DOMContentLoaded", function () {
         containerWidth -
         (containerWidth - (window.innerWidth * 100) / 100) * scrubProgress;
       let borderRadius = 1.5 - 1.5 * scrubProgress;
+      let height = 82 + (18 * scrubProgress); // Smooth transition from 82% to 100%
 
       videoWrapper.style.minWidth = `${minWidth}px`;
       videoWrapper.style.borderRadius = `${borderRadius}rem`;
-      videoWrapper.style.height = "100%";
+      videoWrapper.style.height = `${height}%`;
     } else if (scrollPosition < startTrigger) {
       videoWrapper.style.minWidth = `${containerWidth}px`;
       videoWrapper.style.borderRadius = "1.5rem";
-      videoWrapper.style.height = ""; // Reset height if not scrolling
+      videoWrapper.style.height = "82%"; // Reset height to initial value
     } else if (scrollPosition > endTrigger) {
       videoWrapper.style.minWidth = "100vw";
       videoWrapper.style.borderRadius = "0";
-      videoWrapper.style.height = ""; // Reset height if scrolling is complete
+      videoWrapper.style.height = "100%"; // Final height at end of scroll
     }
   };
 
@@ -341,6 +342,7 @@ document.addEventListener("DOMContentLoaded", function () {
     setInitialValues();
   }
 });
+
 
   
   // Initialize Swiper4 (with cross-fade effect and custom pagination)
