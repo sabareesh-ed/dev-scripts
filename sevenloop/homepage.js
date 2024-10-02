@@ -345,6 +345,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   
+document.addEventListener("DOMContentLoaded", function () {
+  // Ensure Swiper is available
+  if (typeof Swiper === "undefined") {
+    console.error("Swiper is not defined. Please make sure it is included before this script.");
+    return;
+  }
+
   // Initialize Swiper4 (with cross-fade effect and custom pagination)
   const swiper4 = new Swiper(".swiper4", {
     direction: "horizontal",
@@ -376,7 +383,7 @@ document.addEventListener("DOMContentLoaded", function () {
       nextEl: ".swiper-button-next",
       prevEl: ".swiper-button-prev",
     },
-  
+
     on: {
       init: function () {
         startProgressBar(); // Start progress bar on initialization
@@ -393,61 +400,71 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     },
   });
-  
+
   // GSAP animation for content elements (testimonial copy, name, company)
   function animateContent() {
     // Target all testimonial elements
     const elements = document.querySelectorAll(
       ".testimonial_copy, .testimonial_client_name, .testimonial_client_company"
     );
-  
-    // Animate from y: 100% to y: 0% with GSAP, stagger, no delay
-    gsap.fromTo(
-      elements,
-      { y: "100%", opacity: 0 }, // Initial state
-      {
-        y: "0%",
-        opacity: 1,
-        duration: 0.6, // Faster duration (0.6 seconds)
-        stagger: 0.15, // Slight stagger of 0.15 seconds between elements
-        ease: "power2.out", // Smooth transition
-      }
-    );
+
+    if (elements.length > 0) {
+      // Animate from y: 100% to y: 0% with GSAP, stagger, no delay
+      gsap.fromTo(
+        elements,
+        { y: "100%", opacity: 0 }, // Initial state
+        {
+          y: "0%",
+          opacity: 1,
+          duration: 0.6, // Faster duration (0.6 seconds)
+          stagger: 0.15, // Slight stagger of 0.15 seconds between elements
+          ease: "power2.out", // Smooth transition
+        }
+      );
+    }
   }
-  
+
   // Progress Bar: Start from 0% to 100% over 10 seconds
   function startProgressBar() {
     const progressBar = document.querySelector(".testimonial_progress_fill");
-    progressBar.style.transition = "width 10s linear"; // Animate progress bar over 10 seconds
-    progressBar.style.width = "100%"; // Set progress to 100%
+    if (progressBar) {
+      progressBar.style.transition = "width 10s linear"; // Animate progress bar over 10 seconds
+      progressBar.style.width = "100%"; // Set progress to 100%
+    }
   }
-  
+
   // Reset progress bar to 0% width
   function resetProgressBar() {
     const progressBar = document.querySelector(".testimonial_progress_fill");
-    progressBar.style.transition = "none"; // Reset transition
-    progressBar.style.width = "0%"; // Set progress back to 0%
+    if (progressBar) {
+      progressBar.style.transition = "none"; // Reset transition
+      progressBar.style.width = "0%"; // Set progress back to 0%
+    }
   }
-  
+
   // Function to update the pagination and apply gradient to the active slide
   function updatePagination() {
     // Get all pagination bullets
     const bullets = document.querySelectorAll(".swiper-pagination-bullet");
-  
-    // Iterate through each bullet and update its appearance
-    bullets.forEach((bullet, index) => {
-      const svgPath = bullet.querySelector(".svg-path");
-  
-      if (bullet.classList.contains("swiper-pagination-bullet-active")) {
-        // Apply the gradient fill to the active bullet
-        svgPath.setAttribute("fill", "url(#paint0_linear_1344_7585)");
-      } else {
-        // Remove the gradient fill from inactive bullets (use stroke only)
-        svgPath.removeAttribute("fill");
-      }
-    });
+
+    if (bullets.length > 0) {
+      // Iterate through each bullet and update its appearance
+      bullets.forEach((bullet) => {
+        const svgPath = bullet.querySelector(".svg-path");
+
+        if (svgPath) {
+          if (bullet.classList.contains("swiper-pagination-bullet-active")) {
+            // Apply the gradient fill to the active bullet
+            svgPath.setAttribute("fill", "url(#paint0_linear_1344_7585)");
+          } else {
+            // Remove the gradient fill from inactive bullets (use stroke only)
+            svgPath.removeAttribute("fill");
+          }
+        }
+      });
+    }
   }
-  
+
   // SVG gradient definition (include in your HTML to define the gradient)
   const svgGradient = `
       <svg width="0" height="0" style="position:absolute">
@@ -466,12 +483,8 @@ document.addEventListener("DOMContentLoaded", function () {
     `;
   // Append gradient to the body of the document
   document.body.insertAdjacentHTML("beforeend", svgGradient);
-  
-  document.addEventListener("DOMContentLoaded", function () {
-    let swiperLinkClicked = false; // Flag to track if a navigation tab is clicked
-    const progressBars = document.querySelectorAll(".branch_progress_bg");
-    let activeTimeline = null; // Store the current active GSAP timeline
-    let clickedOnce = false; // Track if a tab has been clicked
+});
+
   
     // Initialize Swiper
     const swiper5 = new Swiper(".swiper5", {
