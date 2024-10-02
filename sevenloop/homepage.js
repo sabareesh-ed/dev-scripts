@@ -272,73 +272,76 @@ function updateButtonOpacity(swiper) {
 
 
   
-  document.addEventListener("DOMContentLoaded", function () {
-    const videoWrapper = document.querySelector(".feature_background_wrap");
-    const stickyVideoWrapper = document.querySelector(".feature_cards_wrap");
-    const container = document.querySelector(".feature_background_wrap");
-  
-    let startTrigger,
-      endTrigger,
-      scrubDuration = 0.5,
-      animationDuration = 1;
-    let containerWidth = container.offsetWidth;
-  
-    const setInitialValues = () => {
-      startTrigger = stickyVideoWrapper.offsetTop;
-      endTrigger = startTrigger + stickyVideoWrapper.offsetHeight;
-      containerWidth = container.offsetWidth;
-    };
-  
-    const handleScroll = () => {
-      let scrollPosition = window.scrollY;
-  
-      if (scrollPosition >= startTrigger && scrollPosition <= endTrigger) {
-        let progress =
-          (scrollPosition - startTrigger) / (endTrigger - startTrigger);
-        let scrubProgress = Math.min(progress / scrubDuration, 1);
-        let minWidth =
-          containerWidth -
-          (containerWidth - (window.innerWidth * 100) / 100) * scrubProgress;
-        let borderRadius = 1.5 - 1.5 * scrubProgress;
-  
-        videoWrapper.style.minWidth = `${minWidth}px`;
-        videoWrapper.style.borderRadius = `${borderRadius}rem`;
-      } else if (scrollPosition < startTrigger) {
-        videoWrapper.style.minWidth = `${containerWidth}px`;
-        videoWrapper.style.borderRadius = "1.5rem";
-      } else if (scrollPosition > endTrigger) {
-        videoWrapper.style.minWidth = "100vw";
-        videoWrapper.style.borderRadius = "0";
-      }
-    };
-  
-    const debounce = (func, wait) => {
-      let timeout;
-      return function (...args) {
-        const later = () => {
-          clearTimeout(timeout);
-          func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-      };
-    };
-  
-    const handleResize = debounce(() => {
-      setInitialValues();
-      handleScroll();
-    }, 100);
-  
-    const isMobile = window.matchMedia("(max-width: 767px)");
-  
-    // Only enable scroll behavior if not on mobile
-    if (!isMobile.matches) {
-      window.addEventListener("scroll", handleScroll);
-      window.addEventListener("resize", handleResize);
-  
-      setInitialValues();
+document.addEventListener("DOMContentLoaded", function () {
+  const videoWrapper = document.querySelector(".feature_background_wrap");
+  const stickyVideoWrapper = document.querySelector(".feature_cards_wrap");
+  const container = document.querySelector(".feature_background_wrap");
+
+  let startTrigger,
+    endTrigger,
+    scrubDuration = 0.5,
+    animationDuration = 1;
+  let containerWidth = container.offsetWidth;
+
+  const setInitialValues = () => {
+    startTrigger = stickyVideoWrapper.offsetTop;
+    endTrigger = startTrigger + stickyVideoWrapper.offsetHeight;
+    containerWidth = container.offsetWidth;
+  };
+
+  const handleScroll = () => {
+    let scrollPosition = window.scrollY;
+
+    if (scrollPosition >= startTrigger && scrollPosition <= endTrigger) {
+      let progress = (scrollPosition - startTrigger) / (endTrigger - startTrigger);
+      let scrubProgress = Math.min(progress / scrubDuration, 1);
+      let minWidth =
+        containerWidth -
+        (containerWidth - (window.innerWidth * 100) / 100) * scrubProgress;
+      let borderRadius = 1.5 - 1.5 * scrubProgress;
+
+      videoWrapper.style.minWidth = `${minWidth}px`;
+      videoWrapper.style.borderRadius = `${borderRadius}rem`;
+      videoWrapper.style.height = "100%";
+    } else if (scrollPosition < startTrigger) {
+      videoWrapper.style.minWidth = `${containerWidth}px`;
+      videoWrapper.style.borderRadius = "1.5rem";
+      videoWrapper.style.height = ""; // Reset height if not scrolling
+    } else if (scrollPosition > endTrigger) {
+      videoWrapper.style.minWidth = "100vw";
+      videoWrapper.style.borderRadius = "0";
+      videoWrapper.style.height = ""; // Reset height if scrolling is complete
     }
-  });
+  };
+
+  const debounce = (func, wait) => {
+    let timeout;
+    return function (...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  };
+
+  const handleResize = debounce(() => {
+    setInitialValues();
+    handleScroll();
+  }, 100);
+
+  const isMobile = window.matchMedia("(max-width: 767px)");
+
+  // Only enable scroll behavior if not on mobile
+  if (!isMobile.matches) {
+    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("resize", handleResize);
+
+    setInitialValues();
+  }
+});
+
   
   // Initialize Swiper4 (with cross-fade effect and custom pagination)
   const swiper4 = new Swiper(".swiper4", {
