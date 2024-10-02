@@ -345,6 +345,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   
+document.addEventListener("DOMContentLoaded", function () {
   // Initialize Swiper4 (with cross-fade effect and custom pagination)
   const swiper4 = new Swiper(".swiper4", {
     direction: "horizontal",
@@ -376,7 +377,7 @@ document.addEventListener("DOMContentLoaded", function () {
       nextEl: ".swiper-button-next",
       prevEl: ".swiper-button-prev",
     },
-  
+
     on: {
       init: function () {
         startProgressBar(); // Start progress bar on initialization
@@ -393,14 +394,19 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     },
   });
-  
+
   // GSAP animation for content elements (testimonial copy, name, company)
   function animateContent() {
     // Target all testimonial elements
     const elements = document.querySelectorAll(
       ".testimonial_copy, .testimonial_client_name, .testimonial_client_company"
     );
-  
+
+    if (elements.length === 0) {
+      console.warn("No testimonial elements found for animation");
+      return;
+    }
+
     // Animate from y: 100% to y: 0% with GSAP, stagger, no delay
     gsap.fromTo(
       elements,
@@ -414,30 +420,48 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     );
   }
-  
+
   // Progress Bar: Start from 0% to 100% over 10 seconds
   function startProgressBar() {
     const progressBar = document.querySelector(".testimonial_progress_fill");
+    if (!progressBar) {
+      console.warn("No progress bar element found");
+      return;
+    }
     progressBar.style.transition = "width 10s linear"; // Animate progress bar over 10 seconds
     progressBar.style.width = "100%"; // Set progress to 100%
   }
-  
+
   // Reset progress bar to 0% width
   function resetProgressBar() {
     const progressBar = document.querySelector(".testimonial_progress_fill");
+    if (!progressBar) {
+      console.warn("No progress bar element found");
+      return;
+    }
     progressBar.style.transition = "none"; // Reset transition
     progressBar.style.width = "0%"; // Set progress back to 0%
   }
-  
+
   // Function to update the pagination and apply gradient to the active slide
   function updatePagination() {
     // Get all pagination bullets
     const bullets = document.querySelectorAll(".swiper-pagination-bullet");
-  
+
+    if (bullets.length === 0) {
+      console.warn("No pagination bullets found");
+      return;
+    }
+
     // Iterate through each bullet and update its appearance
-    bullets.forEach((bullet, index) => {
+    bullets.forEach((bullet) => {
       const svgPath = bullet.querySelector(".svg-path");
-  
+
+      if (!svgPath) {
+        console.warn("No SVG path found in bullet");
+        return;
+      }
+
       if (bullet.classList.contains("swiper-pagination-bullet-active")) {
         // Apply the gradient fill to the active bullet
         svgPath.setAttribute("fill", "url(#paint0_linear_1344_7585)");
@@ -447,32 +471,8 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   }
-  
-  // SVG gradient definition (include in your HTML to define the gradient)
-  const svgGradient = `
-      <svg width="0" height="0" style="position:absolute">
-        <defs>
-          <linearGradient id="paint0_linear_1344_7585" x1="7.7015" y1="1.91134" x2="37.9729" y2="59.6112" gradientUnits="userSpaceOnUse">
-            <stop offset="0.00057" stop-color="#FF4500"/>
-            <stop offset="0.06984" stop-color="#FF5516"/>
-            <stop offset="0.3342" stop-color="#FF9068"/>
-            <stop offset="0.5686" stop-color="#FFC0A8"/>
-            <stop offset="0.76447" stop-color="#FFE2D7"/>
-            <stop offset="0.91417" stop-color="#FFF7F4"/>
-            <stop offset="1" stop-color="white"/>
-          </linearGradient>
-        </defs>
-      </svg>
-    `;
-  // Append gradient to the body of the document
-  document.body.insertAdjacentHTML("beforeend", svgGradient);
-  
-  document.addEventListener("DOMContentLoaded", function () {
-    let swiperLinkClicked = false; // Flag to track if a navigation tab is clicked
-    const progressBars = document.querySelectorAll(".branch_progress_bg");
-    let activeTimeline = null; // Store the current active GSAP timeline
-    let clickedOnce = false; // Track if a tab has been clicked
-  
+});
+
     // Initialize Swiper
     const swiper5 = new Swiper(".swiper5", {
       loop: true,
