@@ -186,7 +186,7 @@ const swiper2 = new Swiper(".swiper2", {
 const swiper3 = new Swiper(".swiper3", {
   direction: "horizontal",
   loop: false,
-  spaceBetween: 2,
+  spaceBetween: 0, // Set default space between to 0 for desktop
   slidesPerView: "auto", // Show all slides with auto width
   slidesPerGroup: 1,
   centeredSlides: true, // Ensure the active slide is centered
@@ -198,12 +198,14 @@ const swiper3 = new Swiper(".swiper3", {
       slidesPerGroup: 1,
       centeredSlides: true, // Center the active slide on mobile
       allowTouchMove: true, // Enable swiping on mobile
+      spaceBetween: 4, // Set space between to 4px on mobile
     },
     768: {
       slidesPerView: "auto", // Always auto on tablet
       slidesPerGroup: 1,
       centeredSlides: true, // Center the active slide on tablet
       allowTouchMove: true, // Enable swiping on tablet
+      spaceBetween: 4, // Set space between to 4px on tablet
     },
     992: {
       slidesPerView: "auto", // Always auto on desktop
@@ -214,6 +216,7 @@ const swiper3 = new Swiper(".swiper3", {
       keyboard: {
         enabled: false, // Disable keyboard interaction on desktop
       },
+      spaceBetween: 0, // Set space between to 0px on desktop
       watchSlidesProgress: true, // Sync active state
       watchSlidesVisibility: true, // Sync visibility state
     },
@@ -236,10 +239,10 @@ const swiper3 = new Swiper(".swiper3", {
 // Sync Swiper2 and Swiper3 based on activeIndex and swiper source
 function syncSwipers(activeIndex, swiperSource) {
   if (swiperSource === swiper2 && swiper3.activeIndex !== activeIndex) {
-    swiper3.slideTo(activeIndex, 300);
+    swiper3.slideTo(activeIndex, 0); // Set duration to 0 for instant sync
   }
   if (swiperSource === swiper3 && swiper2.activeIndex !== activeIndex) {
-    swiper2.slideTo(activeIndex, 300);
+    swiper2.slideTo(activeIndex, 0); // Set duration to 0 for instant sync
   }
 }
 
@@ -266,6 +269,7 @@ function updateButtonOpacity(swiper) {
     nextButton.style.pointerEvents = "auto"; // Enable click
   }
 }
+
 
   
   document.addEventListener("DOMContentLoaded", function () {
