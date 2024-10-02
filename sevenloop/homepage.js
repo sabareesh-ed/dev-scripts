@@ -133,152 +133,140 @@ $(document).ready(function () {
   }
   
   // Initialize Swiper2 (main swiper)
-  const swiper2 = new Swiper(".swiper2", {
-    direction: "horizontal",
-    loop: false,
-    spaceBetween: 2,
-    speed: 300,
-    slidesPerView: 1,
-    slidesPerGroup: 1,
-    effect: "fade",
-    fadeEffect: {
-      crossFade: true,
+const swiper2 = new Swiper(".swiper2", {
+  direction: "horizontal",
+  loop: false,
+  spaceBetween: 2,
+  speed: 300,
+  slidesPerView: 1,
+  slidesPerGroup: 1,
+  effect: "fade",
+  fadeEffect: {
+    crossFade: true,
+  },
+  pagination: {
+    el: ".service_swiper_wrap .swiper-pagination", // Target pagination only inside this container
+    type: "fraction",
+  },
+  // Navigation arrows
+  navigation: {
+    nextEl: ".service_button_next",
+    prevEl: ".service_button_prev",
+  },
+  breakpoints: {
+    480: {
+      slidesPerView: 1,
+      slidesPerGroup: 1,
     },
-    pagination: {
-      el: ".service_swiper_wrap .swiper-pagination", // Target pagination only inside this container
-      type: "fraction",
+    768: {
+      slidesPerView: 1,
+      slidesPerGroup: 1,
     },
-    // Navigation arrows
-    navigation: {
-      nextEl: ".service_button_next",
-      prevEl: ".service_button_prev",
+    992: {
+      slidesPerView: 1,
+      slidesPerGroup: 1,
     },
-  
-    breakpoints: {
-      480: {
-        slidesPerView: 1,
-        slidesPerGroup: 1,
-      },
-      768: {
-        slidesPerView: 1,
-        slidesPerGroup: 1,
-      },
-      992: {
-        slidesPerView: 1,
-        slidesPerGroup: 1,
-      },
+  },
+  // Sync with Swiper3 when slide changes
+  on: {
+    init: function () {
+      // Check button opacity when Swiper2 initializes
+      updateButtonOpacity(this);
     },
-  
-    // Sync with Swiper3 when slide changes
-    on: {
-      init: function () {
-        // Check button opacity when Swiper2 initializes
-        updateButtonOpacity(this);
-      },
-      slideChange: function () {
-        let activeIndex = this.activeIndex; // Get active slide index
-        syncSwipers(activeIndex); // Sync both swipers to the same index
-  
-        // Update button opacity on slide change
-        updateButtonOpacity(this);
-      },
+    slideChange: function () {
+      let activeIndex = this.activeIndex; // Get active slide index
+      syncSwipers(activeIndex, swiper2); // Sync both swipers to the same index
+      // Update button opacity on slide change
+      updateButtonOpacity(this);
     },
-  });
-  
-  // Initialize Swiper3 (clickable swiper)
-  const swiper3 = new Swiper(".swiper3", {
-    direction: "horizontal",
-    loop: false,
-    spaceBetween: 5,
-    slidesPerView: "auto", // Show all slides with auto width
-    slidesPerGroup: 1,
-    centeredSlides: true, // Ensure the active slide is centered
-    allowTouchMove: true, // Allow touch movement on mobile and tablet
-    freemode: true,
-  
-    breakpoints: {
-      480: {
-        slidesPerView: "auto", // Always auto on mobile
-        slidesPerGroup: 1,
-        centeredSlides: true, // Center the active slide on mobile
-        allowTouchMove: true, // Enable swiping on mobile
-      },
-      768: {
-        slidesPerView: "auto", // Always auto on tablet
-        slidesPerGroup: 1,
-        centeredSlides: true, // Center the active slide on tablet
-        allowTouchMove: true, // Enable swiping on tablet
-      },
-      992: {
-        slidesPerView: "auto", // Always auto on desktop
-        centeredSlides: true, // Center the active slide on desktop
-        allowTouchMove: false, // Disable touch move on desktop
-        simulateTouch: false, // Disable touch simulation on desktop
-        autoplay: false, // Disable autoplay on desktop
-        keyboard: {
-          enabled: false, // Disable keyboard interaction on desktop
-        },
-        watchSlidesProgress: true, // Sync active state
-        watchSlidesVisibility: true, // Sync visibility state
-      },
+  },
+});
+
+// Initialize Swiper3 (clickable swiper)
+const swiper3 = new Swiper(".swiper3", {
+  direction: "horizontal",
+  loop: false,
+  spaceBetween: 5,
+  slidesPerView: "auto", // Show all slides with auto width
+  slidesPerGroup: 1,
+  centeredSlides: true, // Ensure the active slide is centered
+  allowTouchMove: true, // Allow touch movement on mobile and tablet
+  freemode: true,
+  breakpoints: {
+    480: {
+      slidesPerView: "auto", // Always auto on mobile
+      slidesPerGroup: 1,
+      centeredSlides: true, // Center the active slide on mobile
+      allowTouchMove: true, // Enable swiping on mobile
     },
-  
-    // Sync Swiper2 when a slide is clicked in Swiper3
-    on: {
-      click: function () {
-        let clickedIndex = this.clickedIndex;
-        if (typeof clickedIndex !== "undefined") {
-          syncSwipers(clickedIndex); // Sync both swipers to the clicked index
-        }
-      },
+    768: {
+      slidesPerView: "auto", // Always auto on tablet
+      slidesPerGroup: 1,
+      centeredSlides: true, // Center the active slide on tablet
+      allowTouchMove: true, // Enable swiping on tablet
     },
-  });
-  
-  // Sync Swiper2 and Swiper3 based on activeIndex
-  function syncSwipers(activeIndex) {
-    // Sync Swiper2 to the given index
-    if (swiper2.activeIndex !== activeIndex) {
-      swiper2.slideTo(activeIndex, 300);
-    }
-  
-    // Sync Swiper3 to the given index and scroll to the active slide
-    if (swiper3.activeIndex !== activeIndex) {
-      swiper3.slideTo(activeIndex, 300);
-    }
-  
-    // The `swiper-slide-active` class is automatically handled by Swiper
+    992: {
+      slidesPerView: "auto", // Always auto on desktop
+      centeredSlides: true, // Center the active slide on desktop
+      allowTouchMove: false, // Disable touch move on desktop
+      simulateTouch: false, // Disable touch simulation on desktop
+      autoplay: false, // Disable autoplay on desktop
+      keyboard: {
+        enabled: false, // Disable keyboard interaction on desktop
+      },
+      watchSlidesProgress: true, // Sync active state
+      watchSlidesVisibility: true, // Sync visibility state
+    },
+  },
+  // Sync Swiper2 when a slide is clicked in Swiper3
+  on: {
+    click: function () {
+      let clickedIndex = this.clickedIndex;
+      if (typeof clickedIndex !== "undefined") {
+        syncSwipers(clickedIndex, swiper3); // Sync both swipers to the clicked index
+      }
+    },
+    slideChange: function () {
+      let activeIndex = this.activeIndex; // Get active slide index
+      syncSwipers(activeIndex, swiper3); // Sync both swipers to the same index
+    },
+  },
+});
+
+// Sync Swiper2 and Swiper3 based on activeIndex and swiper source
+function syncSwipers(activeIndex, swiperSource) {
+  if (swiperSource === swiper2 && swiper3.activeIndex !== activeIndex) {
+    swiper3.slideTo(activeIndex, 300);
   }
-  
-  // When clicking a slide in Swiper3, sync with Swiper2
-  swiper3.slides.forEach((slide, index) => {
-    slide.addEventListener("click", () => {
-      syncSwipers(index); // Sync both swipers to the clicked slide
-    });
-  });
-  
-  // Function to toggle the opacity of navigation buttons
-  function updateButtonOpacity(swiper) {
-    const prevButton = document.querySelector(".service_button_prev");
-    const nextButton = document.querySelector(".service_button_next");
-  
-    // If first slide is active
-    if (swiper.activeIndex === 0) {
-      prevButton.style.opacity = "0.5"; // Reduce opacity
-      prevButton.style.pointerEvents = "none"; // Disable click
-    } else {
-      prevButton.style.opacity = "1"; // Restore opacity
-      prevButton.style.pointerEvents = "auto"; // Enable click
-    }
-  
-    // If last slide is active
-    if (swiper.activeIndex === swiper.slides.length - 1) {
-      nextButton.style.opacity = "0.5"; // Reduce opacity
-      nextButton.style.pointerEvents = "none"; // Disable click
-    } else {
-      nextButton.style.opacity = "1"; // Restore opacity
-      nextButton.style.pointerEvents = "auto"; // Enable click
-    }
+  if (swiperSource === swiper3 && swiper2.activeIndex !== activeIndex) {
+    swiper2.slideTo(activeIndex, 300);
   }
+}
+
+// Function to toggle the opacity of navigation buttons
+function updateButtonOpacity(swiper) {
+  const prevButton = document.querySelector(".service_button_prev");
+  const nextButton = document.querySelector(".service_button_next");
+
+  // If first slide is active
+  if (swiper.activeIndex === 0) {
+    prevButton.style.opacity = "0.5"; // Reduce opacity
+    prevButton.style.pointerEvents = "none"; // Disable click
+  } else {
+    prevButton.style.opacity = "1"; // Restore opacity
+    prevButton.style.pointerEvents = "auto"; // Enable click
+  }
+
+  // If last slide is active
+  if (swiper.activeIndex === swiper.slides.length - 1) {
+    nextButton.style.opacity = "0.5"; // Reduce opacity
+    nextButton.style.pointerEvents = "none"; // Disable click
+  } else {
+    nextButton.style.opacity = "1"; // Restore opacity
+    nextButton.style.pointerEvents = "auto"; // Enable click
+  }
+}
+
   
   document.addEventListener("DOMContentLoaded", function () {
     const videoWrapper = document.querySelector(".feature_background_wrap");
