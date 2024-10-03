@@ -372,10 +372,10 @@ document.addEventListener("DOMContentLoaded", function () {
       renderBullet: function (index, className) {
         // Custom SVG for each pagination bullet
         return `<span class="${className} pagination-bullet">
-                    <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path class="svg-path" d="M3.62796 17.2345C2.11431 16.3606 1.22799 14.6798 1.04932 12.6266C0.870746 10.5743 1.40404 8.1741 2.70525 5.92034C4.00646 3.66658 5.81847 2.00462 7.68507 1.13314C9.55255 0.261251 11.4513 0.188434 12.965 1.06234C14.4786 1.93625 15.365 3.61704 15.5436 5.67028C15.7222 7.72253 15.1889 10.1228 13.8877 12.3765C12.5865 14.6303 10.7745 16.2922 8.90787 17.1637C7.04039 18.0356 5.14161 18.1084 3.62796 17.2345Z" stroke="var(--swatch--brand)" stroke-width="1"/>
-                    </svg>
-                  </span>`;
+                  <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path class="svg-path" d="M3.62796 17.2345C2.11431 16.3606 1.22799 14.6798 1.04932 12.6266C0.870746 10.5743 1.40404 8.1741 2.70525 5.92034C4.00646 3.66658 5.81847 2.00462 7.68507 1.13314C9.55255 0.261251 11.4513 0.188434 12.965 1.06234C14.4786 1.93625 15.365 3.61704 15.5436 5.67028C15.7222 7.72253 15.1889 10.1228 13.8877 12.3765C12.5865 14.6303 10.7745 16.2922 8.90787 17.1637C7.04039 18.0356 5.14161 18.1084 3.62796 17.2345Z" stroke="var(--swatch--brand)" stroke-width="1"/>
+                  </svg>
+                </span>`;
       },
     },
     navigation: {
@@ -385,61 +385,41 @@ document.addEventListener("DOMContentLoaded", function () {
     on: {
       init: function () {
         startProgressBar(); // Start progress bar on initialization
-        animateActiveSlideContent(); // Animate content on initialization
+        animateActiveSlide(); // Animate the initial slide
       },
       slideChangeTransitionStart: function () {
         resetProgressBar(); // Reset progress bar at the start of slide change
-        if (activeTimeline) {
-          activeTimeline.kill(); // Kill any ongoing GSAP timeline to avoid overlaps
-        }
       },
       slideChangeTransitionEnd: function () {
         startProgressBar(); // Restart progress bar after slide transition
 
-        requestAnimationFrame(() => {
-          animateActiveSlideContent(); // Animate content for the active slide
-        });
+        if (!swiperLinkClicked) {
+          clickedOnce = true; // Update if a navigation tab is clicked
+        }
+
+        animateActiveSlide(); // Animate elements in the active slide
       },
     },
   });
 
-  // GSAP animation for content elements of the active slide
-  function animateActiveSlideContent() {
-    // Find the active slide
-    const activeSlide = document.querySelector(".swiper-slide-active");
-    if (activeSlide) {
-      // Debugging: Log the active slide to ensure it is being selected correctly
-      console.log("Active slide found:", activeSlide);
+  // Listen for any pagination link clicks to track interactions
+  const paginationBullets = document.querySelectorAll(".pagination-bullet");
+  paginationBullets.forEach((bullet) => {
+    bullet.addEventListener("click", () => {
+      swiperLinkClicked = true;
+      clickedOnce = true;
 
-      // Target elements within the active slide only
-      const elements = activeSlide.querySelectorAll(
-        ".testimonial_copy, .testimonial_client_name, .testimonial_client_company"
-      );
-
-      if (elements.length > 0) {
-        console.log("Elements to animate:", elements);
-
-        // Create a new GSAP timeline for animations
-        activeTimeline = gsap.timeline();
-
-        activeTimeline.fromTo(
-          elements,
-          { y: "100%", opacity: 0 }, // Initial state
-          {
-            y: "0%",
-            opacity: 1,
-            duration: 0.6, // Faster duration (0.6 seconds)
-            stagger: 0.15, // Slight stagger of 0.15 seconds between elements
-            ease: "power2.out", // Smooth transition
-          }
-        );
-      } else {
-        console.warn("No elements found to animate in active slide.");
+      if (activeTimeline) {
+        activeTimeline.pause(); // Pause any active animations if they exist
       }
-    } else {
-      console.warn("No active slide found.");
-    }
-  }
+
+      resetProgressBar(); // Reset progress bar when tab is clicked
+      setTimeout(() => {
+        startProgressBar(); // Restart progress bar after a short delay
+        swiperLinkClicked = false;
+      }, 100);
+    });
+  });
 
   // Progress Bar: Start from 0% to 100% over 10 seconds
   function startProgressBar() {
@@ -462,17 +442,52 @@ document.addEventListener("DOMContentLoaded", function () {
       console.warn("Progress bar element not found.");
     }
   }
+
+  // GSAP animation for active slide elements
+  function animateActiveSlide() {
+    if (activeTimeline) {
+      activeTimeline.kill(); // Kill any existing animations to prevent overlap
+    }
+
+    // Select active slide and its elements to animate
+    const activeSlide = document.querySelector(".swiper-slide-active");
+    if (activeSlide) {
+      const testimonialCopy = activeSlide.querySelector(".testimonial_copy");
+      const clientName = activeSlide.querySelector(".testimonial_client_name");
+      const clientCompany = activeSlide.querySelector(".testimonial_client_company");
+
+      // Create a new timeline for the animation
+      activeTimeline = gsap.timeline();
+
+      if (testimonialCopy) {
+        activeTimeline.fromTo(
+          testimonialCopy,
+          { y: "100%", opacity: 0 },
+          { y: "0%", opacity: 1, duration: 0.8, ease: "power4.out" }
+        );
+      }
+
+      if (clientName) {
+        activeTimeline.fromTo(
+          clientName,
+          { y: "100%", opacity: 0 },
+          { y: "0%", opacity: 1, duration: 0.6, ease: "power4.out" },
+          "-=0.6" // Overlap animations for a smoother transition
+        );
+      }
+
+      if (clientCompany) {
+        activeTimeline.fromTo(
+          clientCompany,
+          { y: "100%", opacity: 0 },
+          { y: "0%", opacity: 1, duration: 0.6, ease: "power4.out" },
+          "-=0.6" // Overlap animations for a smoother transition
+        );
+      }
+    }
+  }
 });
 
-
-
-  
-  document.addEventListener("DOMContentLoaded", function () {
-    let swiperLinkClicked = false; // Flag to track if a navigation tab is clicked
-    const progressBars = document.querySelectorAll(".branch_progress_bg");
-    let activeTimeline = null; // Store the current active GSAP timeline
-    let clickedOnce = false; // Track if a tab has been clicked
-  
     // Initialize Swiper
     const swiper5 = new Swiper(".swiper5", {
       loop: true,
