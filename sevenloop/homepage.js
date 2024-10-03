@@ -538,7 +538,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // Animate the text color from default to brand color
       activeTimeline.fromTo(
         navigationTabText,
-        { color: "initial" },
+        { color: "rgba(66, 66, 66, 0.8)" },
         { color: "var(--swatch--brand)", duration: animationDuration, ease: "linear" },
         0 // Start at the same time as progress bar animation
       );
@@ -551,7 +551,7 @@ document.addEventListener("DOMContentLoaded", function () {
       progressBars.forEach((bar, index) => {
         gsap.set(bar, { width: "0%" });
         const navigationTabText = navigationTabs[index].querySelector(".branch_navigation_text");
-        gsap.set(navigationTabText, { color: "initial" });
+        gsap.set(navigationTabText, { color: "rgba(66, 66, 66, 0.8)" });
       });
     }
 
@@ -582,13 +582,12 @@ document.addEventListener("DOMContentLoaded", function () {
             gsap.to(navigationTabText, { color: "var(--swatch--brand)", duration: 0 }); // Set text color immediately
           } else {
             gsap.set(bar, { width: "0%" }); // Reset others
-            gsap.set(navigationTabText, { color: "initial" }); // Reset text color for others
+            gsap.set(navigationTabText, { color: "rgba(66, 66, 66, 0.8)" }); // Reset text color for others
           }
         });
       });
     });
   });
-
 
   
   const swiper6 = new Swiper(".swiper6", {
