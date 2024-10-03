@@ -373,45 +373,47 @@ const swiper4 = new Swiper(".swiper4", {
     },
   },
   navigation: {
-    nextEl: ".testimonial_button_next", // Changed selectors for consistency
-    prevEl: ".testimonial_button_prev", // Changed selectors for consistency
+    nextEl: ".testimonial_button_next",
+    prevEl: ".testimonial_button_prev",
   },
   on: {
     init: function () {
       startProgressBar(); // Start progress bar on initialization
-      animateContent(); // Animate content on initialization
-      updatePagination(); // Update pagination to fill active bullet
+      animateActiveSlideContent(); // Animate content on initialization
     },
     slideChangeTransitionStart: function () {
       resetProgressBar(); // Reset progress bar at the start of slide change
     },
     slideChangeTransitionEnd: function () {
       startProgressBar(); // Restart progress bar after slide transition
-      animateContent(); // Animate content when slide changes
-      updatePagination(); // Update active pagination fill
+      animateActiveSlideContent(); // Animate content for the active slide
     },
   },
 });
 
-// GSAP animation for content elements (testimonial copy, name, company)
-function animateContent() {
-  // Target all testimonial elements
-  const elements = document.querySelectorAll(
-    ".testimonial_copy, .testimonial_client_name, .testimonial_client_company"
-  );
+// GSAP animation for content elements of the active slide
+function animateActiveSlideContent() {
+  // Find the active slide
+  const activeSlide = document.querySelector(".swiper-slide-active");
+  if (activeSlide) {
+    // Target elements within the active slide only
+    const elements = activeSlide.querySelectorAll(
+      ".testimonial_copy, .testimonial_client_name, .testimonial_client_company"
+    );
 
-  // Animate from y: 100% to y: 0% with GSAP, stagger, no delay
-  gsap.fromTo(
-    elements,
-    { y: "100%", opacity: 0 }, // Initial state
-    {
-      y: "0%",
-      opacity: 1,
-      duration: 0.6, // Faster duration (0.6 seconds)
-      stagger: 0.15, // Slight stagger of 0.15 seconds between elements
-      ease: "power2.out", // Smooth transition
-    }
-  );
+    // Animate from y: 100% to y: 0% with GSAP, stagger, no delay
+    gsap.fromTo(
+      elements,
+      { y: "100%", opacity: 0 }, // Initial state
+      {
+        y: "0%",
+        opacity: 1,
+        duration: 0.6, // Faster duration (0.6 seconds)
+        stagger: 0.15, // Slight stagger of 0.15 seconds between elements
+        ease: "power2.out", // Smooth transition
+      }
+    );
+  }
 }
 
 // Progress Bar: Start from 0% to 100% over 10 seconds
@@ -428,58 +430,6 @@ function resetProgressBar() {
   progressBar.style.width = "0%"; // Set progress back to 0%
 }
 
-// Function to update the pagination and apply fill to the active slide
-function updatePagination() {
-  // Get all pagination bullets
-  const bullets = document.querySelectorAll(".swiper-pagination-bullet");
-
-  // Iterate through each bullet and update its appearance
-  bullets.forEach((bullet) => {
-    const svgPath = bullet.querySelector(".svg-path");
-
-    if (bullet.classList.contains("swiper-pagination-bullet-active")) {
-      // Apply the solid fill color to the active bullet
-      svgPath.setAttribute("fill", "var(--swatch--brand)");
-    } else {
-      // Use stroke only for inactive bullets
-      svgPath.removeAttribute("fill");
-    }
-  });
-
-  // Add hover effect with reduced opacity
-  bullets.forEach((bullet) => {
-    bullet.addEventListener("mouseenter", () => {
-      const svgPath = bullet.querySelector(".svg-path");
-      svgPath.style.fill = "var(--swatch--brand)";
-      svgPath.style.opacity = "0.5"; // Reduced opacity on hover
-    });
-    bullet.addEventListener("mouseleave", () => {
-      const svgPath = bullet.querySelector(".svg-path");
-      if (!bullet.classList.contains("swiper-pagination-bullet-active")) {
-        svgPath.removeAttribute("fill");
-      }
-      svgPath.style.opacity = "1"; // Reset opacity
-    });
-  });
-}
-
-// Append SVG gradient if needed
-const svgGradient = `
-  <svg width="0" height="0" style="position:absolute">
-    <defs>
-      <linearGradient id="paint0_linear_1344_7585" x1="7.7015" y1="1.91134" x2="37.9729" y2="59.6112" gradientUnits="userSpaceOnUse">
-        <stop offset="0.00057" stop-color="#FF4500"/>
-        <stop offset="0.06984" stop-color="#FF5516"/>
-        <stop offset="0.3342" stop-color="#FF9068"/>
-        <stop offset="0.5686" stop-color="#FFC0A8"/>
-        <stop offset="0.76447" stop-color="#FFE2D7"/>
-        <stop offset="0.91417" stop-color="#FFF7F4"/>
-        <stop offset="1" stop-color="white"/>
-      </linearGradient>
-    </defs>
-  </svg>
-`;
-document.body.insertAdjacentHTML("beforeend", svgGradient);
 
   
   document.addEventListener("DOMContentLoaded", function () {
