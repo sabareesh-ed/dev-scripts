@@ -396,39 +396,60 @@ function animateActiveSlideContent() {
   // Find the active slide
   const activeSlide = document.querySelector(".swiper-slide-active");
   if (activeSlide) {
+    // Debugging: Log the active slide to ensure it is being selected correctly
+    console.log("Active slide found:", activeSlide);
+
     // Target elements within the active slide only
     const elements = activeSlide.querySelectorAll(
       ".testimonial_copy, .testimonial_client_name, .testimonial_client_company"
     );
 
-    // Animate from y: 100% to y: 0% with GSAP, stagger, no delay
-    gsap.fromTo(
-      elements,
-      { y: "100%", opacity: 0 }, // Initial state
-      {
-        y: "0%",
-        opacity: 1,
-        duration: 0.6, // Faster duration (0.6 seconds)
-        stagger: 0.15, // Slight stagger of 0.15 seconds between elements
-        ease: "power2.out", // Smooth transition
-      }
-    );
+    if (elements.length > 0) {
+      // Debugging: Log the elements found to animate
+      console.log("Elements to animate:", elements);
+
+      // Animate from y: 100% to y: 0% with GSAP, stagger, no delay
+      gsap.fromTo(
+        elements,
+        { y: "100%", opacity: 0 }, // Initial state
+        {
+          y: "0%",
+          opacity: 1,
+          duration: 0.6, // Faster duration (0.6 seconds)
+          stagger: 0.15, // Slight stagger of 0.15 seconds between elements
+          ease: "power2.out", // Smooth transition
+        }
+      );
+    } else {
+      console.warn("No elements found to animate in active slide.");
+    }
+  } else {
+    console.warn("No active slide found.");
   }
 }
 
 // Progress Bar: Start from 0% to 100% over 10 seconds
 function startProgressBar() {
   const progressBar = document.querySelector(".testimonial_progress_fill");
-  progressBar.style.transition = "width 10s linear"; // Animate progress bar over 10 seconds
-  progressBar.style.width = "100%"; // Set progress to 100%
+  if (progressBar) {
+    progressBar.style.transition = "width 10s linear"; // Animate progress bar over 10 seconds
+    progressBar.style.width = "100%"; // Set progress to 100%
+  } else {
+    console.warn("Progress bar element not found.");
+  }
 }
 
 // Reset progress bar to 0% width
 function resetProgressBar() {
   const progressBar = document.querySelector(".testimonial_progress_fill");
-  progressBar.style.transition = "none"; // Reset transition
-  progressBar.style.width = "0%"; // Set progress back to 0%
+  if (progressBar) {
+    progressBar.style.transition = "none"; // Reset transition
+    progressBar.style.width = "0%"; // Set progress back to 0%
+  } else {
+    console.warn("Progress bar element not found.");
+  }
 }
+
 
 
   
