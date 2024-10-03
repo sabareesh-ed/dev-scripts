@@ -695,7 +695,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Set item font color for the first item
             item.style.color = "var(--swatch--brand)";
             // Set initial rotation of arrow for the first item
-            gsap.set(dropPathArrow, { rotationZ: 180 });
+            gsap.set(dropPathArrow, { rotation: 180 });
         } else {
             // Set all other contents to height 0
             gsap.set(content, { height: 0, overflow: "hidden" });
@@ -705,7 +705,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Set item font color to default for other items
             item.style.color = "";
             // Set initial rotation of arrow for other items
-            gsap.set(dropPathArrow, { rotationZ: 0 });
+            gsap.set(dropPathArrow, { rotation: 0 });
         }
     });
 
@@ -748,21 +748,20 @@ document.addEventListener("DOMContentLoaded", function () {
                             absolute: true,
                         });
 
-                        // Collapse the content and add overflow hidden
+                        // Collapse the content and rotate the arrow concurrently
                         gsap.to(otherContent, {
                             height: 0,
                             duration: 0.5,
                             ease: "power2.out",
                             onStart: () => {
                                 otherContent.style.overflow = "hidden";
-                            },
-                            onComplete: () => {
-                                // Reset the item font color to default when collapsed
-                                otherItem.style.color = "";
-                                // Rotate arrow back to 0 degrees when collapsed
-                                gsap.to(otherArrow, { rotationZ: 0, duration: 0.5, ease: "power2.inOut" });
                             }
                         });
+                        // Rotate arrow back to 0 degrees during collapse
+                        gsap.to(otherArrow, { rotation: 0, duration: 0.5, ease: "power2.inOut" });
+
+                        // Reset the item font color after collapsing
+                        otherItem.style.color = "";
                     }
                 }
             });
@@ -782,23 +781,22 @@ document.addEventListener("DOMContentLoaded", function () {
                     absolute: true,
                 });
 
-                // Collapse the current item and add overflow hidden
+                // Collapse the current item and rotate the arrow concurrently
                 gsap.to(content, {
                     height: 0,
                     duration: 0.5,
                     ease: "power2.out",
                     onStart: () => {
                         content.style.overflow = "hidden";
-                    },
-                    onComplete: () => {
-                        // Reset the item font color to default when collapsed
-                        item.style.color = "";
-                        // Rotate arrow back to 0 degrees when collapsed
-                        gsap.to(dropPathArrow, { rotationZ: 0, duration: 0.5, ease: "power2.inOut" });
                     }
                 });
+                // Rotate arrow back to 0 degrees during collapse
+                gsap.to(dropPathArrow, { rotation: 0, duration: 0.5, ease: "power2.inOut" });
+
+                // Reset the item font color after collapsing
+                item.style.color = "";
             } else {
-                // Expand the current item
+                // Expand the current item and rotate the arrow concurrently
                 gsap.set(content, { height: "auto" });
                 const targetHeight = content.clientHeight;
 
@@ -824,15 +822,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
                         // Change the item font color to brand color when expanded
                         item.style.color = "var(--swatch--brand)";
-
-                        // Rotate arrow to 180 degrees when expanded
-                        gsap.to(dropPathArrow, { rotationZ: 180, duration: 0.5, ease: "power2.inOut" });
                     }
                 });
 
                 timeline
                     .set(content, { height: 0 }) // Reset height to 0 to animate from closed state
-                    .to(content, { height: targetHeight }); // Animate to the natural height
+                    .to(content, { height: targetHeight }) // Animate to the natural height
+                    .to(dropPathArrow, { rotation: 180 }, "<"); // Rotate arrow to 180 degrees concurrently with content expansion
             }
         });
     });
