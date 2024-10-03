@@ -503,7 +503,6 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         slideChangeTransitionStart: function () {
           resetAllProgressBars(); // Reset progress bars when the slide changes
-          updateNavigationTextColor(this.realIndex); // Update navigation text color
           if (this.realIndex === 0) {
             resetAllProgressAndRestart(); // Reset everything when first slide becomes active
           } else {
@@ -576,22 +575,16 @@ document.addEventListener("DOMContentLoaded", function () {
         });
   
         // Update font color for branch navigation text
-        updateNavigationTextColor(index);
+        navigationTexts.forEach((text, textIndex) => {
+          if (textIndex === index) {
+            text.style.color = "var(--swatch--brand)"; // Set active color
+          } else {
+            text.style.color = ""; // Reset to default color
+          }
+        });
       });
     });
-  
-    // Function to update the navigation text color based on the active slide index
-    function updateNavigationTextColor(activeIndex) {
-      navigationTexts.forEach((text, textIndex) => {
-        if (textIndex === activeIndex) {
-          text.style.color = "var(--swatch--brand)"; // Set active color
-        } else {
-          text.style.color = ""; // Reset to default color
-        }
-      });
-    }
   });
-  
   
   const swiper6 = new Swiper(".swiper6", {
     slidesPerView: 1,
