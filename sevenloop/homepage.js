@@ -776,7 +776,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 target.appendChild(zone);
                 Flip.from(flipState, {
-                    duration: 0.3,
+                    duration: 0.2,
                     ease: "power2.inOut",
                     absolute: true,
                 });
