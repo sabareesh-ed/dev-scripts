@@ -789,7 +789,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                         host.appendChild(zone);
                         Flip.from(flipState, {
-                            duration: 0.5,
+                            duration: 0.3,
                             ease: "power2.inOut",
                             absolute: true,
                         });
