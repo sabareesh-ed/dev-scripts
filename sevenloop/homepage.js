@@ -373,8 +373,8 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     },
     navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev",
+      nextEl: ".testimonial_button_next",
+      prevEl: ".testimonial_button_prev",
     },
   
     on: {
