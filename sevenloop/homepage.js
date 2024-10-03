@@ -670,170 +670,106 @@ document.addEventListener("DOMContentLoaded", function () {
     startCountdown(targetDate);
   });
 
+
   
-  
-  document.addEventListener("DOMContentLoaded", () => {
-    const items = document.querySelectorAll('[data-dropdown="item"]');
+  trigger.addEventListener("click", () => {
+  const isOpen = gsap.getProperty(content, "height") !== 0;
 
-    // Set initial states: First item open, others closed
-    items.forEach((item, index) => {
-        const content = item.querySelector('[data-dropdown="content"]');
-        const zone = item.querySelector('[data-dropdown="zone"]');
-        const host = item.querySelector('[data-dropdown="host"]');
-        const frontIcon = zone.querySelector('.industry_front_icon');
-        const backIcon = zone.querySelector('.industry_back_icon');
-        const dropPathArrow = item.querySelector('.drop_path_arrow');
+  // Collapse all other items
+  items.forEach((otherItem) => {
+    if (otherItem !== item) {
+      const otherContent = otherItem.querySelector('[data-dropdown="content"]');
+      const otherZone = otherItem.querySelector('[data-dropdown="zone"]');
+      const otherTarget = otherItem.querySelector('[data-dropdown="target"]');
+      const otherFrontIcon = otherZone.querySelector('.industry_front_icon');
+      const otherBackIcon = otherZone.querySelector('.industry_back_icon');
+      const otherArrow = otherItem.querySelector('.drop_path_arrow');
 
-        if (index === 0) {
-            // Set the first item's content to auto height initially
-            gsap.set(content, { height: "auto", overflow: "visible" });
-            // Set initial visibility of icons for the first item
-            gsap.set(frontIcon, { opacity: 0 });
-            gsap.set(backIcon, { opacity: 1 });
-            // Append zone to host initially for the first item
-            host.appendChild(zone);
-            // Set item font color for the first item
-            item.style.color = "var(--swatch--brand)";
-            // Set initial rotation of arrow for the first item
-            gsap.set(dropPathArrow, { rotationZ: 180 });
-        } else {
-            // Set all other contents to height 0
-            gsap.set(content, { height: 0, overflow: "hidden" });
-            // Set initial visibility of icons for other items
-            gsap.set(frontIcon, { opacity: 1 });
-            gsap.set(backIcon, { opacity: 0 });
-            // Set item font color to default for other items
-            item.style.color = "";
-            // Set initial rotation of arrow for other items
-            gsap.set(dropPathArrow, { rotationZ: 0 });
-        }
-    });
+      if (gsap.getProperty(otherContent, "height") !== 0) {
+        // FLIP transition for zone before collapsing
+        const flipState = Flip.getState(otherZone);
 
-    // Attach click event listeners to each trigger
-    items.forEach((item) => {
-        const trigger = item.querySelector('[data-dropdown="trigger"]');
-        const content = item.querySelector('[data-dropdown="content"]');
-        const zone = item.querySelector('[data-dropdown="zone"]');
-        const target = item.querySelector('[data-dropdown="target"]');
-        const host = item.querySelector('[data-dropdown="host"]');
-        const frontIcon = zone.querySelector('.industry_front_icon');
-        const backIcon = zone.querySelector('.industry_back_icon');
-        const dropPathArrow = item.querySelector('.drop_path_arrow');
+        // Animate icons while moving zone back to target
+        gsap.to(otherFrontIcon, { opacity: 1, duration: 0.5, ease: "power2.inOut" });
+        gsap.to(otherBackIcon, { opacity: 0, duration: 0.5, ease: "power2.inOut" });
 
-        trigger.addEventListener("click", () => {
-            const isOpen = gsap.getProperty(content, "height") !== 0;
-
-            // Collapse all other items
-            items.forEach((otherItem) => {
-                if (otherItem !== item) {
-                    const otherContent = otherItem.querySelector('[data-dropdown="content"]');
-                    const otherZone = otherItem.querySelector('[data-dropdown="zone"]');
-                    const otherTarget = otherItem.querySelector('[data-dropdown="target"]');
-                    const otherFrontIcon = otherZone.querySelector('.industry_front_icon');
-                    const otherBackIcon = otherZone.querySelector('.industry_back_icon');
-                    const otherArrow = otherItem.querySelector('.drop_path_arrow');
-
-                    if (gsap.getProperty(otherContent, "height") !== 0) {
-                        // FLIP transition for zone before collapsing
-                        const flipState = Flip.getState(otherZone);
-
-                        // Animate icons while moving zone back to target
-                        gsap.to(otherFrontIcon, { opacity: 1, duration: 0.5, ease: "power2.inOut" });
-                        gsap.to(otherBackIcon, { opacity: 0, duration: 0.5, ease: "power2.inOut" });
-
-                        otherTarget.appendChild(otherZone);
-                        Flip.from(flipState, {
-                            duration: 0.5,
-                            ease: "power2.inOut",
-                            absolute: true,
-                        });
-
-                        // Collapse the content and add overflow hidden
-                        gsap.to(otherContent, {
-                            height: 0,
-                            duration: 0.5,
-                            ease: "power2.out",
-                            onStart: () => {
-                                otherContent.style.overflow = "hidden";
-                            },
-                            onComplete: () => {
-                                // Reset the item font color to default when collapsed
-                                otherItem.style.color = "";
-                                // Rotate arrow back to 0 degrees when collapsed
-                                gsap.to(otherArrow, { rotationZ: 0, duration: 0.5, ease: "power2.inOut" });
-                            }
-                        });
-                    }
-                }
-            });
-
-            if (isOpen) {
-                // FLIP transition for zone before collapsing the current item
-                const flipState = Flip.getState(zone);
-
-                // Animate icons while moving zone back to target
-                gsap.to(frontIcon, { opacity: 1, duration: 0.5, ease: "power2.inOut" });
-                gsap.to(backIcon, { opacity: 0, duration: 0.5, ease: "power2.inOut" });
-
-                target.appendChild(zone);
-                Flip.from(flipState, {
-                    duration: 0.5,
-                    ease: "power2.inOut",
-                    absolute: true,
-                });
-
-                // Collapse the current item and add overflow hidden
-                gsap.to(content, {
-                    height: 0,
-                    duration: 0.5,
-                    ease: "power2.out",
-                    onStart: () => {
-                        content.style.overflow = "hidden";
-                    },
-                    onComplete: () => {
-                        // Reset the item font color to default when collapsed
-                        item.style.color = "";
-                        // Rotate arrow back to 0 degrees when collapsed
-                        gsap.to(dropPathArrow, { rotationZ: 0, duration: 0.5, ease: "power2.inOut" });
-                    }
-                });
-            } else {
-                // Expand the current item
-                gsap.set(content, { height: "auto" });
-                const targetHeight = content.clientHeight;
-
-                const timeline = gsap.timeline({
-                    defaults: { duration: 0.5, ease: "power2.out" },
-                    onComplete: () => {
-                        // Remove overflow hidden after expansion completes
-                        content.style.overflow = "visible";
-
-                        // FLIP transition for zone after content expands
-                        const flipState = Flip.getState(zone);
-
-                        // Animate icons while moving zone to host
-                        gsap.to(frontIcon, { opacity: 0, duration: 0.5, ease: "power2.inOut" });
-                        gsap.to(backIcon, { opacity: 1, duration: 0.5, ease: "power2.inOut" });
-
-                        host.appendChild(zone);
-                        Flip.from(flipState, {
-                            duration: 0.5,
-                            ease: "power2.inOut",
-                            absolute: true,
-                        });
-
-                        // Change the item font color to brand color when expanded
-                        item.style.color = "var(--swatch--brand)";
-
-                        // Rotate arrow to 180 degrees when expanded
-                        gsap.to(dropPathArrow, { rotationZ: 180, duration: 0.5, ease: "power2.inOut" });
-                    }
-                });
-
-                timeline
-                    .set(content, { height: 0 }) // Reset height to 0 to animate from closed state
-                    .to(content, { height: targetHeight }); // Animate to the natural height
-            }
+        otherTarget.appendChild(otherZone);
+        Flip.from(flipState, {
+          duration: 0.5,
+          ease: "power2.inOut",
+          absolute: true,
         });
+
+        // Collapse the content and rotate the arrow concurrently
+        gsap.to(otherContent, {
+          height: 0,
+          duration: 0.5,
+          ease: "power2.out",
+          onStart: () => {
+            otherContent.style.overflow = "hidden";
+          }
+        });
+        // Rotate arrow back to 0 degrees during collapse
+        gsap.to(otherArrow, { rotation: 0, duration: 0.5, ease: "power2.inOut" });
+
+        // Reset the item font color after collapsing
+        otherItem.style.color = "";
+      }
+    }
+  });
+
+  if (isOpen) {
+    // FLIP transition for zone before collapsing the current item
+    const flipState = Flip.getState(zone);
+
+    // Animate icons while moving zone back to target
+    gsap.to(frontIcon, { opacity: 1, duration: 0.5, ease: "power2.inOut" });
+    gsap.to(backIcon, { opacity: 0, duration: 0.5, ease: "power2.inOut" });
+
+    target.appendChild(zone);
+    Flip.from(flipState, {
+      duration: 0.5,
+      ease: "power2.inOut",
+      absolute: true,
     });
-});
+
+    // Collapse the current item and rotate the arrow concurrently
+    gsap.to(content, {
+      height: 0,
+      duration: 0.5,
+      ease: "power2.out",
+      onStart: () => {
+        content.style.overflow = "hidden";
+      }
+    });
+    // Rotate arrow back to 0 degrees during collapse
+    gsap.to(dropPathArrow, { rotation: 0, duration: 0.5, ease: "power2.inOut" });
+
+    // Reset the item font color after collapsing
+    item.style.color = "";
+  } else {
+    // Expand the current item and rotate the arrow concurrently
+    gsap.set(content, { height: "auto" });
+    const targetHeight = content.clientHeight;
+
+    const timeline = gsap.timeline({
+      defaults: { duration: 0.5, ease: "power2.out" },
+      onComplete: () => {
+        // Remove overflow hidden after expansion completes
+        content.style.overflow = "visible";
+
+        // FLIP transition for zone after content expands
+        const flipState = Flip.getState(zone);
+
+        // Animate icons while moving zone to host
+        gsap.to(frontIcon, { opacity: 0, duration: 0.5, ease: "power2.inOut" });
+        gsap.to(backIcon, { opacity: 1, duration: 0.5, ease: "power2.inOut" });
+
+        host.appendChild(zone);
+        Flip.from(flipState, {
+          duration: 0.5,
+          ease: "power2.inOut",
+          absolute: true,
+        });
+
+        //
