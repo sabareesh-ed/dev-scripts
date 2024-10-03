@@ -344,144 +344,95 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-
-
-
+  
   // Initialize Swiper4 (with cross-fade effect and custom pagination)
-  const swiper4 = new Swiper(".swiper4", {
-    direction: "horizontal",
-    loop: true, // Enable looping of slides
-    spaceBetween: 0,
-    speed: 300,
-    slidesPerView: 1,
-    effect: "fade", // Use fade effect
-    fadeEffect: {
-      crossFade: true, // Enable cross-fade between slides
+const swiper4 = new Swiper(".swiper4", {
+  direction: "horizontal",
+  loop: true, // Enable looping of slides
+  spaceBetween: 0,
+  speed: 300,
+  slidesPerView: 1,
+  effect: "fade", // Use fade effect
+  fadeEffect: {
+    crossFade: true, // Enable cross-fade between slides
+  },
+  autoplay: {
+    delay: 10000, // 10 seconds per slide
+    disableOnInteraction: false, // Continue autoplay even after user interaction
+  },
+  pagination: {
+    el: ".testimonial_pagination_wrap", // Custom pagination wrapper
+    clickable: true, // Allow user to click on the pagination bullets
+    renderBullet: function (index, className) {
+      // Custom SVG for each pagination bullet
+      return `<span class="${className} pagination-bullet">
+                  <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path class="svg-path" d="M3.62796 17.2345C2.11431 16.3606 1.22799 14.6798 1.04932 12.6266C0.870746 10.5743 1.40404 8.1741 2.70525 5.92034C4.00646 3.66658 5.81847 2.00462 7.68507 1.13314C9.55255 0.261251 11.4513 0.188434 12.965 1.06234C14.4786 1.93625 15.365 3.61704 15.5436 5.67028C15.7222 7.72253 15.1889 10.1228 13.8877 12.3765C12.5865 14.6303 10.7745 16.2922 8.90787 17.1637C7.04039 18.0356 5.14161 18.1084 3.62796 17.2345Z" stroke="var(--swatch--brand)" stroke-width="1"/>
+                  </svg>
+                </span>`;
     },
-    autoplay: {
-      delay: 10000, // 10 seconds per slide
-      disableOnInteraction: false, // Continue autoplay even after user interaction
+  },
+  navigation: {
+    nextEl: ".testimonial_button_next",
+    prevEl: ".testimonial_button_prev",
+  },
+  on: {
+    init: function () {
+      startProgressBar(); // Start progress bar on initialization
+      animateActiveSlideContent(); // Animate content on initialization
     },
-    pagination: {
-      el: ".testimonial_pagination_wrap", // Custom pagination wrapper
-      clickable: true, // Allow user to click on the pagination bullets
-      renderBullet: function (index, className) {
-        // Custom SVG for each pagination bullet
-        return `<span class="${className} pagination-bullet">
-                    <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path class="svg-path" d="M3.62796 17.2345C2.11431 16.3606 1.22799 14.6798 1.04932 12.6266C0.870746 10.5743 1.40404 8.1741 2.70525 5.92034C4.00646 3.66658 5.81847 2.00462 7.68507 1.13314C9.55255 0.261251 11.4513 0.188434 12.965 1.06234C14.4786 1.93625 15.365 3.61704 15.5436 5.67028C15.7222 7.72253 15.1889 10.1228 13.8877 12.3765C12.5865 14.6303 10.7745 16.2922 8.90787 17.1637C7.04039 18.0356 5.14161 18.1084 3.62796 17.2345Z" stroke="var(--swatch--brand)" stroke-width="1"/>
-                    </svg>
-                  </span>`;
-      },
+    slideChangeTransitionStart: function () {
+      resetProgressBar(); // Reset progress bar at the start of slide change
     },
-    navigation: {
-      nextEl: ".testimonial_button_next",
-      prevEl: ".testimonial_button_prev",
+    slideChangeTransitionEnd: function () {
+      startProgressBar(); // Restart progress bar after slide transition
+      animateActiveSlideContent(); // Animate content for the active slide
     },
-    on: {
-      init: function () {
-        startProgressBar(); // Start progress bar on initialization
-        animateActiveSlideContent(); // Animate content on initialization
-      },
-      slideChangeTransitionStart: function () {
-        resetProgressBar(); // Reset progress bar at the start of slide change
-        if (activeTimeline) {
-          activeTimeline.kill(); // Kill any ongoing GSAP timeline to avoid overlaps
-        }
-      },
-      slideChangeTransitionEnd: function () {
-        startProgressBar(); // Restart progress bar after slide transition
+  },
+});
 
-        requestAnimationFrame(() => {
-          animateActiveSlideContent(); // Animate content for the active slide
-        });
-      },
-    },
-  });
+// GSAP animation for content elements of the active slide
+function animateActiveSlideContent() {
+  // Find the active slide
+  const activeSlide = document.querySelector(".swiper-slide-active");
+  if (activeSlide) {
+    // Target elements within the active slide only
+    const elements = activeSlide.querySelectorAll(
+      ".testimonial_copy, .testimonial_client_name, .testimonial_client_company"
+    );
 
-  // GSAP animation for content elements of the active slide
-  function animateActiveSlideContent() {
-    // Find the active slide
-    const activeSlide = document.querySelector(".swiper-slide-active");
-    if (activeSlide) {
-      // Target elements within the active slide only
-      const elements = activeSlide.querySelectorAll(
-        ".testimonial_copy, .testimonial_client_name, .testimonial_client_company"
-      );
-
-      if (elements.length > 0) {
-        // Create a new GSAP timeline for animations
-        activeTimeline = gsap.timeline();
-
-        activeTimeline.fromTo(
-          elements,
-          { y: "100%", opacity: 0 }, // Initial state
-          {
-            y: "0%",
-            opacity: 1,
-            duration: 0.6, // Faster duration (0.6 seconds)
-            stagger: 0.15, // Slight stagger of 0.15 seconds between elements
-            ease: "power2.out", // Smooth transition
-          }
-        );
-      } else {
-        console.warn("No elements found to animate in active slide.");
+    // Animate from y: 100% to y: 0% with GSAP, stagger, no delay
+    gsap.fromTo(
+      elements,
+      { y: "100%", opacity: 0 }, // Initial state
+      {
+        y: "0%",
+        opacity: 1,
+        duration: 0.6, // Faster duration (0.6 seconds)
+        stagger: 0.15, // Slight stagger of 0.15 seconds between elements
+        ease: "power2.out", // Smooth transition
       }
-    } else {
-      console.warn("No active slide found.");
-    }
+    );
   }
+}
 
-  // Progress Bar: Start from 0% to 100% over 10 seconds
-  function startProgressBar() {
-    const progressBar = document.querySelector(".testimonial_progress_fill");
-    if (progressBar) {
-      progressBar.style.transition = "width 10s linear"; // Animate progress bar over 10 seconds
-      progressBar.style.width = "100%"; // Set progress to 100%
-    } else {
-      console.warn("Progress bar element not found.");
-    }
-  }
+// Progress Bar: Start from 0% to 100% over 10 seconds
+function startProgressBar() {
+  const progressBar = document.querySelector(".testimonial_progress_fill");
+  progressBar.style.transition = "width 10s linear"; // Animate progress bar over 10 seconds
+  progressBar.style.width = "100%"; // Set progress to 100%
+}
 
-  // Reset progress bar to 0% width
-  function resetProgressBar() {
-    const progressBar = document.querySelector(".testimonial_progress_fill");
-    if (progressBar) {
-      progressBar.style.transition = "none"; // Reset transition
-      progressBar.style.width = "0%"; // Set progress back to 0%
-    } else {
-      console.warn("Progress bar element not found.");
-    }
-  }
-
-  // Event listener for pagination bullets
-  const paginationBullets = document.querySelectorAll(".pagination-bullet");
-  paginationBullets.forEach((bullet) => {
-    bullet.addEventListener("click", () => {
-      swiperLinkClicked = true;
-      clickedOnce = true;
-
-      if (activeTimeline) {
-        activeTimeline.pause(); // Pause any active animations if they exist
-      }
-
-      resetProgressBar(); // Reset progress bar when tab is clicked
-      setTimeout(() => {
-        startProgressBar(); // Restart progress bar after a short delay
-        swiperLinkClicked = false;
-      }, 100);
-    });
-  });
-
-
-
-
-
-
+// Reset progress bar to 0% width
+function resetProgressBar() {
+  const progressBar = document.querySelector(".testimonial_progress_fill");
+  progressBar.style.transition = "none"; // Reset transition
+  progressBar.style.width = "0%"; // Set progress back to 0%
+}
 
 
   
-   document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("DOMContentLoaded", function () {
     let swiperLinkClicked = false; // Flag to track if a navigation tab is clicked
     const progressBars = document.querySelectorAll(".branch_progress_bg");
     let activeTimeline = null; // Store the current active GSAP timeline
@@ -587,7 +538,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
       });
     });
-   });
+  });
   
   const swiper6 = new Swiper(".swiper6", {
     slidesPerView: 1,
