@@ -473,118 +473,109 @@ document.addEventListener("DOMContentLoaded", function () {
     let activeTimeline = null; // Store the current active GSAP timeline
     let clickedOnce = false; // Track if a tab has been clicked
   
-    // Initialize Swiper
-    const swiper5 = new Swiper(".swiper5", {
-      loop: true,
-      spaceBetween: 10,
-      speed: 300,
-      slidesPerView: 1,
-      autoHeight: true,
-      effect: "fade",
-      autoplay: {
-        delay: 10000,
-        disableOnInteraction: false,
+   // Initialize Swiper
+   const swiper5 = new Swiper(".swiper5", {
+    loop: true,
+    spaceBetween: 10,
+    speed: 300,
+    slidesPerView: 1,
+    autoHeight: true,
+    effect: "fade",
+    autoplay: {
+      delay: 10000,
+      disableOnInteraction: false,
+    },
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+    on: {
+      autoplayTimeLeft(s, time, progress) {
+        // Handle smooth progress bar update for active slide
+        const activeBar = progressBars[s.realIndex];
+        if (activeTimeline) {
+          activeTimeline.progress(1 - progress); // Sync GSAP timeline with Swiper progress
+        }
       },
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
+      slideChangeTransitionStart: function () {
+        resetAllProgressBars(); // Reset progress bars when the slide changes
+        if (this.realIndex === 0) {
+          resetAllProgressAndRestart(); // Reset everything when first slide becomes active
+        } else {
+          animateProgressBar(this.realIndex); // Animate progress bar for the active slide
+        }
       },
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-      },
-      on: {
-        autoplayTimeLeft(s, time, progress) {
-          // Handle smooth progress bar update for active slide
-          const activeBar = progressBars[s.realIndex];
-          if (activeTimeline) {
-            activeTimeline.progress(1 - progress); // Sync GSAP timeline with Swiper progress
-          }
-        },
-        slideChangeTransitionStart: function () {
-          resetAllProgressBars(); // Reset progress bars when the slide changes
-          if (this.realIndex === 0) {
-            resetAllProgressAndRestart(); // Reset everything when first slide becomes active
-          } else {
-            animateProgressBar(this.realIndex); // Animate progress bar for the active slide
-          }
-        },
-      },
+    },
+  });
+
+  // GSAP animation for nth progress bar
+  function animateProgressBar(index) {
+    const progressBar = progressBars[index];
+
+    // Clear any existing timeline
+    if (activeTimeline) {
+      activeTimeline.kill();
+    }
+
+    // Create a new GSAP timeline for the active progress bar
+    activeTimeline = gsap.timeline({ paused: true });
+
+    // If a tab was clicked (clickedOnce is true), set duration to 0, else use 10s
+    const animationDuration = clickedOnce ? 0 : 10;
+
+    activeTimeline.fromTo(
+      progressBar,
+      { width: "0%" },
+      { width: "100%", duration: animationDuration, ease: "linear" }
+    );
+
+    activeTimeline.play(); // Play the timeline
+  }
+
+  // Reset all progress bars to 0%
+  function resetAllProgressBars() {
+    progressBars.forEach((bar) => {
+      gsap.set(bar, { width: "0%" });
     });
-  
-    // GSAP animation for nth progress bar
-    function animateProgressBar(index) {
-      const progressBar = progressBars[index];
-  
-      // Clear any existing timeline
-      if (activeTimeline) {
-        activeTimeline.kill();
-      }
-  
-      // Create a new GSAP timeline for the active progress bar
-      activeTimeline = gsap.timeline({ paused: true });
-  
-      // If a tab was clicked (clickedOnce is true), set duration to 0, else use 10s
-      const animationDuration = clickedOnce ? 0 : 10;
-  
-      activeTimeline.fromTo(
-        progressBar,
-        { width: "0%" },
-        { width: "100%", duration: animationDuration, ease: "linear" }
-      );
-  
-      activeTimeline.play(); // Play the timeline
-    }
-  
-    // Reset all progress bars to 0%
-    function resetAllProgressBars() {
-      progressBars.forEach((bar) => {
-        gsap.set(bar, { width: "0%" });
-      });
-    }
-  
-    // Reset everything and restart when the first slide gets active
-    function resetAllProgressAndRestart() {
-      resetAllProgressBars();
-      animateProgressBar(0); // Start the first slide's progress bar animation
-    }
-  
-    // Set the initial slide's progress bar to animate
-    setTimeout(() => {
-      resetAllProgressAndRestart(); // Start progress for the first slide
-    }, 300);
-  
-    // Tab Navigation Event Listener
-    const navigationTabs = document.querySelectorAll(".branch_navigation_tab");
-    const navigationTexts = document.querySelectorAll(".branch_navigation_text");
-  
-    navigationTabs.forEach((tab, index) => {
-      tab.addEventListener("click", () => {
-        clickedOnce = true; // Set the flag to true after the first click
-        swiper5.slideToLoop(index); // Go to the corresponding slide
-        swiper5.autoplay.stop(); // Stop autoplay when a tab is clicked
-        swiperLinkClicked = true; // Mark that a tab was clicked
-  
-        // Manually update progress bars without animation
-        progressBars.forEach((bar, barIndex) => {
-          if (barIndex === index) {
-            gsap.to(bar, { width: "100%", duration: 0, ease: "power2.out" }); // No transition
-          } else {
-            gsap.set(bar, { width: "0%" }); // Reset others
-          }
-        });
-  
-        // Update font color for branch navigation text
-        navigationTexts.forEach((text, textIndex) => {
-          if (textIndex === index) {
-            text.style.color = "var(--swatch--brand)"; // Set active color
-          } else {
-            text.style.color = ""; // Reset to default color
-          }
-        });
+  }
+
+  // Reset everything and restart when the first slide gets active
+  function resetAllProgressAndRestart() {
+    resetAllProgressBars();
+    animateProgressBar(0); // Start the first slide's progress bar animation
+  }
+
+  // Set the initial slide's progress bar to animate
+  setTimeout(() => {
+    resetAllProgressAndRestart(); // Start progress for the first slide
+  }, 300);
+
+  // Tab Navigation Event Listener
+  const navigationTabs = document.querySelectorAll(".branch_navigation_tab");
+  navigationTabs.forEach((tab, index) => {
+    tab.addEventListener("click", () => {
+      clickedOnce = true; // Set the flag to true after the first click
+      swiper5.slideToLoop(index); // Go to the corresponding slide
+      swiper5.autoplay.stop(); // Stop autoplay when a tab is clicked
+      swiperLinkClicked = true; // Mark that a tab was clicked
+
+      // Manually update progress bars without animation
+      progressBars.forEach((bar, barIndex) => {
+        if (barIndex === index) {
+          gsap.to(bar, { width: "100%", duration: 0, ease: "power2.out" }); // No transition
+        } else {
+          gsap.set(bar, { width: "0%" }); // Reset others
+        }
       });
     });
- });
+  });
+});
+
+
   
   const swiper6 = new Swiper(".swiper6", {
     slidesPerView: 1,
