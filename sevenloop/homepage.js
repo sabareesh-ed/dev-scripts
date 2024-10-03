@@ -556,6 +556,8 @@ document.addEventListener("DOMContentLoaded", function () {
   
     // Tab Navigation Event Listener
     const navigationTabs = document.querySelectorAll(".branch_navigation_tab");
+    const navigationTexts = document.querySelectorAll(".branch_navigation_text");
+  
     navigationTabs.forEach((tab, index) => {
       tab.addEventListener("click", () => {
         clickedOnce = true; // Set the flag to true after the first click
@@ -569,6 +571,15 @@ document.addEventListener("DOMContentLoaded", function () {
             gsap.to(bar, { width: "100%", duration: 0, ease: "power2.out" }); // No transition
           } else {
             gsap.set(bar, { width: "0%" }); // Reset others
+          }
+        });
+  
+        // Update font color for branch navigation text
+        navigationTexts.forEach((text, textIndex) => {
+          if (textIndex === index) {
+            text.style.color = "var(--swatch--brand)"; // Set active color
+          } else {
+            text.style.color = ""; // Reset to default color
           }
         });
       });
