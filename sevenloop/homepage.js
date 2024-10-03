@@ -584,7 +584,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
       });
     });
-  });
+ });
   
   const swiper6 = new Swiper(".swiper6", {
     slidesPerView: 1,
