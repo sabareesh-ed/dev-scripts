@@ -345,7 +345,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   
-  // Initialize Swiper4 (with cross-fade effect and custom pagination)
+// Initialize Swiper4 (with cross-fade effect and custom pagination)
 const swiper4 = new Swiper(".swiper4", {
   direction: "horizontal",
   loop: true, // Enable looping of slides
@@ -386,7 +386,10 @@ const swiper4 = new Swiper(".swiper4", {
     },
     slideChangeTransitionEnd: function () {
       startProgressBar(); // Restart progress bar after slide transition
-      animateActiveSlideContent(); // Animate content for the active slide
+      // Delay the animation slightly to ensure elements are properly rendered
+      setTimeout(() => {
+        animateActiveSlideContent(); // Animate content for the active slide
+      }, 100);
     },
   },
 });
@@ -449,6 +452,7 @@ function resetProgressBar() {
     console.warn("Progress bar element not found.");
   }
 }
+
 
 
 
