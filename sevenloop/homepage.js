@@ -345,12 +345,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   
-document.addEventListener("DOMContentLoaded", function () {
-  let swiperLinkClicked = false; // Flag to track if a navigation tab is clicked
-  const progressBars = document.querySelectorAll(".branch_progress_bg");
-  let activeTimeline = null; // Store the current active GSAP timeline
-  let clickedOnce = false; // Track if a tab has been clicked
-
   // Initialize Swiper4 (with cross-fade effect and custom pagination)
   const swiper4 = new Swiper(".swiper4", {
     direction: "horizontal",
@@ -408,17 +402,12 @@ document.addEventListener("DOMContentLoaded", function () {
     // Find the active slide
     const activeSlide = document.querySelector(".swiper-slide-active");
     if (activeSlide) {
-      // Debugging: Log the active slide to ensure it is being selected correctly
-      console.log("Active slide found:", activeSlide);
-
       // Target elements within the active slide only
       const elements = activeSlide.querySelectorAll(
         ".testimonial_copy, .testimonial_client_name, .testimonial_client_company"
       );
 
       if (elements.length > 0) {
-        console.log("Elements to animate:", elements);
-
         // Create a new GSAP timeline for animations
         activeTimeline = gsap.timeline();
 
@@ -462,7 +451,26 @@ document.addEventListener("DOMContentLoaded", function () {
       console.warn("Progress bar element not found.");
     }
   }
-});
+
+  // Event listener for pagination bullets
+  const paginationBullets = document.querySelectorAll(".pagination-bullet");
+  paginationBullets.forEach((bullet) => {
+    bullet.addEventListener("click", () => {
+      swiperLinkClicked = true;
+      clickedOnce = true;
+
+      if (activeTimeline) {
+        activeTimeline.pause(); // Pause any active animations if they exist
+      }
+
+      resetProgressBar(); // Reset progress bar when tab is clicked
+      setTimeout(() => {
+        startProgressBar(); // Restart progress bar after a short delay
+        swiperLinkClicked = false;
+      }, 100);
+    });
+  });
+
 
 
 
