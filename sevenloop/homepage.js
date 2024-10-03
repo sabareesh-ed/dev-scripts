@@ -345,6 +345,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+document.addEventListener("DOMContentLoaded", function () {
+  let swiperLinkClicked = false; // Flag to track if a navigation tab is clicked
+  let activeTimeline = null; // Store the current active GSAP timeline
+  let clickedOnce = false; // Track if a tab has been clicked
+
   // Initialize Swiper4 (with cross-fade effect and custom pagination)
   const swiper4 = new Swiper(".swiper4", {
     direction: "horizontal",
@@ -470,6 +475,8 @@ document.addEventListener("DOMContentLoaded", function () {
       }, 100);
     });
   });
+});
+
 
 
 
@@ -477,7 +484,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   
-  document.addEventListener("DOMContentLoaded", function () {
+  // document.addEventListener("DOMContentLoaded", function () {
     let swiperLinkClicked = false; // Flag to track if a navigation tab is clicked
     const progressBars = document.querySelectorAll(".branch_progress_bg");
     let activeTimeline = null; // Store the current active GSAP timeline
@@ -583,7 +590,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
       });
     });
-  });
+  // });
   
   const swiper6 = new Swiper(".swiper6", {
     slidesPerView: 1,
