@@ -386,10 +386,11 @@ const swiper4 = new Swiper(".swiper4", {
     },
     slideChangeTransitionEnd: function () {
       startProgressBar(); // Restart progress bar after slide transition
-      // Delay the animation slightly to ensure elements are properly rendered
-      setTimeout(() => {
+
+      // Use requestAnimationFrame for smoother, accurate animation timing
+      requestAnimationFrame(() => {
         animateActiveSlideContent(); // Animate content for the active slide
-      }, 100);
+      });
     },
   },
 });
@@ -407,10 +408,10 @@ function animateActiveSlideContent() {
       ".testimonial_copy, .testimonial_client_name, .testimonial_client_company"
     );
 
+    // Debugging: Log if no elements found or found elements
     if (elements.length > 0) {
-      // Debugging: Log the elements found to animate
       console.log("Elements to animate:", elements);
-
+      
       // Animate from y: 100% to y: 0% with GSAP, stagger, no delay
       gsap.fromTo(
         elements,
@@ -452,8 +453,6 @@ function resetProgressBar() {
     console.warn("Progress bar element not found.");
   }
 }
-
-
 
 
   
