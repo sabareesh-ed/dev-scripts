@@ -367,20 +367,20 @@ const swiper4 = new Swiper(".swiper4", {
       // Custom SVG for each pagination bullet
       return `<span class="${className} pagination-bullet">
                   <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path class="svg-path" d="M3.62796 17.2345C2.11431 16.3606 1.22799 14.6798 1.04932 12.6266C0.870746 10.5743 1.40404 8.1741 2.70525 5.92034C4.00646 3.66658 5.81847 2.00462 7.68507 1.13314C9.55255 0.261251 11.4513 0.188434 12.965 1.06234C14.4786 1.93625 15.365 3.61704 15.5436 5.67028C15.7222 7.72253 15.1889 10.1228 13.8877 12.3765C12.5865 14.6303 10.7745 16.2922 8.90787 17.1637C7.04039 18.0356 5.14161 18.1084 3.62796 17.2345Z" stroke="#FF4500" stroke-width="1"/>
+                    <path class="svg-path" d="M3.62796 17.2345C2.11431 16.3606 1.22799 14.6798 1.04932 12.6266C0.870746 10.5743 1.40404 8.1741 2.70525 5.92034C4.00646 3.66658 5.81847 2.00462 7.68507 1.13314C9.55255 0.261251 11.4513 0.188434 12.965 1.06234C14.4786 1.93625 15.365 3.61704 15.5436 5.67028C15.7222 7.72253 15.1889 10.1228 13.8877 12.3765C12.5865 14.6303 10.7745 16.2922 8.90787 17.1637C7.04039 18.0356 5.14161 18.1084 3.62796 17.2345Z" stroke="var(--swatch--brand)" stroke-width="1"/>
                   </svg>
                 </span>`;
     },
   },
   navigation: {
-    nextEl: ".testimonial_button_next",
-    prevEl: ".testimonial_button_prev",
+    nextEl: ".testimonial_button_next", // Changed selectors for consistency
+    prevEl: ".testimonial_button_prev", // Changed selectors for consistency
   },
   on: {
     init: function () {
       startProgressBar(); // Start progress bar on initialization
       animateContent(); // Animate content on initialization
-      updatePagination(); // Add gradient to the initial active slide
+      updatePagination(); // Update pagination to fill active bullet
     },
     slideChangeTransitionStart: function () {
       resetProgressBar(); // Reset progress bar at the start of slide change
@@ -388,7 +388,7 @@ const swiper4 = new Swiper(".swiper4", {
     slideChangeTransitionEnd: function () {
       startProgressBar(); // Restart progress bar after slide transition
       animateContent(); // Animate content when slide changes
-      updatePagination(); // Update gradient fill for active slide
+      updatePagination(); // Update active pagination fill
     },
   },
 });
@@ -428,7 +428,7 @@ function resetProgressBar() {
   progressBar.style.width = "0%"; // Set progress back to 0%
 }
 
-// Function to update the pagination and apply styles to the active slide
+// Function to update the pagination and apply fill to the active slide
 function updatePagination() {
   // Get all pagination bullets
   const bullets = document.querySelectorAll(".swiper-pagination-bullet");
@@ -438,42 +438,55 @@ function updatePagination() {
     const svgPath = bullet.querySelector(".svg-path");
 
     if (bullet.classList.contains("swiper-pagination-bullet-active")) {
-      // Apply brand color fill to the active bullet
+      // Apply the solid fill color to the active bullet
       svgPath.setAttribute("fill", "var(--swatch--brand)");
     } else {
-      // Remove fill from inactive bullets (use stroke only)
+      // Use stroke only for inactive bullets
       svgPath.removeAttribute("fill");
     }
   });
-}
 
-// SVG gradient definition is no longer needed for pagination, as we now use solid fill
-// Hover event listener for pagination bullets to change fill with reduced opacity
-document.addEventListener("DOMContentLoaded", function () {
-  const bullets = document.querySelectorAll(".swiper-pagination-bullet");
-
+  // Add hover effect with reduced opacity
   bullets.forEach((bullet) => {
-    bullet.addEventListener("mouseenter", function () {
-      const svgPath = this.querySelector(".svg-path");
-      svgPath.setAttribute("fill", "var(--swatch--brand)");
-      svgPath.style.opacity = "0.5"; // Set reduced opacity on hover
+    bullet.addEventListener("mouseenter", () => {
+      const svgPath = bullet.querySelector(".svg-path");
+      svgPath.style.fill = "var(--swatch--brand)";
+      svgPath.style.opacity = "0.5"; // Reduced opacity on hover
     });
-
-    bullet.addEventListener("mouseleave", function () {
-      const svgPath = this.querySelector(".svg-path");
-      if (!this.classList.contains("swiper-pagination-bullet-active")) {
+    bullet.addEventListener("mouseleave", () => {
+      const svgPath = bullet.querySelector(".svg-path");
+      if (!bullet.classList.contains("swiper-pagination-bullet-active")) {
         svgPath.removeAttribute("fill");
-      } else {
-        svgPath.style.opacity = "1"; // Restore full opacity for active bullet
       }
+      svgPath.style.opacity = "1"; // Reset opacity
     });
   });
-});
+}
 
-// Append navigation classes for Swiper
-swiper4.navigation.nextEl = ".testimonial_button_next";
-swiper4.navigation.prevEl = ".testimonial_button_prev";
+// Append SVG gradient if needed
+const svgGradient = `
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <linearGradient id="paint0_linear_1344_7585" x1="7.7015" y1="1.91134" x2="37.9729" y2="59.6112" gradientUnits="userSpaceOnUse">
+        <stop offset="0.00057" stop-color="#FF4500"/>
+        <stop offset="0.06984" stop-color="#FF5516"/>
+        <stop offset="0.3342" stop-color="#FF9068"/>
+        <stop offset="0.5686" stop-color="#FFC0A8"/>
+        <stop offset="0.76447" stop-color="#FFE2D7"/>
+        <stop offset="0.91417" stop-color="#FFF7F4"/>
+        <stop offset="1" stop-color="white"/>
+      </linearGradient>
+    </defs>
+  </svg>
+`;
+document.body.insertAdjacentHTML("beforeend", svgGradient);
 
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    let swiperLinkClicked = false; // Flag to track if a navigation tab is clicked
+    const progressBars = document.querySelectorAll(".branch_progress_bg");
+    let activeTimeline = null; // Store the current active GSAP timeline
+    let clickedOnce = false; // Track if a tab has been clicked
   
     // Initialize Swiper
     const swiper5 = new Swiper(".swiper5", {
