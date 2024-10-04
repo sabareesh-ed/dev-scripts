@@ -381,7 +381,7 @@ const swiper4 = new Swiper(".swiper4", {
     init: function () {
       startProgressBar(); // Start progress bar on initialization
       updatePagination(); // Add class to style the initial active slide
-      setTimeout(animateActiveSlide, 100); // Animate elements in the initial slide with a slight delay
+      animateActiveSlide(); // Animate elements in the initial slide
     },
     slideChangeTransitionStart: function () {
       resetProgressBar(); // Reset progress bar at the start of slide change
@@ -389,7 +389,7 @@ const swiper4 = new Swiper(".swiper4", {
     slideChangeTransitionEnd: function () {
       startProgressBar(); // Restart progress bar after slide transition
       updatePagination(); // Update active state styles for pagination bullets
-      setTimeout(animateActiveSlide, 100); // Animate elements in the active slide with a slight delay
+      animateActiveSlide(); // Animate elements in the active slide
     },
   },
 });
@@ -433,31 +433,27 @@ function updatePagination() {
 
 // GSAP Animation for active slide elements
 function animateActiveSlide() {
+  // Select the current active slide
   const activeSlide = document.querySelector(".swiper-slide-active");
   if (activeSlide) {
-    // Animate elements depending on the view (desktop or mobile)
-    let clientName = activeSlide.querySelector(".testimonial_name_wrap.is-desktop-view .testimonial_client_name");
-    let clientCompany = activeSlide.querySelector(".testimonial_name_wrap.is-desktop-view .testimonial_client_company");
-    let testimonialCopy = activeSlide.querySelector(".testimonial_copy");
+    // Select the elements that need to be animated within the active slide
+    const clientNameElements = activeSlide.querySelectorAll(".testimonial_client_name");
+    const clientCompanyElements = activeSlide.querySelectorAll(".testimonial_client_company");
+    const testimonialCopyElements = activeSlide.querySelectorAll(".testimonial_copy");
 
-    // If desktop elements are not found, try to get mobile view elements
-    if (!clientName || !clientCompany) {
-      clientName = activeSlide.querySelector(".testimonial_name_wrap.is-mobile-view .testimonial_client_name");
-      clientCompany = activeSlide.querySelector(".testimonial_name_wrap.is-mobile-view .testimonial_client_company");
-    }
+    // Combine all selected elements into a single array
+    const elementsToAnimate = [...clientNameElements, ...clientCompanyElements, ...testimonialCopyElements];
 
-    // Debugging to check which elements are being selected
-    console.log("Animating elements:", clientName, clientCompany, testimonialCopy);
-
-    // Animate the elements if they are found
-    if (clientName && clientCompany && testimonialCopy) {
+    // If elements exist, apply the animation
+    if (elementsToAnimate.length > 0) {
+      console.log("Animating elements within active slide..."); // Debugging log
       gsap.fromTo(
-        [clientName, clientCompany, testimonialCopy],
+        elementsToAnimate,
         { y: "100%", opacity: 0 },
         { y: "0%", opacity: 1, duration: 1, ease: "power2.out", stagger: 0.2 }
       );
     } else {
-      console.warn("One or more elements not found in active slide.");
+      console.warn("No elements found to animate in the active slide.");
     }
   } else {
     console.error("No active slide found.");
