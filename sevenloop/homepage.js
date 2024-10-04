@@ -444,14 +444,16 @@ function animateActiveSlide() {
     // Combine all selected elements into a single array
     const elementsToAnimate = [...clientNameElements, ...clientCompanyElements, ...testimonialCopyElements];
 
-    // If elements exist, apply the animation
+    // If elements exist, apply the animation with a delay
     if (elementsToAnimate.length > 0) {
       console.log("Animating elements within active slide..."); // Debugging log
-      gsap.fromTo(
-        elementsToAnimate,
-        { y: "100%", opacity: 0 },
-        { y: "0%", opacity: 1, duration: 1, ease: "power2.out", stagger: 0.2 }
-      );
+      setTimeout(() => {
+        gsap.fromTo(
+          elementsToAnimate,
+          { y: "100%", opacity: 0 },
+          { y: "0%", opacity: 1, duration: 1, ease: "power2.out", stagger: 0.2 }
+        );
+      }, 200); // Delay of 200ms before starting the animation
     } else {
       console.warn("No elements found to animate in the active slide.");
     }
@@ -459,7 +461,6 @@ function animateActiveSlide() {
     console.error("No active slide found.");
   }
 }
-
 
 
   
