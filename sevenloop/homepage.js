@@ -808,52 +808,55 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-  const counter = document.querySelector('.counter');
-  const startValue = parseInt(counter.getAttribute('data-number-start'));
-  const endValue = parseInt(counter.getAttribute('data-number-end'));
-  let currentValue = startValue;
+document.addEventListener('DOMContentLoaded', function() {
+  const numberSection = document.querySelector('.data-number-section');
+  const startValue = parseInt(numberSection.dataset.numberStart);
+  const endValue = parseInt(numberSection.dataset.numberEnd);
+  const numberDisplay = document.getElementById('numberSection');
 
-  // Initialize ScrollTrigger
-  gsap.registerPlugin(ScrollTrigger);
+  // Function to create digit elements
+  function createDigits(value) {
+      numberDisplay.innerHTML = '';
+      const valueString = String(value).padStart(String(endValue).length, '0');
 
-  ScrollTrigger.create({
-      trigger: counter,
-      start: "top 70%",
-      onEnter: () => {
-          animateCounter();
-      }
-  });
-
-  // Function to animate counter from start to end
-  function updateCounter(value) {
-      const strValue = value.toString().padStart(4, '0');
-      const digits = strValue.split('');
-
-      // Update each digit individually
-      digits.forEach((digit, index) => {
-          const digitElement = counter.children[index].querySelector('.number');
-          const currentDigit = parseInt(digitElement.innerHTML);
-          const newDigit = parseInt(digit);
-
-          if (currentDigit !== newDigit) {
-              gsap.to(digitElement, {
-                  y: 100,
-                  duration: 0.3,
-                  onComplete: () => {
-                      digitElement.innerHTML = newDigit;
-                      gsap.fromTo(digitElement, { y: -100 }, { y: 0, duration: 0.3 });
-                  }
-              });
-          }
+      valueString.split('').forEach(digit => {
+          const digitElement = document.createElement('div');
+          digitElement.classList.add('digit');
+          digitElement.textContent = digit;
+          numberDisplay.appendChild(digitElement);
       });
   }
 
-  function animateCounter() {
-      if (currentValue <= endValue) {
-          updateCounter(currentValue);
-          currentValue++;
-          setTimeout(animateCounter, 300); // Adjust delay as needed for a smoother animation
+  // Animate the numbers digit by digit
+  function animateNumber(start, end) {
+      let currentNumber = start;
+
+      const animation = gsap.timeline({
+          onUpdate: function() {
+              createDigits(currentNumber);
+          }
+      });
+
+      // Iterate over each digit, from ones to thousands
+      for (let i = start; i <= end; i++) {
+          animation.to({}, {
+              duration: 0.1, // Speed of the digit animation
+              onUpdate: function() {
+                  createDigits(currentNumber);
+              },
+              onComplete: function() {
+                  currentNumber++;
+              }
+          });
       }
   }
+
+  // ScrollTrigger to initiate the animation
+  ScrollTrigger.create({
+      trigger: numberSection,
+      start: "top 70%",
+      onEnter: () => {
+          animateNumber(startValue, endValue);
+      }
+  });
 });
