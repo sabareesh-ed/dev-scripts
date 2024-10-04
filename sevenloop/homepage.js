@@ -810,14 +810,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Store the initial color
-const initialBackgroundColor = getComputedStyle(document.querySelector("[data-nav]")).backgroundColor;
+// Store the initial font color
+const initialFontColor = getComputedStyle(document.querySelector("[data-nav]")).color;
 
 // Select all elements with `[data-nav-change]`
 document.querySelectorAll("[data-nav-change]").forEach((element) => {
   gsap.to("[data-nav]", {
-    backgroundColor: "var(--swatch--light)",
-    duration: 0.5,
+    color: "var(--swatch--light-secondary)",
+    duration: 0.3,
     scrollTrigger: {
       trigger: element,
       start: "top 30%", // Start when the top of `data-nav-change` reaches 30% of the viewport
@@ -826,4 +826,5 @@ document.querySelectorAll("[data-nav-change]").forEach((element) => {
     }
   });
 });
+
 
