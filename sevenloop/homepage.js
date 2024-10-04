@@ -381,7 +381,7 @@ const swiper4 = new Swiper(".swiper4", {
     init: function () {
       startProgressBar(); // Start progress bar on initialization
       updatePagination(); // Add class to style the initial active slide
-      animateActiveSlide(); // Animate elements in the initial slide
+      animateActiveSlide(); // Animate the elements of the initial active slide
     },
     slideChangeTransitionStart: function () {
       resetProgressBar(); // Reset progress bar at the start of slide change
@@ -389,7 +389,7 @@ const swiper4 = new Swiper(".swiper4", {
     slideChangeTransitionEnd: function () {
       startProgressBar(); // Restart progress bar after slide transition
       updatePagination(); // Update active state styles for pagination bullets
-      animateActiveSlide(); // Animate elements in the active slide
+      animateActiveSlide(); // Animate elements of the newly active slide
     },
   },
 });
@@ -427,25 +427,24 @@ function updatePagination() {
   });
 }
 
-// GSAP Animation for active slide elements
+// GSAP Animation for the active slide elements
 function animateActiveSlide() {
+  // Get the currently active slide
   const activeSlide = document.querySelector(".swiper-slide-active");
-  if (activeSlide) {
-    // Animate the elements within the active slide
-    const clientName = activeSlide.querySelector(".testimonial_client_name");
-    const clientCompany = activeSlide.querySelector(".testimonial_client_company");
-    const testimonialCopy = activeSlide.querySelector(".testimonial_copy");
 
-    if (clientName && clientCompany && testimonialCopy) {
-      gsap.fromTo(
-        [clientName, clientCompany, testimonialCopy],
-        { y: "100%", opacity: 0 },
-        { y: "0%", opacity: 1, duration: 1, ease: "power2.out", stagger: 0.2 }
-      );
-    }
+  // Select the client name and company elements within the active slide
+  const clientName = activeSlide.querySelector(".testimonial_client_name");
+  const clientCompany = activeSlide.querySelector(".testimonial_client_company");
+
+  // Animate the elements from y 100% to y 0% using GSAP
+  if (clientName && clientCompany) {
+    gsap.fromTo(
+      [clientName, clientCompany],
+      { y: "100%", opacity: 0 },
+      { y: "0%", opacity: 1, duration: 1, ease: "power2.out" }
+    );
   }
 }
-
 
 
   
