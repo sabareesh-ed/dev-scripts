@@ -381,7 +381,7 @@ const swiper4 = new Swiper(".swiper4", {
     init: function () {
       startProgressBar(); // Start progress bar on initialization
       updatePagination(); // Add class to style the initial active slide
-      animateActiveSlide(); // Animate elements in the initial slide
+      setTimeout(animateActiveSlide, 100); // Animate elements in the initial slide with a slight delay
     },
     slideChangeTransitionStart: function () {
       resetProgressBar(); // Reset progress bar at the start of slide change
@@ -389,7 +389,7 @@ const swiper4 = new Swiper(".swiper4", {
     slideChangeTransitionEnd: function () {
       startProgressBar(); // Restart progress bar after slide transition
       updatePagination(); // Update active state styles for pagination bullets
-      animateActiveSlide(); // Animate elements in the active slide
+      setTimeout(animateActiveSlide, 100); // Animate elements in the active slide with a slight delay
     },
   },
 });
@@ -397,15 +397,19 @@ const swiper4 = new Swiper(".swiper4", {
 // Progress Bar: Start from 0% to 100% over 10 seconds
 function startProgressBar() {
   const progressBar = document.querySelector(".testimonial_progress_fill");
-  progressBar.style.transition = "width 10s linear"; // Animate progress bar over 10 seconds
-  progressBar.style.width = "100%"; // Set progress to 100%
+  if (progressBar) {
+    progressBar.style.transition = "width 10s linear"; // Animate progress bar over 10 seconds
+    progressBar.style.width = "100%"; // Set progress to 100%
+  }
 }
 
 // Reset progress bar to 0% width
 function resetProgressBar() {
   const progressBar = document.querySelector(".testimonial_progress_fill");
-  progressBar.style.transition = "none"; // Reset transition
-  progressBar.style.width = "0%"; // Set progress back to 0%
+  if (progressBar) {
+    progressBar.style.transition = "none"; // Reset transition
+    progressBar.style.width = "0%"; // Set progress back to 0%
+  }
 }
 
 // Function to update the pagination and apply custom class to the active slide
@@ -436,13 +440,19 @@ function animateActiveSlide() {
     const clientCompany = activeSlide.querySelector(".testimonial_client_company");
     const testimonialCopy = activeSlide.querySelector(".testimonial_copy");
 
+    // Check if the elements are available before animating
     if (clientName && clientCompany && testimonialCopy) {
+      console.log("Animating active slide elements..."); // Debugging log
       gsap.fromTo(
         [clientName, clientCompany, testimonialCopy],
         { y: "100%", opacity: 0 },
         { y: "0%", opacity: 1, duration: 1, ease: "power2.out", stagger: 0.2 }
       );
+    } else {
+      console.warn("One or more elements not found in active slide."); // Debugging log
     }
+  } else {
+    console.error("No active slide found."); // Debugging log
   }
 }
 
