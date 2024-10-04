@@ -817,7 +817,7 @@ const initialBackgroundColor = getComputedStyle(document.querySelector("[data-na
 document.querySelectorAll("[data-nav-change]").forEach((element) => {
   gsap.to("[data-nav]", {
     backgroundColor: "var(--swatch--light)",
-    duration: 0.3,
+    duration: 0.5,
     scrollTrigger: {
       trigger: element,
       start: "top 30%", // Start when the top of `data-nav-change` reaches 30% of the viewport
