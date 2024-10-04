@@ -813,28 +813,31 @@ gsap.registerPlugin(ScrollTrigger);
 // Store the initial color
 const initialBackgroundColor = getComputedStyle(document.querySelector("[data-nav]")).backgroundColor;
 
-gsap.to("[data-nav]", {
-  scrollTrigger: {
-    trigger: "[data-nav-change]",
-    start: "top 30%", // When the top of `data-nav-change` reaches 30% of the viewport
-    end: "bottom top", // When the bottom of `data-nav-change` reaches the top of the viewport
-    onEnter: () => {
-      gsap.to("[data-nav]", {
-        backgroundColor: "var(--swatch--light)",
-        duration: 0.3,
-      });
+// Select all elements with `[data-nav-change]`
+document.querySelectorAll("[data-nav-change]").forEach((element) => {
+  gsap.to("[data-nav]", {
+    scrollTrigger: {
+      trigger: element,
+      start: "top 30%", // Start when top of `data-nav-change` reaches 30% of the viewport
+      end: "bottom top", // End when the bottom of `data-nav-change` reaches the top of the viewport
+      onEnter: () => {
+        gsap.to("[data-nav]", {
+          backgroundColor: "var(--swatch--light)",
+          duration: 0.3,
+        });
+      },
+      onLeaveBack: () => {
+        gsap.to("[data-nav]", {
+          backgroundColor: initialBackgroundColor, // Revert to initial color when scrolling back
+          duration: 0.3,
+        });
+      },
+      onLeave: () => {
+        gsap.to("[data-nav]", {
+          backgroundColor: initialBackgroundColor, // Revert to initial color when leaving at the bottom
+          duration: 0.3,
+        });
+      }
     },
-    onLeaveBack: () => {
-      gsap.to("[data-nav]", {
-        backgroundColor: initialBackgroundColor, // Revert to initial color
-        duration: 0.3,
-      });
-    },
-    onLeave: () => {
-      gsap.to("[data-nav]", {
-        backgroundColor: initialBackgroundColor, // Revert to initial color when leaving the bottom
-        duration: 0.3,
-      });
-    }
-  },
+  });
 });
