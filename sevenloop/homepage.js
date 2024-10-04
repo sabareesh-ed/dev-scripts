@@ -272,166 +272,7 @@ function updateButtonOpacity(swiper) {
 
 
   
-document.addEventListener("DOMContentLoaded", function () {
-  const videoWrapper = document.querySelector(".feature_background_wrap");
-  const stickyVideoWrapper = document.querySelector(".feature_cards_wrap");
-  const container = document.querySelector(".feature_background_wrap");
-
-  let startTrigger,
-    endTrigger,
-    scrubDuration = 0.5,
-    animationDuration = 1;
-  let containerWidth = container.offsetWidth;
-
-  const setInitialValues = () => {
-    startTrigger = stickyVideoWrapper.offsetTop;
-    endTrigger = startTrigger + stickyVideoWrapper.offsetHeight;
-    containerWidth = container.offsetWidth;
-  };
-
-  const handleScroll = () => {
-    let scrollPosition = window.scrollY;
-
-    if (scrollPosition >= startTrigger && scrollPosition <= endTrigger) {
-      let progress = (scrollPosition - startTrigger) / (endTrigger - startTrigger);
-      let scrubProgress = Math.min(progress / scrubDuration, 1);
-      let minWidth =
-        containerWidth -
-        (containerWidth - (window.innerWidth * 100) / 100) * scrubProgress;
-      let borderRadius = 1.5 - 1.5 * scrubProgress;
-      let height = 82 + (18 * scrubProgress); // Smooth transition from 82% to 100%
-
-      videoWrapper.style.minWidth = `${minWidth}px`;
-      videoWrapper.style.borderRadius = `${borderRadius}rem`;
-      videoWrapper.style.height = `${height}%`;
-    } else if (scrollPosition < startTrigger) {
-      videoWrapper.style.minWidth = `${containerWidth}px`;
-      videoWrapper.style.borderRadius = "1.5rem";
-      videoWrapper.style.height = "82%"; // Reset height to initial value
-    } else if (scrollPosition > endTrigger) {
-      videoWrapper.style.minWidth = "100vw";
-      videoWrapper.style.borderRadius = "0";
-      videoWrapper.style.height = "100%"; // Final height at end of scroll
-    }
-  };
-
-  const debounce = (func, wait) => {
-    let timeout;
-    return function (...args) {
-      const later = () => {
-        clearTimeout(timeout);
-        func(...args);
-      };
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-    };
-  };
-
-  const handleResize = debounce(() => {
-    setInitialValues();
-    handleScroll();
-  }, 100);
-
-  const isMobile = window.matchMedia("(max-width: 767px)");
-
-  // Only enable scroll behavior if not on mobile
-  if (!isMobile.matches) {
-    window.addEventListener("scroll", handleScroll);
-    window.addEventListener("resize", handleResize);
-
-    setInitialValues();
-  }
-});
-
-
-  
-// Initialize Swiper4 (with cross-fade effect and custom pagination)
-const swiper4 = new Swiper(".swiper4", {
-  direction: "horizontal",
-  loop: true, // Enable looping of slides
-  spaceBetween: 0,
-  speed: 300,
-  slidesPerView: 1,
-  effect: "fade", // Use fade effect
-  fadeEffect: {
-    crossFade: true, // Enable cross-fade between slides
-  },
-  autoplay: {
-    delay: 10000, // 10 seconds per slide
-    disableOnInteraction: false, // Continue autoplay even after user interaction
-  },
-  pagination: {
-    el: ".testimonial_pagination_wrap", // Custom pagination wrapper
-    clickable: true, // Allow user to click on the pagination bullets
-    renderBullet: function (index, className) {
-      // Custom SVG for each pagination bullet (removed gradient styling)
-      return `<span class="${className} pagination-bullet">
-                  <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path class="svg-path" d="M3.62796 17.2345C2.11431 16.3606 1.22799 14.6798 1.04932 12.6266C0.870746 10.5743 1.40404 8.1741 2.70525 5.92034C4.00646 3.66658 5.81847 2.00462 7.68507 1.13314C9.55255 0.261251 11.4513 0.188434 12.965 1.06234C14.4786 1.93625 15.365 3.61704 15.5436 5.67028C15.7222 7.72253 15.1889 10.1228 13.8877 12.3765C12.5865 14.6303 10.7745 16.2922 8.90787 17.1637C7.04039 18.0356 5.14161 18.1084 3.62796 17.2345Z" stroke="#FF4500" stroke-width="1"/>
-                  </svg>
-                </span>`;
-    },
-  },
-  navigation: {
-    nextEl: ".testimonial_button_next",
-    prevEl: ".testimonial_button_prev",
-  },
-
-  on: {
-    init: function () {
-      startProgressBar(); // Start progress bar on initialization
-      updatePagination(); // Add class to style the initial active slide
-      setTimeout(animateActiveSlide, 500); // Animate elements in the initial slide with a slight delay
-    },
-    slideChangeTransitionStart: function () {
-      resetProgressBar(); // Reset progress bar at the start of slide change
-    },
-    slideChangeTransitionEnd: function () {
-      startProgressBar(); // Restart progress bar after slide transition
-      updatePagination(); // Update active state styles for pagination bullets
-      setTimeout(animateActiveSlide, 500); // Animate elements in the active slide with a slight delay
-    },
-  },
-});
-
-// Progress Bar: Start from 0% to 100% over 10 seconds
-function startProgressBar() {
-  const progressBar = document.querySelector(".testimonial_progress_fill");
-  if (progressBar) {
-    progressBar.style.transition = "width 10s linear"; // Animate progress bar over 10 seconds
-    progressBar.style.width = "100%"; // Set progress to 100%
-  }
-}
-
-// Reset progress bar to 0% width
-function resetProgressBar() {
-  const progressBar = document.querySelector(".testimonial_progress_fill");
-  if (progressBar) {
-    progressBar.style.transition = "none"; // Reset transition
-    progressBar.style.width = "0%"; // Set progress back to 0%
-  }
-}
-
-// Function to update the pagination and apply custom class to the active slide
-function updatePagination() {
-  // Get all pagination bullets
-  const bullets = document.querySelectorAll(".swiper-pagination-bullet");
-
-  // Iterate through each bullet and update its appearance
-  bullets.forEach((bullet) => {
-    const svgPath = bullet.querySelector(".svg-path");
-
-    if (bullet.classList.contains("swiper-pagination-bullet-active")) {
-      // Apply a class for the active bullet to add styles via CSS
-      svgPath.classList.add("active-svg-path");
-    } else {
-      // Remove the class from inactive bullets
-      svgPath.classList.remove("active-svg-path");
-    }
-  });
-}
-
-// GSAP Animation for active slide elements
+// Function to animate active slide elements without GSAP
 function animateActiveSlide() {
   // Select the current active slide
   const activeSlide = document.querySelector(".swiper-slide-active");
@@ -446,21 +287,49 @@ function animateActiveSlide() {
     // Combine all selected elements into a single array
     const elementsToAnimate = [...clientNameElements, ...clientCompanyElements, ...testimonialCopyElements];
 
-    // If elements exist, apply the animation with a delay
+    // If elements exist, apply the animation
     if (elementsToAnimate.length > 0) {
-      setTimeout(() => {
-        gsap.fromTo(
-          elementsToAnimate,
-          { y: "100%", opacity: 0 },
-          { y: "0%", opacity: 1, duration: 1, ease: "power2.out", stagger: 0.2 }
-        );
-      }, 500); // Delay of 500ms before starting the animation
+      // Animate each element with a delay for staggering
+      elementsToAnimate.forEach((element, index) => {
+        animateElement(element, index * 200); // Each element starts with a delay of 200ms
+      });
     } else {
       console.warn("No elements found to animate in the active slide.");
     }
   } else {
     console.error("No visible active slide found or slide is hidden.");
   }
+}
+
+// Helper function to animate an element
+function animateElement(element, delay) {
+  setTimeout(() => {
+    let startTime;
+    const duration = 1000; // Animation duration in ms (1 second)
+
+    const animate = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+
+      // Calculate progress (0 to 1)
+      const progress = Math.min(elapsed / duration, 1);
+
+      // Apply transform and opacity based on progress
+      element.style.transform = `translateY(${(1 - progress) * 100}%)`;
+      element.style.opacity = progress;
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+
+    // Set initial state
+    element.style.transform = "translateY(100%)";
+    element.style.opacity = "0";
+
+    // Start the animation
+    requestAnimationFrame(animate);
+  }, delay);
 }
 
 // Helper function to check if a slide is visible and not a duplicate
