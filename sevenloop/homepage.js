@@ -807,3 +807,53 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+  const counter = document.querySelector('.counter');
+  const startValue = parseInt(counter.getAttribute('data-number-start'));
+  const endValue = parseInt(counter.getAttribute('data-number-end'));
+  let currentValue = startValue;
+
+  // Initialize ScrollTrigger
+  gsap.registerPlugin(ScrollTrigger);
+
+  ScrollTrigger.create({
+      trigger: counter,
+      start: "top 70%",
+      onEnter: () => {
+          animateCounter();
+      }
+  });
+
+  // Function to animate counter from start to end
+  function updateCounter(value) {
+      const strValue = value.toString().padStart(4, '0');
+      const digits = strValue.split('');
+
+      // Update each digit individually
+      digits.forEach((digit, index) => {
+          const digitElement = counter.children[index].querySelector('.number');
+          const currentDigit = parseInt(digitElement.innerHTML);
+          const newDigit = parseInt(digit);
+
+          if (currentDigit !== newDigit) {
+              gsap.to(digitElement, {
+                  y: 100,
+                  duration: 0.3,
+                  onComplete: () => {
+                      digitElement.innerHTML = newDigit;
+                      gsap.fromTo(digitElement, { y: -100 }, { y: 0, duration: 0.3 });
+                  }
+              });
+          }
+      });
+  }
+
+  function animateCounter() {
+      if (currentValue <= endValue) {
+          updateCounter(currentValue);
+          currentValue++;
+          setTimeout(animateCounter, 300); // Adjust delay as needed for a smoother animation
+      }
+  }
+});
