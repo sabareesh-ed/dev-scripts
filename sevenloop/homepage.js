@@ -808,46 +808,26 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// GSAP script
 gsap.registerPlugin(ScrollTrigger);
 
-// Animation function for the counter
-function animateCounter(counterElement) {
-  const start = parseInt(counterElement.getAttribute('data-number-start'), 10);
-  const end = parseInt(counterElement.getAttribute('data-number-end'), 10);
-  const counterDigits = Array.from(counterElement.querySelectorAll('.digit'));
+// Store the initial color
+const initialBackgroundColor = getComputedStyle(document.querySelector("[data-nav]")).backgroundColor;
 
-  // Loop from the start to the end value
-  for (let i = start; i <= end; i++) {
-    const strNumber = i.toString().padStart(counterDigits.length, '0');
-
-    for (let j = 0; j < counterDigits.length; j++) {
-      const currentDigitElement = counterDigits[j];
-      const currentDigit = parseInt(currentDigitElement.textContent, 10);
-      const newDigit = parseInt(strNumber[j], 10);
-
-      if (newDigit !== currentDigit) {
-        // Animate the digit change
-        gsap.to(currentDigitElement, {
-          y: '100%', // Move the current digit out of view
-          duration: 0.5,
-          onComplete: () => {
-            currentDigitElement.textContent = newDigit;
-            gsap.fromTo(currentDigitElement, { y: '-100%' }, { y: '0%', duration: 0.5 });
-          },
-        });
-      }
-    }
-  }
-}
-
-// ScrollTrigger implementation
-ScrollTrigger.create({
-  trigger: '[data-number-section="counterSection"]',
-  start: 'top 70%',
-  onEnter: () => {
-    document.querySelectorAll('[data-number-section="counterSection"]').forEach(counter => {
-      animateCounter(counter);
-    });
+gsap.to("[data-nav]", {
+  scrollTrigger: {
+    trigger: "[data-nav-change]",
+    start: "top 70%",
+    onEnter: () => {
+      gsap.to("[data-nav]", {
+        backgroundColor: "var(--button--background)",
+        duration: 0.3,
+      });
+    },
+    onLeaveBack: () => {
+      gsap.to("[data-nav]", {
+        backgroundColor: initialBackgroundColor, // Revert to initial color
+        duration: 0.3,
+      });
+    },
   },
 });
