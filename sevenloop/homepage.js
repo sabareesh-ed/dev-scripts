@@ -451,7 +451,7 @@ function animateActiveSlide() {
         elementsToAnimate,
         { y: "100%", opacity: 0 },
         { y: "0%", opacity: 1, duration: 0.5, ease: "power2.out", stagger: 0.1 }
-      ),0 ;
+      ) ;
     } else {
       console.warn("No elements found to animate in the active slide.");
     }
