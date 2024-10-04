@@ -345,97 +345,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   
-// Initialize Swiper4 (with cross-fade effect and custom pagination)
-const swiper4 = new Swiper(".swiper4", {
-  direction: "horizontal",
-  loop: true, // Enable looping of slides
-  spaceBetween: 0,
-  speed: 300,
-  slidesPerView: 1,
-  effect: "fade", // Use fade effect
-  fadeEffect: {
-    crossFade: true, // Enable cross-fade between slides
-  },
-  autoplay: {
-    delay: 10000, // 10 seconds per slide
-    disableOnInteraction: false, // Continue autoplay even after user interaction
-  },
-  pagination: {
-    el: ".testimonial_pagination_wrap", // Custom pagination wrapper
-    clickable: true, // Allow user to click on the pagination bullets
-    renderBullet: function (index, className) {
-      // Custom SVG for each pagination bullet (removed gradient styling)
-      return `<span class="${className} pagination-bullet">
-                  <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path class="svg-path" d="M3.62796 17.2345C2.11431 16.3606 1.22799 14.6798 1.04932 12.6266C0.870746 10.5743 1.40404 8.1741 2.70525 5.92034C4.00646 3.66658 5.81847 2.00462 7.68507 1.13314C9.55255 0.261251 11.4513 0.188434 12.965 1.06234C14.4786 1.93625 15.365 3.61704 15.5436 5.67028C15.7222 7.72253 15.1889 10.1228 13.8877 12.3765C12.5865 14.6303 10.7745 16.2922 8.90787 17.1637C7.04039 18.0356 5.14161 18.1084 3.62796 17.2345Z" stroke="#FF4500" stroke-width="1"/>
-                  </svg>
-                </span>`;
-    },
-  },
-  navigation: {
-    nextEl: ".testimonial_button_next",
-    prevEl: ".testimonial_button_prev",
-  },
-
-  on: {
-    init: function () {
-      startProgressBar(); // Start progress bar on initialization
-      updatePagination(); // Add class to style the initial active slide
-      setTimeout(animateActiveSlide, 500); // Animate elements in the initial slide with a slight delay
-    },
-    slideChangeTransitionStart: function () {
-      resetProgressBar(); // Reset progress bar at the start of slide change
-    },
-    slideChangeTransitionEnd: function () {
-      startProgressBar(); // Restart progress bar after slide transition
-      updatePagination(); // Update active state styles for pagination bullets
-      setTimeout(animateActiveSlide, 500); // Animate elements in the active slide with a slight delay
-    },
-  },
-});
-
-// Progress Bar: Start from 0% to 100% over 10 seconds
-function startProgressBar() {
-  const progressBar = document.querySelector(".testimonial_progress_fill");
-  if (progressBar) {
-    progressBar.style.transition = "width 10s linear"; // Animate progress bar over 10 seconds
-    progressBar.style.width = "100%"; // Set progress to 100%
-  }
-}
-
-// Reset progress bar to 0% width
-function resetProgressBar() {
-  const progressBar = document.querySelector(".testimonial_progress_fill");
-  if (progressBar) {
-    progressBar.style.transition = "none"; // Reset transition
-    progressBar.style.width = "0%"; // Set progress back to 0%
-  }
-}
-
-// Function to update the pagination and apply custom class to the active slide
-function updatePagination() {
-  // Get all pagination bullets
-  const bullets = document.querySelectorAll(".swiper-pagination-bullet");
-
-  // Iterate through each bullet and update its appearance
-  bullets.forEach((bullet) => {
-    const svgPath = bullet.querySelector(".svg-path");
-
-    if (bullet.classList.contains("swiper-pagination-bullet-active")) {
-      // Apply a class for the active bullet to add styles via CSS
-      svgPath.classList.add("active-svg-path");
-    } else {
-      // Remove the class from inactive bullets
-      svgPath.classList.remove("active-svg-path");
-    }
-  });
-}
-
 // GSAP Animation for active slide elements
 function animateActiveSlide() {
-  // Select the current active slide
-  const activeSlide = document.querySelector(".swiper-slide-active");
-  if (activeSlide && isSlideVisible(activeSlide)) {
+  // Select the current active and visible slide that is not a duplicate
+  const activeSlide = document.querySelector(".swiper-slide-active.swiper-slide-visible:not(.swiper-slide-duplicate)");
+
+  if (activeSlide) {
     console.log("Animating active slide elements...", activeSlide); // Debugging log
 
     // Select the elements that need to be animated within the active slide
@@ -459,14 +374,8 @@ function animateActiveSlide() {
       console.warn("No elements found to animate in the active slide.");
     }
   } else {
-    console.error("No visible active slide found or slide is hidden.");
+    console.error("No visible, non-duplicate active slide found.");
   }
-}
-
-// Helper function to check if a slide is visible and not a duplicate
-function isSlideVisible(slide) {
-  const style = window.getComputedStyle(slide);
-  return style.opacity !== "0" && style.visibility !== "hidden" && style.display !== "none";
 }
 
 
