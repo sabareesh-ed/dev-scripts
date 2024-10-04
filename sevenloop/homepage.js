@@ -828,3 +828,96 @@ document.querySelectorAll("[data-nav-change]").forEach((element) => {
 });
 
 
+document.addEventListener("DOMContentLoaded", () => {
+  // Function to check if the viewport is mobile portrait
+  const isMobilePortrait = () => window.matchMedia("(max-width: 767px)").matches;
+
+  if (isMobilePortrait()) {
+      const footerItems = document.querySelectorAll('[data-footer-dropdown]');
+
+      // Set initial states: First item open, others closed
+      footerItems.forEach((item) => {
+          const content = item.querySelector('[data-footer-content]');
+          const arrow = item.querySelector('.footer_dropdown_arrow');
+
+          if (item.hasAttribute('data-footer-first')) {
+              // Set the first item's content to auto height initially
+              gsap.set(content, { height: "auto", overflow: "visible" });
+              // Set initial rotation of arrow for the first item
+              gsap.set(arrow, { rotation: 180 });
+          } else {
+              // Set all other contents to height 0
+              gsap.set(content, { height: 0, overflow: "hidden" });
+              // Set initial rotation of arrow for other items
+              gsap.set(arrow, { rotation: 0 });
+          }
+      });
+
+      // Attach click event listeners to each trigger
+      footerItems.forEach((item) => {
+          const trigger = item.querySelector('[data-footer-trigger]');
+          const content = item.querySelector('[data-footer-content]');
+          const arrow = item.querySelector('.footer_dropdown_arrow');
+
+          trigger.addEventListener("click", () => {
+              const isOpen = gsap.getProperty(content, "height") !== 0;
+
+              // Collapse all other items
+              footerItems.forEach((otherItem) => {
+                  if (otherItem !== item) {
+                      const otherContent = otherItem.querySelector('[data-footer-content]');
+                      const otherArrow = otherItem.querySelector('.footer_dropdown_arrow');
+
+                      if (gsap.getProperty(otherContent, "height") !== 0) {
+                          // Collapse the content and rotate the arrow concurrently
+                          gsap.to(otherContent, {
+                              height: 0,
+                              duration: 0.5,
+                              ease: "power2.out",
+                              onStart: () => {
+                                  otherContent.style.overflow = "hidden";
+                              }
+                          });
+                          // Rotate arrow back to 0 degrees during collapse
+                          gsap.to(otherArrow, { rotation: 0, duration: 0.5, ease: "power2.inOut" });
+                      }
+                  }
+              });
+
+              if (isOpen) {
+                  // Collapse the current item and rotate the arrow concurrently
+                  gsap.to(content, {
+                      height: 0,
+                      duration: 0.5,
+                      ease: "power2.out",
+                      onStart: () => {
+                          content.style.overflow = "hidden";
+                      }
+                  });
+                  // Rotate arrow back to 0 degrees during collapse
+                  gsap.to(arrow, { rotation: 0, duration: 0.5, ease: "power2.inOut" });
+              } else {
+                  // Expand the current item and rotate the arrow concurrently
+                  gsap.set(content, { height: "auto" });
+                  const targetHeight = content.clientHeight;
+
+                  const timeline = gsap.timeline({
+                      defaults: { duration: 0.5, ease: "power2.out" },
+                      onComplete: () => {
+                          // Remove overflow hidden after expansion completes
+                          content.style.overflow = "visible";
+                      }
+                  });
+
+                  timeline
+                      .set(content, { height: 0 }) // Reset height to 0 to animate from closed state
+                      .to(content, { height: targetHeight }) // Animate to the natural height
+                      .to(arrow, { rotation: 180 }, "<"); // Rotate arrow to 180 degrees concurrently with content expansion
+              }
+          });
+      });
+  }
+});
+
+
+
