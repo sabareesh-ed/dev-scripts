@@ -842,12 +842,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
           if (item.hasAttribute('data-footer-first')) {
               // Set the first item's content to auto height initially
-              gsap.set(content, { height: "auto", overflow: "visible" });
+              gsap.set(content, { height: "auto", overflow: "visible", display: "flex" });
               // Set initial rotation of arrow for the first item
               gsap.set(arrow, { rotation: 180 });
           } else {
-              // Set all other contents to height 0
-              gsap.set(content, { height: 0, overflow: "hidden" });
+              // Set all other contents to height 0 and hidden initially
+              gsap.set(content, { height: 0, overflow: "hidden", display: "none" });
               // Set initial rotation of arrow for other items
               gsap.set(arrow, { rotation: 0 });
           }
@@ -876,6 +876,9 @@ document.addEventListener("DOMContentLoaded", () => {
                               ease: "power2.out",
                               onStart: () => {
                                   otherContent.style.overflow = "hidden";
+                              },
+                              onComplete: () => {
+                                  otherContent.style.display = "none"; // Hide the content after collapsing
                               }
                           });
                           // Rotate arrow back to 0 degrees during collapse
@@ -892,13 +895,16 @@ document.addEventListener("DOMContentLoaded", () => {
                       ease: "power2.out",
                       onStart: () => {
                           content.style.overflow = "hidden";
+                      },
+                      onComplete: () => {
+                          content.style.display = "none"; // Hide the content after collapsing
                       }
                   });
                   // Rotate arrow back to 0 degrees during collapse
                   gsap.to(arrow, { rotation: 0, duration: 0.5, ease: "power2.inOut" });
               } else {
                   // Expand the current item and rotate the arrow concurrently
-                  gsap.set(content, { height: "auto" });
+                  gsap.set(content, { height: "auto", display: "flex" });
                   const targetHeight = content.clientHeight;
 
                   const timeline = gsap.timeline({
@@ -918,6 +924,3 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   }
 });
-
-
-
