@@ -816,28 +816,14 @@ const initialBackgroundColor = getComputedStyle(document.querySelector("[data-na
 // Select all elements with `[data-nav-change]`
 document.querySelectorAll("[data-nav-change]").forEach((element) => {
   gsap.to("[data-nav]", {
+    backgroundColor: "var(--swatch--light)",
+    duration: 0.3,
     scrollTrigger: {
       trigger: element,
-      start: "top 30%", // Start when top of `data-nav-change` reaches 30% of the viewport
+      start: "top 30%", // Start when the top of `data-nav-change` reaches 30% of the viewport
       end: "bottom top", // End when the bottom of `data-nav-change` reaches the top of the viewport
-      onEnter: () => {
-        gsap.to("[data-nav]", {
-          backgroundColor: "var(--swatch--light)",
-          duration: 0.3,
-        });
-      },
-      onLeaveBack: () => {
-        gsap.to("[data-nav]", {
-          backgroundColor: initialBackgroundColor, // Revert to initial color when scrolling back
-          duration: 0.3,
-        });
-      },
-      onLeave: () => {
-        gsap.to("[data-nav]", {
-          backgroundColor: initialBackgroundColor, // Revert to initial color when leaving at the bottom
-          duration: 0.3,
-        });
-      }
-    },
+      toggleActions: "play reverse play reverse", // Controls animation actions on enter, leave, enter back, and leave back
+    }
   });
 });
+
