@@ -435,24 +435,32 @@ function updatePagination() {
 function animateActiveSlide() {
   const activeSlide = document.querySelector(".swiper-slide-active");
   if (activeSlide) {
-    // Animate the elements within the active slide
-    const clientName = activeSlide.querySelector(".testimonial_client_name");
-    const clientCompany = activeSlide.querySelector(".testimonial_client_company");
-    const testimonialCopy = activeSlide.querySelector(".testimonial_copy");
+    // Animate elements depending on the view (desktop or mobile)
+    let clientName = activeSlide.querySelector(".testimonial_name_wrap.is-desktop-view .testimonial_client_name");
+    let clientCompany = activeSlide.querySelector(".testimonial_name_wrap.is-desktop-view .testimonial_client_company");
+    let testimonialCopy = activeSlide.querySelector(".testimonial_copy");
 
-    // Check if the elements are available before animating
+    // If desktop elements are not found, try to get mobile view elements
+    if (!clientName || !clientCompany) {
+      clientName = activeSlide.querySelector(".testimonial_name_wrap.is-mobile-view .testimonial_client_name");
+      clientCompany = activeSlide.querySelector(".testimonial_name_wrap.is-mobile-view .testimonial_client_company");
+    }
+
+    // Debugging to check which elements are being selected
+    console.log("Animating elements:", clientName, clientCompany, testimonialCopy);
+
+    // Animate the elements if they are found
     if (clientName && clientCompany && testimonialCopy) {
-      console.log("Animating active slide elements..."); // Debugging log
       gsap.fromTo(
         [clientName, clientCompany, testimonialCopy],
         { y: "100%", opacity: 0 },
         { y: "0%", opacity: 1, duration: 1, ease: "power2.out", stagger: 0.2 }
       );
     } else {
-      console.warn("One or more elements not found in active slide."); // Debugging log
+      console.warn("One or more elements not found in active slide.");
     }
   } else {
-    console.error("No active slide found."); // Debugging log
+    console.error("No active slide found.");
   }
 }
 
