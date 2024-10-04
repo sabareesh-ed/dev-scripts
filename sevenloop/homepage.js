@@ -430,7 +430,7 @@ function updatePagination() {
 // GSAP Animation for the active slide elements
 function animateActiveSlide() {
   // Get the currently active slide
-  const activeSlide = document.querySelector(".swiper-slide-active");
+  const activeSlide = document.querySelectorAll(".swiper-slide-active");
 
   // Select the client name and company elements within the active slide
   const clientName = activeSlide.querySelector(".testimonial_client_name");
