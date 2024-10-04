@@ -440,8 +440,8 @@ function animateActiveSlide() {
   if (clientName && clientCompany) {
     gsap.fromTo(
       [clientName, clientCompany],
-      { y: "100%", opacity: 0 },
-      { y: "0%", opacity: 1, duration: 1, ease: "power2.out" }
+      { y: "0%", opacity: 0 },
+      { y: "100%", opacity: 1, duration: 1, ease: "power2.out" }
     );
   }
 }
