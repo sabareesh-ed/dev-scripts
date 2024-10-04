@@ -808,93 +808,46 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-  const numberCounters = document.querySelectorAll('[data-number-card]');
+// GSAP script
+gsap.registerPlugin(ScrollTrigger);
 
-  numberCounters.forEach((counter) => {
-    const start = parseInt(counter.getAttribute('data-number-start'), 10);
-    const end = parseInt(counter.getAttribute('data-number-end'), 10);
-    initializeCounter(counter, start, end);
-    animateCounter(counter, start, end);
-  });
+// Animation function for the counter
+function animateCounter(counterElement) {
+  const start = parseInt(counterElement.getAttribute('data-number-start'), 10);
+  const end = parseInt(counterElement.getAttribute('data-number-end'), 10);
+  const counterDigits = Array.from(counterElement.querySelectorAll('.digit'));
 
-  function initializeCounter(counter, start) {
-    const digits = String(start).padStart(4, '0').split('');
+  // Loop from the start to the end value
+  for (let i = start; i <= end; i++) {
+    const strNumber = i.toString().padStart(counterDigits.length, '0');
 
-    digits.forEach((digit) => {
-      const digitContainer = document.createElement('div');
-      digitContainer.setAttribute('data-digit', digit);
-      digitContainer.style.position = 'relative';
-      digitContainer.style.overflow = 'hidden';
-      digitContainer.style.height = '2rem';
-      digitContainer.style.width = '1rem';
-      digitContainer.style.display = 'inline-block';
+    for (let j = 0; j < counterDigits.length; j++) {
+      const currentDigitElement = counterDigits[j];
+      const currentDigit = parseInt(currentDigitElement.textContent, 10);
+      const newDigit = parseInt(strNumber[j], 10);
 
-      const digitSpan = document.createElement('span');
-      digitSpan.innerText = digit;
-      digitSpan.style.position = 'absolute';
-      digitSpan.style.width = '100%';
-      digitSpan.style.height = '2rem';
-      digitSpan.style.transform = 'translateY(0%)';
-      digitSpan.style.transition = 'transform 1s ease-in-out';
-
-      digitContainer.appendChild(digitSpan);
-      counter.appendChild(digitContainer);
-    });
-  }
-
-  function animateCounter(counter, start, end) {
-    let current = start;
-
-    const interval = setInterval(() => {
-      if (current <= end) {
-        updateDigits(counter, current);
-        current++;
-      } else {
-        clearInterval(interval);
+      if (newDigit !== currentDigit) {
+        // Animate the digit change
+        gsap.to(currentDigitElement, {
+          y: '100%', // Move the current digit out of view
+          duration: 0.5,
+          onComplete: () => {
+            currentDigitElement.textContent = newDigit;
+            gsap.fromTo(currentDigitElement, { y: '-100%' }, { y: '0%', duration: 0.5 });
+          },
+        });
       }
-    }, 100); // Adjust speed here
+    }
   }
+}
 
-  function updateDigits(counter, number) {
-    const digits = String(number).padStart(4, '0').split('');
-    const digitElements = counter.children;
-
-    digits.forEach((digit, index) => {
-      const digitElement = digitElements[index];
-      const currentDigit = parseInt(digitElement.getAttribute('data-digit'), 10);
-      const newDigit = parseInt(digit, 10);
-
-      if (currentDigit !== newDigit) {
-        animateDigit(digitElement, newDigit);
-        digitElement.setAttribute('data-digit', newDigit);
-      }
+// ScrollTrigger implementation
+ScrollTrigger.create({
+  trigger: '[data-number-section="counterSection"]',
+  start: 'top 70%',
+  onEnter: () => {
+    document.querySelectorAll('[data-number-section="counterSection"]').forEach(counter => {
+      animateCounter(counter);
     });
-  }
-
-  function animateDigit(digitElement, newDigit) {
-    const digitSpan = digitElement.querySelector('span');
-
-    // Create a new span for the new digit
-    const newDigitSpan = document.createElement('span');
-    newDigitSpan.innerText = newDigit;
-    newDigitSpan.style.position = 'absolute';
-    newDigitSpan.style.width = '100%';
-    newDigitSpan.style.height = '2rem';
-    newDigitSpan.style.transform = 'translateY(100%)';
-    newDigitSpan.style.transition = 'transform 1s ease-in-out';
-
-    digitElement.appendChild(newDigitSpan);
-
-    // Trigger the animation
-    requestAnimationFrame(() => {
-      digitSpan.style.transform = 'translateY(-100%)';
-      newDigitSpan.style.transform = 'translateY(0%)';
-    });
-
-    // Remove the old span after animation
-    setTimeout(() => {
-      digitElement.removeChild(digitSpan);
-    }, 1000); // Match the transition duration
-  }
+  },
 });
