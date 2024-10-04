@@ -277,16 +277,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const stickyVideoWrapper = document.querySelector(".feature_cards_wrap");
   const container = document.querySelector(".feature_background_wrap");
 
-  let startTrigger,
-    endTrigger,
-    scrubDuration = 0.5,
-    animationDuration = 1;
-  let containerWidth = container.offsetWidth;
+  let startTrigger, endTrigger, scrubDuration = 0.5;
 
   const setInitialValues = () => {
     startTrigger = stickyVideoWrapper.offsetTop;
     endTrigger = startTrigger + stickyVideoWrapper.offsetHeight;
-    containerWidth = container.offsetWidth;
   };
 
   const handleScroll = () => {
@@ -295,9 +290,9 @@ document.addEventListener("DOMContentLoaded", function () {
     if (scrollPosition >= startTrigger && scrollPosition <= endTrigger) {
       let progress = (scrollPosition - startTrigger) / (endTrigger - startTrigger);
       let scrubProgress = Math.min(progress / scrubDuration, 1);
-      let minWidth =
-        containerWidth -
-        (containerWidth - (window.innerWidth * 100) / 100) * scrubProgress;
+      
+      let columnWidth = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--column-width--11'));
+      let minWidth = columnWidth + (window.innerWidth - columnWidth) * scrubProgress;
       let borderRadius = 1.5 - 1.5 * scrubProgress;
       let height = 82 + (18 * scrubProgress); // Smooth transition from 82% to 100%
 
@@ -305,7 +300,7 @@ document.addEventListener("DOMContentLoaded", function () {
       videoWrapper.style.borderRadius = `${borderRadius}rem`;
       videoWrapper.style.height = `${height}%`;
     } else if (scrollPosition < startTrigger) {
-      videoWrapper.style.minWidth = `${containerWidth}px`;
+      videoWrapper.style.minWidth = `var(--column-width--11)`;
       videoWrapper.style.borderRadius = "1.5rem";
       videoWrapper.style.height = "82%"; // Reset height to initial value
     } else if (scrollPosition > endTrigger) {
@@ -342,7 +337,6 @@ document.addEventListener("DOMContentLoaded", function () {
     setInitialValues();
   }
 });
-
 
   
 // Initialize Swiper4 (with cross-fade effect and custom pagination)
