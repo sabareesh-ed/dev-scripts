@@ -350,7 +350,7 @@ const swiper4 = new Swiper(".swiper4", {
   direction: "horizontal",
   loop: true, // Enable looping of slides
   spaceBetween: 0,
-  speed: 300,
+  speed: 0,
   slidesPerView: 1,
   effect: "fade", // Use fade effect
   fadeEffect: {
