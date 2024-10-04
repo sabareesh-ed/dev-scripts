@@ -816,10 +816,11 @@ const initialBackgroundColor = getComputedStyle(document.querySelector("[data-na
 gsap.to("[data-nav]", {
   scrollTrigger: {
     trigger: "[data-nav-change]",
-    start: "top 70%",
+    start: "top 30%", // When the top of `data-nav-change` reaches 30% of the viewport
+    end: "bottom top", // When the bottom of `data-nav-change` reaches the top of the viewport
     onEnter: () => {
       gsap.to("[data-nav]", {
-        backgroundColor: "var(--button--background)",
+        backgroundColor: "var(--swatch--light)",
         duration: 0.3,
       });
     },
@@ -829,5 +830,11 @@ gsap.to("[data-nav]", {
         duration: 0.3,
       });
     },
+    onLeave: () => {
+      gsap.to("[data-nav]", {
+        backgroundColor: initialBackgroundColor, // Revert to initial color when leaving the bottom
+        duration: 0.3,
+      });
+    }
   },
 });
