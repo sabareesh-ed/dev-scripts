@@ -345,6 +345,128 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   
+  // Initialize Swiper4 (with cross-fade effect and custom pagination)
+  const swiper4 = new Swiper(".swiper4", {
+    direction: "horizontal",
+    loop: true, // Enable looping of slides
+    spaceBetween: 0,
+    speed: 300,
+    slidesPerView: 1,
+    effect: "fade", // Use fade effect
+    fadeEffect: {
+      crossFade: true, // Enable cross-fade between slides
+    },
+    autoplay: {
+      delay: 10000, // 10 seconds per slide
+      disableOnInteraction: false, // Continue autoplay even after user interaction
+    },
+    pagination: {
+      el: ".testimonial_pagination_wrap", // Custom pagination wrapper
+      clickable: true, // Allow user to click on the pagination bullets
+      renderBullet: function (index, className) {
+        // Custom SVG for each pagination bullet
+        return `<span class="${className} pagination-bullet">
+                    <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path class="svg-path" d="M3.62796 17.2345C2.11431 16.3606 1.22799 14.6798 1.04932 12.6266C0.870746 10.5743 1.40404 8.1741 2.70525 5.92034C4.00646 3.66658 5.81847 2.00462 7.68507 1.13314C9.55255 0.261251 11.4513 0.188434 12.965 1.06234C14.4786 1.93625 15.365 3.61704 15.5436 5.67028C15.7222 7.72253 15.1889 10.1228 13.8877 12.3765C12.5865 14.6303 10.7745 16.2922 8.90787 17.1637C7.04039 18.0356 5.14161 18.1084 3.62796 17.2345Z" stroke="#FF4500" stroke-width="1"/>
+                    </svg>
+                  </span>`;
+      },
+    },
+    navigation: {
+      nextEl: ".testimonial_button_next",
+      prevEl: ".testimonial_button_prev",
+    },
+  
+    on: {
+      init: function () {
+        startProgressBar(); // Start progress bar on initialization
+        animateContent(); // Animate content on initialization
+        updatePagination(); // Add gradient to the initial active slide
+      },
+      slideChangeTransitionStart: function () {
+        resetProgressBar(); // Reset progress bar at the start of slide change
+      },
+      slideChangeTransitionEnd: function () {
+        startProgressBar(); // Restart progress bar after slide transition
+        animateContent(); // Animate content when slide changes
+        updatePagination(); // Update gradient fill for active slide
+      },
+    },
+  });
+  
+  // GSAP animation for content elements (testimonial copy, name, company)
+  function animateContent() {
+    // Target all testimonial elements
+    const elements = document.querySelectorAll(
+      ".testimonial_copy, .testimonial_client_name, .testimonial_client_company"
+    );
+  
+    // Animate from y: 100% to y: 0% with GSAP, stagger, no delay
+    gsap.fromTo(
+      elements,
+      { y: "100%", opacity: 0 }, // Initial state
+      {
+        y: "0%",
+        opacity: 1,
+        duration: 0.6, // Faster duration (0.6 seconds)
+        stagger: 0.15, // Slight stagger of 0.15 seconds between elements
+        ease: "power2.out", // Smooth transition
+      }
+    );
+  }
+  
+  // Progress Bar: Start from 0% to 100% over 10 seconds
+  function startProgressBar() {
+    const progressBar = document.querySelector(".testimonial_progress_fill");
+    progressBar.style.transition = "width 10s linear"; // Animate progress bar over 10 seconds
+    progressBar.style.width = "100%"; // Set progress to 100%
+  }
+  
+  // Reset progress bar to 0% width
+  function resetProgressBar() {
+    const progressBar = document.querySelector(".testimonial_progress_fill");
+    progressBar.style.transition = "none"; // Reset transition
+    progressBar.style.width = "0%"; // Set progress back to 0%
+  }
+  
+  // Function to update the pagination and apply gradient to the active slide
+  function updatePagination() {
+    // Get all pagination bullets
+    const bullets = document.querySelectorAll(".swiper-pagination-bullet");
+  
+    // Iterate through each bullet and update its appearance
+    bullets.forEach((bullet, index) => {
+      const svgPath = bullet.querySelector(".svg-path");
+  
+      if (bullet.classList.contains("swiper-pagination-bullet-active")) {
+        // Apply the gradient fill to the active bullet
+        svgPath.setAttribute("fill", "url(#paint0_linear_1344_7585)");
+      } else {
+        // Remove the gradient fill from inactive bullets (use stroke only)
+        svgPath.removeAttribute("fill");
+      }
+    });
+  }
+  
+  // SVG gradient definition (include in your HTML to define the gradient)
+  const svgGradient = `
+      <svg width="0" height="0" style="position:absolute">
+        <defs>
+          <linearGradient id="paint0_linear_1344_7585" x1="7.7015" y1="1.91134" x2="37.9729" y2="59.6112" gradientUnits="userSpaceOnUse">
+            <stop offset="0.00057" stop-color="#FF4500"/>
+            <stop offset="0.06984" stop-color="#FF5516"/>
+            <stop offset="0.3342" stop-color="#FF9068"/>
+            <stop offset="0.5686" stop-color="#FFC0A8"/>
+            <stop offset="0.76447" stop-color="#FFE2D7"/>
+            <stop offset="0.91417" stop-color="#FFF7F4"/>
+            <stop offset="1" stop-color="white"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    `;
+  // Append gradient to the body of the document
+  document.body.insertAdjacentHTML("beforeend", svgGradient);
+  
   document.addEventListener("DOMContentLoaded", function () {
     let swiperLinkClicked = false; // Flag to track if a navigation tab is clicked
     const progressBars = document.querySelectorAll(".branch_progress_bg");
@@ -684,4 +806,95 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const numberCounters = document.querySelectorAll('[data-number-card]');
+
+  numberCounters.forEach((counter) => {
+    const start = parseInt(counter.getAttribute('data-number-start'), 10);
+    const end = parseInt(counter.getAttribute('data-number-end'), 10);
+    initializeCounter(counter, start, end);
+    animateCounter(counter, start, end);
+  });
+
+  function initializeCounter(counter, start) {
+    const digits = String(start).padStart(4, '0').split('');
+
+    digits.forEach((digit) => {
+      const digitContainer = document.createElement('div');
+      digitContainer.setAttribute('data-digit', digit);
+      digitContainer.style.position = 'relative';
+      digitContainer.style.overflow = 'hidden';
+      digitContainer.style.height = '2rem';
+      digitContainer.style.width = '1rem';
+      digitContainer.style.display = 'inline-block';
+
+      const digitSpan = document.createElement('span');
+      digitSpan.innerText = digit;
+      digitSpan.style.position = 'absolute';
+      digitSpan.style.width = '100%';
+      digitSpan.style.height = '2rem';
+      digitSpan.style.transform = 'translateY(0%)';
+      digitSpan.style.transition = 'transform 1s ease-in-out';
+
+      digitContainer.appendChild(digitSpan);
+      counter.appendChild(digitContainer);
+    });
+  }
+
+  function animateCounter(counter, start, end) {
+    let current = start;
+
+    const interval = setInterval(() => {
+      if (current <= end) {
+        updateDigits(counter, current);
+        current++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 100); // Adjust speed here
+  }
+
+  function updateDigits(counter, number) {
+    const digits = String(number).padStart(4, '0').split('');
+    const digitElements = counter.children;
+
+    digits.forEach((digit, index) => {
+      const digitElement = digitElements[index];
+      const currentDigit = parseInt(digitElement.getAttribute('data-digit'), 10);
+      const newDigit = parseInt(digit, 10);
+
+      if (currentDigit !== newDigit) {
+        animateDigit(digitElement, newDigit);
+        digitElement.setAttribute('data-digit', newDigit);
+      }
+    });
+  }
+
+  function animateDigit(digitElement, newDigit) {
+    const digitSpan = digitElement.querySelector('span');
+
+    // Create a new span for the new digit
+    const newDigitSpan = document.createElement('span');
+    newDigitSpan.innerText = newDigit;
+    newDigitSpan.style.position = 'absolute';
+    newDigitSpan.style.width = '100%';
+    newDigitSpan.style.height = '2rem';
+    newDigitSpan.style.transform = 'translateY(100%)';
+    newDigitSpan.style.transition = 'transform 1s ease-in-out';
+
+    digitElement.appendChild(newDigitSpan);
+
+    // Trigger the animation
+    requestAnimationFrame(() => {
+      digitSpan.style.transform = 'translateY(-100%)';
+      newDigitSpan.style.transform = 'translateY(0%)';
+    });
+
+    // Remove the old span after animation
+    setTimeout(() => {
+      digitElement.removeChild(digitSpan);
+    }, 1000); // Match the transition duration
+  }
 });
