@@ -450,7 +450,7 @@ function animateActiveSlide() {
       gsap.fromTo(
         elementsToAnimate,
         { y: "100%", opacity: 0 },
-        { y: "0%", opacity: 1, duration: 1, ease: "power2.out", stagger: 0.2 }
+        { y: "0%", opacity: 1, duration: 0.5, ease: "power2.out", stagger: 0.2 }
       );
     } else {
       console.warn("No elements found to animate in the active slide.");
