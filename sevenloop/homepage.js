@@ -815,40 +815,50 @@ document.addEventListener('DOMContentLoaded', function() {
   const numberDisplay = document.getElementById('numberSection');
 
   // Function to create digit elements
-  function createDigits(value) {
+  function createDigits(num) {
       numberDisplay.innerHTML = '';
-      const valueString = String(value).padStart(String(endValue).length, '0');
+      const numStr = String(num).padStart(String(endValue).length, '0');
 
-      valueString.split('').forEach(digit => {
-          const digitElement = document.createElement('div');
-          digitElement.classList.add('digit');
-          digitElement.textContent = digit;
-          numberDisplay.appendChild(digitElement);
+      numStr.split('').forEach(digit => {
+          const digitWrapper = document.createElement('div');
+          digitWrapper.classList.add('digit');
+
+          for (let i = 0; i <= 9; i++) {
+              const span = document.createElement('span');
+              span.textContent = i;
+              digitWrapper.appendChild(span);
+          }
+
+          numberDisplay.appendChild(digitWrapper);
       });
   }
 
-  // Animate the numbers digit by digit
-  function animateNumber(start, end) {
-      let currentNumber = start;
+  // Function to animate the numbers
+  function animateNumbers(start, end) {
+      let currentValue = start;
 
       const animation = gsap.timeline({
           onUpdate: function() {
-              createDigits(currentNumber);
+              const numStr = String(currentValue).padStart(String(end).length, '0');
+              document.querySelectorAll('.digit').forEach((digitWrapper, index) => {
+                  const currentDigit = parseInt(numStr[index]);
+                  const spans = digitWrapper.querySelectorAll('span');
+                  gsap.to(spans, {
+                      yPercent: -100 * currentDigit,
+                      duration: 0.3,
+                      ease: 'power2.inOut',
+                  });
+              });
+          },
+          onComplete: function() {
+              if (currentValue < end) {
+                  currentValue++;
+                  animateNumbers(currentValue, end);
+              }
           }
       });
 
-      // Iterate over each digit, from ones to thousands
-      for (let i = start; i <= end; i++) {
-          animation.to({}, {
-              duration: 0.1, // Speed of the digit animation
-              onUpdate: function() {
-                  createDigits(currentNumber);
-              },
-              onComplete: function() {
-                  currentNumber++;
-              }
-          });
-      }
+      animation.to({}, { duration: 0.1 });
   }
 
   // ScrollTrigger to initiate the animation
@@ -856,7 +866,8 @@ document.addEventListener('DOMContentLoaded', function() {
       trigger: numberSection,
       start: "top 70%",
       onEnter: () => {
-          animateNumber(startValue, endValue);
+          createDigits(endValue);
+          animateNumbers(startValue, endValue);
       }
   });
 });
