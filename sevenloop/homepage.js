@@ -275,7 +275,7 @@ function updateButtonOpacity(swiper) {
 // Function to animate active slide elements without GSAP
 function animateActiveSlide() {
   // Select the current active slide
-  const activeSlide = document.querySelector(".testimonial_slider_slide.swiper-slide-active");
+  const activeSlide = document.querySelector(".swiper-slide-active");
   if (activeSlide && isSlideVisible(activeSlide)) {
     console.log("Animating active slide elements...", activeSlide); // Debugging log
 
