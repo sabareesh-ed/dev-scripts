@@ -381,7 +381,7 @@ const swiper4 = new Swiper(".swiper4", {
     init: function () {
       startProgressBar(); // Start progress bar on initialization
       updatePagination(); // Add class to style the initial active slide
-      animateActiveSlide(); // Animate elements in the initial slide
+      setTimeout(animateActiveSlide, 500); // Animate elements in the initial slide with a slight delay
     },
     slideChangeTransitionStart: function () {
       resetProgressBar(); // Reset progress bar at the start of slide change
@@ -389,7 +389,7 @@ const swiper4 = new Swiper(".swiper4", {
     slideChangeTransitionEnd: function () {
       startProgressBar(); // Restart progress bar after slide transition
       updatePagination(); // Update active state styles for pagination bullets
-      animateActiveSlide(); // Animate elements in the active slide
+      setTimeout(animateActiveSlide, 500); // Animate elements in the active slide with a slight delay
     },
   },
 });
@@ -435,7 +435,9 @@ function updatePagination() {
 function animateActiveSlide() {
   // Select the current active slide
   const activeSlide = document.querySelector(".swiper-slide-active");
-  if (activeSlide) {
+  if (activeSlide && isSlideVisible(activeSlide)) {
+    console.log("Animating active slide elements...", activeSlide); // Debugging log
+
     // Select the elements that need to be animated within the active slide
     const clientNameElements = activeSlide.querySelectorAll(".testimonial_client_name");
     const clientCompanyElements = activeSlide.querySelectorAll(".testimonial_client_company");
@@ -446,20 +448,25 @@ function animateActiveSlide() {
 
     // If elements exist, apply the animation with a delay
     if (elementsToAnimate.length > 0) {
-      console.log("Animating elements within active slide..."); // Debugging log
       setTimeout(() => {
         gsap.fromTo(
           elementsToAnimate,
           { y: "100%", opacity: 0 },
           { y: "0%", opacity: 1, duration: 1, ease: "power2.out", stagger: 0.2 }
         );
-      }, 200); // Delay of 200ms before starting the animation
+      }, 500); // Delay of 500ms before starting the animation
     } else {
       console.warn("No elements found to animate in the active slide.");
     }
   } else {
-    console.error("No active slide found.");
+    console.error("No visible active slide found or slide is hidden.");
   }
+}
+
+// Helper function to check if a slide is visible and not a duplicate
+function isSlideVisible(slide) {
+  const style = window.getComputedStyle(slide);
+  return style.opacity !== "0" && style.visibility !== "hidden" && style.display !== "none";
 }
 
 
