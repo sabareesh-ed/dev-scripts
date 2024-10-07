@@ -8,6 +8,12 @@ document.addEventListener("DOMContentLoaded", function() {
   // Initially disable scroll
   body.classList.add('u-overflow-hidden');
 
+  // Ensure video starts playing only after it is fully loaded
+  preloaderVideo.addEventListener('canplaythrough', function() {
+      preloaderVideo.play();
+      preloaderVideo.playbackRate = 2.0; // Set playback rate to 2x
+  });
+
   // Function to fade out and then hide preloader
   function fadeOutPreloader() {
       preloader.style.opacity = '0';
@@ -21,16 +27,9 @@ document.addEventListener("DOMContentLoaded", function() {
       }, 2000); // This should match the transition duration
   }
 
-  // Ensure video starts playing only after it is fully loaded
-  preloaderVideo.addEventListener('canplaythrough', function() {
-      preloaderVideo.play();
-  });
-
-  // Listen for the video to end
+  // Listen for the video to end or ensure it runs after 6 seconds if the video ends sooner or is interrupted
   preloaderVideo.addEventListener('ended', fadeOutPreloader);
-
-  // Fallback to ensure it runs after 12 seconds if the video ends sooner or is interrupted
-  setTimeout(fadeOutPreloader, 12000);
+  setTimeout(fadeOutPreloader, 6000); // Adjusted to 6 seconds due to 2x playback rate
 });
 
 
