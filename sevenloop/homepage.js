@@ -710,7 +710,7 @@ const swiper4 = new Swiper(".swiper4", {
     el: ".testimonial_pagination_wrap", // Custom pagination wrapper
     clickable: true, // Allow user to click on the pagination bullets
     renderBullet: function (index, className) {
-      // Custom SVG for each pagination bullet
+      // Custom SVG for each pagination bullet (removed gradient styling)
       return `<span class="${className} pagination-bullet">
                   <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path class="svg-path" d="M3.62796 17.2345C2.11431 16.3606 1.22799 14.6798 1.04932 12.6266C0.870746 10.5743 1.40404 8.1741 2.70525 5.92034C4.00646 3.66658 5.81847 2.00462 7.68507 1.13314C9.55255 0.261251 11.4513 0.188434 12.965 1.06234C14.4786 1.93625 15.365 3.61704 15.5436 5.67028C15.7222 7.72253 15.1889 10.1228 13.8877 12.3765C12.5865 14.6303 10.7745 16.2922 8.90787 17.1637C7.04039 18.0356 5.14161 18.1084 3.62796 17.2345Z" stroke="#FF4500" stroke-width="1"/>
@@ -744,8 +744,8 @@ const swiper4 = new Swiper(".swiper4", {
 function startProgressBar() {
   const progressBar = document.querySelector(".testimonial_progress_fill");
   if (progressBar) {
-    progressBar.style.transition = "width 10s linear";
-    progressBar.style.width = "100%";
+    progressBar.style.transition = "width 10s linear"; // Animate progress bar over 10 seconds
+    progressBar.style.width = "100%"; // Set progress to 100%
   }
 }
 
@@ -753,22 +753,25 @@ function startProgressBar() {
 function resetProgressBar() {
   const progressBar = document.querySelector(".testimonial_progress_fill");
   if (progressBar) {
-    progressBar.style.transition = "none"; // Remove any transition effects
-    progressBar.style.width = "0%"; // Immediately reset width to 0%
-    setTimeout(() => {
-      progressBar.style.transition = "width 10s linear";
-    }, 20); // Brief delay to reapply transition to avoid flickering
+    progressBar.style.transition = "none"; // Reset transition
+    progressBar.style.width = "0%"; // Set progress back to 0%
   }
 }
 
 // Function to update the pagination and apply custom class to the active slide
 function updatePagination() {
+  // Get all pagination bullets
   const bullets = document.querySelectorAll(".swiper-pagination-bullet");
+
+  // Iterate through each bullet and update its appearance
   bullets.forEach((bullet) => {
     const svgPath = bullet.querySelector(".svg-path");
+
     if (bullet.classList.contains("swiper-pagination-bullet-active")) {
+      // Apply a class for the active bullet to add styles via CSS
       svgPath.classList.add("active-svg-path");
     } else {
+      // Remove the class from inactive bullets
       svgPath.classList.remove("active-svg-path");
     }
   });
@@ -776,13 +779,32 @@ function updatePagination() {
 
 // GSAP Animation for active slide elements
 function animateActiveSlide() {
-  const activeSlide = document.querySelector(".swiper-slide-active");
+  // Select the current active slide
+  const activeSlide = document.querySelector(".testimonial_slider_slide.swiper-slide-active");
   if (activeSlide) {
-    const elementsToAnimate = activeSlide.querySelectorAll(".animate-element");
-    gsap.fromTo(elementsToAnimate, { y: 100, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power2.out", stagger: 0.1 });
+    // Select the elements that need to be animated within the active slide
+    const clientNameElements = activeSlide.querySelectorAll(".testimonial_client_name");
+    const clientCompanyElements = activeSlide.querySelectorAll(".testimonial_client_company");
+    const testimonialCopyElements = activeSlide.querySelectorAll(".testimonial_copy");
+
+    // Combine all selected elements into a single array
+    const elementsToAnimate = [...clientNameElements, ...clientCompanyElements, ...testimonialCopyElements];
+
+    // If elements exist, apply the animation
+    if (elementsToAnimate.length > 0) {
+      console.log("Animating elements within active slide..."); // Debugging log
+      gsap.fromTo(
+        elementsToAnimate,
+        { y: "100%", opacity: 0 },
+        { y: "0%", opacity: 1, duration: 0.5, ease: "power2.out", stagger: 0.1 }
+      ) ;
+    } else {
+      console.warn("No elements found to animate in the active slide.");
+    }
+  } else {
+    console.error("No active slide found.");
   }
 }
-
 
 
 
