@@ -1,63 +1,406 @@
-$(document).ready(function () {
-    // Ensure all headings and paragraphs are hidden initially
-    gsap.set(".hero_heading, .hero_para_wrap", { opacity: 0 });
-  
-    // Function to animate both heading and paragraph when .w--current is added
-    function animateHeadingAndParagraph(index) {
-      let allHeadings = $(".hero_heading"); // All .hero_heading elements
-      let heading = allHeadings.eq(index); // Targeting the corresponding nth .hero_heading
-      let paragraph = $(".hero_para_wrap").eq(index); // Targeting the corresponding nth .hero_para_wrap
-  
-      // Hide all other headings except the one at the current index
-      allHeadings.each(function (i) {
-        if (i !== index) {
-          gsap.to($(this), { opacity: 0, duration: 0.5, ease: "power1.out" });
-        }
+document.addEventListener("DOMContentLoaded", (event) => {
+  gsap.registerPlugin(ScrollTrigger);
+
+  function animateMaskedSlideUp() {
+    const components = document.querySelectorAll("[animate='component']");
+
+    components.forEach(function (component) {
+      let elements = component.querySelectorAll("[animate='hero-text']");
+      let subheadings = component.querySelectorAll("[animate='subheading']");
+
+      let childrenCount = elements[0].children.length;
+      let firstTrigger = component.querySelector("[animate-scroll='trigger']");
+
+      // Splitting text into words and setting initial visibility
+      elements.forEach((element) => {
+        let typeSplit = new SplitType(element, {
+          types: "words",
+          tagName: "span",
+        });
+      });
+      subheadings.forEach((subheading) => {
+        let typeSplit = new SplitType(subheading, {
+          types: "words",
+          tagName: "span",
+        });
       });
 
+      // Appending hero-spacer elements
+      if (firstTrigger) {
+        firstTrigger.style.marginTop = "-100dvh";
 
-      //change gh
-  
-      // Show the heading corresponding to the current .hero_progress_active
-      gsap.to(heading, { opacity: 1, duration: 0.6, ease: "power1.out" });
-  
-      // Animate the paragraph (keep the existing behavior)
-      gsap.to(paragraph, { opacity: 1, y: 0, duration: 0.6, ease: "power1.out" });
-    }
+        for (let i = 0; i < childrenCount - 1; i++) {
+          const heroSpacerClone = firstTrigger.cloneNode();
+          heroSpacerClone.style.marginTop = "0";
+          component.appendChild(heroSpacerClone);
+        }
+      }
 
-    // Function to fade out both heading and paragraph when .w--current is removed
-    function fadeOutHeadingAndParagraph(index) {
-      let heading = $(".hero_heading").eq(index); // Targeting the corresponding nth .hero_heading
-      let paragraph = $(".hero_para_wrap").eq(index); // Targeting the corresponding nth .hero_para_wrap
-  
-      // Fade out both heading and paragraph
-      gsap.to(heading, { opacity: 0, duration: 0.5, ease: "power1.out" });
-      gsap.to(paragraph, { opacity: 0, duration: 0.5, ease: "power1.out" });
-    }
-  
-    // Main function to check which .hero_progress_active has .w--current and animate accordingly
-    function checkCurrent() {
-      $(".hero_progress_active").each(function (index) {
-        if ($(this).hasClass("w--current")) {
-          // Animate the heading and paragraph when .w--current is added
-          animateHeadingAndParagraph(index);
+      let triggers = component.querySelectorAll("[animate-scroll='trigger']");
+
+      triggers.forEach((trigger, index) => {
+        const words =
+          elements[0]?.children[index]?.querySelectorAll(".word") || [];
+        const subheadingWords =
+          subheadings[0]?.children[index]?.querySelectorAll(".word") || [];
+
+        // console.log("Animating words for trigger index:", index, words); // Debugging word selection
+
+        if (index === 0) {
+          // console.log("1st trigger");
+          gsap.timeline({
+            scrollTrigger: {
+              trigger: trigger,
+              start: "top center",
+              end: "bottom center",
+              // scrub: true
+              // markers: true,
+              onEnter: () => {
+                if (words.length > 0) {
+                  gsap.to(words, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.6,
+                    ease: "power2.out",
+                    stagger: 0.1,
+                  });
+                }
+                if (subheadingWords.length > 0) {
+                  gsap.to(subheadingWords, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.6,
+                    ease: "power2.out",
+                    stagger: 0.1,
+                  });
+                }
+              },
+              onLeave: () => {
+                if (words.length > 0) {
+                  gsap.to(words, {
+                    opacity: 0,
+                    y: "-20%",
+                    duration: 0.6,
+                    ease: "power2.out",
+                    stagger: 0.1,
+                  });
+                }
+                if (subheadingWords.length > 0) {
+                  gsap.to(subheadingWords, {
+                    opacity: 0,
+                    y: "-20%",
+                    duration: 0.6,
+                    ease: "power2.out",
+                    stagger: 0.1,
+                  });
+                }
+              },
+              onEnterBack: () => {
+                if (words.length > 0) {
+                  gsap.to(words, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.6,
+                    delay: 0.6,
+                    ease: "power2.out",
+                    stagger: 0.1,
+                  });
+                }
+                if (subheadingWords.length > 0) {
+                  gsap.to(subheadingWords, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.6,
+                    delay: 0.6,
+                    ease: "power2.out",
+                    stagger: 0.1,
+                  });
+                }
+              },
+              onLeaveBack: () => {
+                if (words.length > 0) {
+                  gsap.to(words, {
+                    opacity: 0,
+                    y: "20%",
+                    duration: 0.6,
+                    ease: "power2.out",
+                    stagger: 0.1,
+                  });
+                }
+                if (subheadingWords.length > 0) {
+                  gsap.to(subheadingWords, {
+                    opacity: 0,
+                    y: "20%",
+                    duration: 0.6,
+                    ease: "power2.out",
+                    stagger: 0.1,
+                  });
+                }
+              },
+            },
+          });
+        } else if (index === triggers.length - 1) {
+          // console.log("3rd trigger");
+          // Timeline for the last trigger (index === triggers.length - 1)
+          gsap.timeline({
+            scrollTrigger: {
+              trigger: trigger,
+              start: "top center",
+              end: "bottom center",
+              // scrub: true,
+              // markers: true,
+              onEnter: () => {
+                if (words.length > 0) {
+                  gsap.to(words, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.6,
+                    delay: 0.6,
+                    ease: "power2.out",
+                    stagger: 0.1,
+                  });
+                }
+                if (subheadingWords.length > 0) {
+                  gsap.to(subheadingWords, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.6,
+                    delay: 0.6,
+                    ease: "power2.out",
+                    stagger: 0.1,
+                  });
+                }
+              },
+              onLeaveBack: () => {
+                if (words.length > 0) {
+                  gsap.to(words, {
+                    opacity: 0,
+                    y: "20%",
+                    duration: 0.6,
+                    ease: "power2.out",
+                    stagger: 0.1,
+                  });
+                }
+                if (subheadingWords.length > 0) {
+                  gsap.to(subheadingWords, {
+                    opacity: 0,
+                    y: "20%",
+                    duration: 0.6,
+                    ease: "power2.out",
+                    stagger: 0.1,
+                  });
+                }
+              },
+            },
+          });
         } else {
-          // Fade out the heading and paragraph when .w--current is removed
-          fadeOutHeadingAndParagraph(index);
+          // console.log("2nd trigger");
+          gsap.timeline({
+            scrollTrigger: {
+              trigger: trigger,
+              start: "top center",
+              end: "bottom center",
+              // scrub: true,
+              // markers: true,
+              onEnter: () => {
+                if (words.length > 0) {
+                  gsap.to(words, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.6,
+                    ease: "power2.out",
+                    stagger: 0.1,
+                  });
+                }
+                if (subheadingWords.length > 0) {
+                  gsap.to(subheadingWords, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.6,
+                    ease: "power2.out",
+                    stagger: 0.1,
+                  });
+                }
+              },
+              onLeave: () => {
+                if (words.length > 0) {
+                  gsap.to(words, {
+                    opacity: 0,
+                    y: "-20%",
+                    duration: 0.6,
+                    ease: "power2.out",
+                    stagger: 0.1,
+                  });
+                }
+                if (subheadingWords.length > 0) {
+                  gsap.to(subheadingWords, {
+                    opacity: 0,
+                    y: "-20%",
+                    duration: 0.6,
+                    ease: "power2.out",
+                    stagger: 0.1,
+                  });
+                }
+              },
+              onLeaveBack: () => {
+                if (words.length > 0) {
+                  gsap.to(words, {
+                    opacity: 0,
+                    y: "20%",
+                    duration: 0.6,
+                    ease: "power2.out",
+                    stagger: 0.1,
+                  });
+                }
+                if (subheadingWords.length > 0) {
+                  gsap.to(subheadingWords, {
+                    opacity: 0,
+                    y: "20%",
+                    duration: 0.6,
+                    ease: "power2.out",
+                    stagger: 0.1,
+                  });
+                }
+              },
+              onEnterBack: () => {
+                if (words.length > 0) {
+                  gsap.to(words, {
+                    opacity: 1,
+                    y: "0%",
+                    duration: 0.6,
+                    ease: "power2.out",
+                    stagger: 0.1,
+                  });
+                }
+                if (subheadingWords.length > 0) {
+                  gsap.to(subheadingWords, {
+                    opacity: 1,
+                    y: "0%",
+                    duration: 0.6,
+                    ease: "power2.out",
+                    stagger: 0.1,
+                  });
+                }
+              },
+            },
+          });
         }
       });
-    }
-  
-    // Initial check on page load
-    checkCurrent();
-  
-    // Use MutationObserver to listen for changes in the .w--current class on the .hero_progress_active elements
-    const observer = new MutationObserver(checkCurrent);
-    $(".hero_progress_active").each(function () {
-      observer.observe(this, { attributes: true, attributeFilter: ["class"] });
     });
-  });
-  
+  }
+
+  function animateHeadingText() {
+    const textHeadings = document.querySelectorAll("[animate='text-heading']");
+
+    textHeadings.forEach((textHeading) => {
+      // Split text into words using SplitType
+      let typeSplit = new SplitType(textHeading, {
+        types: "words",
+        tagName: "span",
+      });
+
+      // Select all words
+      const words = textHeading.querySelectorAll(".word");
+
+      // Set initial styles for animation
+      gsap.set(words, {
+        y: "20%",
+        autoAlpha: 0,
+      });
+
+      // GSAP ScrollTrigger to handle the animation when the text comes into view
+      gsap
+        .timeline({
+          scrollTrigger: {
+            trigger: textHeading,
+            start: "top center",
+            end: "bottom center",
+          },
+        })
+        .to(words, {
+          y: 0,
+          autoAlpha: 1,
+          stagger: 0.1,
+          duration: 0.6,
+          ease: "power2.out",
+        });
+    });
+  }
+
+  function animateScrollWidth() {
+    var targetSection = document.querySelector("header");
+    var scrollWidth = document.querySelector("header .abs-width");
+    // console.log(scrollWidth);
+
+    // Check if the section element is found
+    if (!targetSection) {
+      console.error(
+        "Section element not found. Please ensure the correct selector is provided."
+      );
+      return; // Exit the function
+    }
+
+    window.addEventListener("scroll", function () {
+      var scrollTop = window.scrollY || window.pageYOffset;
+      var sectionTop = targetSection.getBoundingClientRect().top + scrollTop; // Get absolute position
+      var sectionHeight = targetSection.offsetHeight;
+      var windowHeight = window.innerHeight;
+
+      // Calculate the distance between the top of the section and the top of the viewport
+      var distanceFromTop = Math.max(0, scrollTop - sectionTop);
+
+      // Calculate the distance between the bottom of the viewport and the bottom of the section
+      var distanceFromBottom = Math.max(
+        0,
+        sectionTop + sectionHeight - (scrollTop + windowHeight)
+      );
+
+      // Calculate the visible height of the section
+      var visibleSectionHeight =
+        sectionHeight - distanceFromTop - distanceFromBottom;
+
+      // Calculate the scroll percentage relative to the visible height of the section
+      var scrollPercent = 0;
+
+      // Calculate the scroll percentage based on the position of the section relative to the viewport
+      if (distanceFromTop >= 0 && distanceFromBottom >= 0) {
+        scrollPercent =
+          (distanceFromTop / (sectionHeight - windowHeight)) * 100;
+      } else if (distanceFromTop < 0) {
+        // Section is above viewport
+        scrollPercent = 0;
+      } else if (distanceFromBottom < 0) {
+        // Section is below viewport
+        scrollPercent = 100;
+      }
+
+      // Ensure the scroll percentage remains within the range of 0% to 100%
+      scrollPercent = Math.min(100, Math.max(0, scrollPercent));
+
+      // Round the scroll percentage, ensuring it rounds up at 99.5% or higher
+      var scrollPercentRounded = Math.ceil(scrollPercent);
+
+      // console.log(scrollPercentRounded);
+
+      // Update the scroll percentage display
+      // You can uncomment the next line to display the scroll percentage
+      // document.getElementById("scroll-per").textContent = scrollPercentRounded;
+      scrollWidth.style.width = `${scrollPercentRounded}%`;
+    });
+  }
+
+  // function animateScrollWidth() {
+  //   hero_progress_wrap;
+  // }
+
+  // Call the function to enable the scroll tracking
+  // animateScrollWidth();
+
+  animateMaskedSlideUp();
+  animateHeadingText();
+  animateScrollWidth();
+});
+
   const swiper1 = new Swiper(".swiper1", {
     direction: "horizontal",
     loop: false,
