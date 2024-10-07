@@ -329,7 +329,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   function animateScrollWidth() {
     var targetSection = document.querySelector("header");
-    var scrollWidth = document.querySelector("header .abs-width");
+    var scrollWidth = document.querySelector("header .hero_progress_active");
     // console.log(scrollWidth);
 
     // Check if the section element is found
