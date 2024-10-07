@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const heroVideo = heroContainer.querySelector('video');
 
   // Initially disable scroll
-  body.classList.add('no-scroll');
+  body.classList.add('u-overflow-hidden');
 
   // Function to fade out and then hide preloader
   function fadeOutPreloader() {
