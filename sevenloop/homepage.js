@@ -723,7 +723,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   
-// Initialize Swiper4 with fade effect and custom pagination
+// Initialize Swiper4 (with cross-fade effect and custom pagination)
 const swiper4 = new Swiper(".swiper4", {
   direction: "horizontal",
   loop: true,
@@ -732,7 +732,7 @@ const swiper4 = new Swiper(".swiper4", {
   slidesPerView: 1,
   effect: "fade",
   fadeEffect: {
-    crossFade: true,
+    crossFade: true
   },
   autoplay: {
     delay: 10000,
@@ -755,23 +755,19 @@ const swiper4 = new Swiper(".swiper4", {
   },
   on: {
     init: function () {
-      resetProgressBar(); // Initialize with progress bar reset
-      startProgressBar(); // Then start the progress bar
-      updatePagination();
-      animateActiveSlide();
+      this.emit('transitionEnd'); // Emit transitionEnd on init to start the progress bar correctly
     },
     slideChangeTransitionStart: function () {
-      resetProgressBar(); // Ensure progress bar is reset at the start of a slide change
+      resetProgressBar(); // Reset progress bar at the start of slide change
     },
     slideChangeTransitionEnd: function () {
-      startProgressBar(); // Restart progress bar after slide transition completes
-      updatePagination();
-      animateActiveSlide();
+      startProgressBar(); // Restart progress bar after slide transition
+      updatePagination(); // Update active state styles for pagination bullets
+      animateActiveSlide(); // Animate elements in the active slide
     },
   },
 });
 
-// Function to start progress bar from 0% to 100% over 10 seconds
 function startProgressBar() {
   const progressBar = document.querySelector(".testimonial_progress_fill");
   if (progressBar) {
@@ -780,16 +776,14 @@ function startProgressBar() {
   }
 }
 
-// Function to reset progress bar to 0% width instantly
 function resetProgressBar() {
   const progressBar = document.querySelector(".testimonial_progress_fill");
   if (progressBar) {
-    progressBar.style.transition = "none"; // Remove any animation
-    progressBar.style.width = "0%"; // Set width to 0%
+    progressBar.style.transition = "none";
+    progressBar.style.width = "0%";
   }
 }
 
-// Update pagination and apply custom class to the active bullet
 function updatePagination() {
   const bullets = document.querySelectorAll(".swiper-pagination-bullet");
   bullets.forEach((bullet) => {
@@ -802,16 +796,11 @@ function updatePagination() {
   });
 }
 
-// Animate elements within the active slide using GSAP
 function animateActiveSlide() {
   const activeSlide = document.querySelector(".swiper-slide-active");
   if (activeSlide) {
-    const elementsToAnimate = [
-      ...activeSlide.querySelectorAll(".testimonial_client_name"),
-      ...activeSlide.querySelectorAll(".testimonial_client_company"),
-      ...activeSlide.querySelectorAll(".testimonial_copy")
-    ];
-    if (elementsToAnimate.length > 0) {
+    const elementsToAnimate = activeSlide.querySelectorAll(".animate-element");
+    if (elementsToAnimate.length) {
       gsap.fromTo(
         elementsToAnimate,
         { y: "100%", opacity: 0 },
