@@ -755,22 +755,23 @@ const swiper4 = new Swiper(".swiper4", {
   },
   on: {
     init: function () {
-      startProgressBar();
+      resetProgressBar(); // Initialize with progress bar reset
+      startProgressBar(); // Then start the progress bar
       updatePagination();
       animateActiveSlide();
     },
     slideChangeTransitionStart: function () {
-      resetProgressBar();
+      resetProgressBar(); // Ensure progress bar is reset at the start of a slide change
     },
     slideChangeTransitionEnd: function () {
-      startProgressBar();
+      startProgressBar(); // Restart progress bar after slide transition completes
       updatePagination();
       animateActiveSlide();
     },
   },
 });
 
-// Start progress bar from 0% to 100% over 10 seconds
+// Function to start progress bar from 0% to 100% over 10 seconds
 function startProgressBar() {
   const progressBar = document.querySelector(".testimonial_progress_fill");
   if (progressBar) {
@@ -779,12 +780,12 @@ function startProgressBar() {
   }
 }
 
-// Reset progress bar to 0% width instantly
+// Function to reset progress bar to 0% width instantly
 function resetProgressBar() {
   const progressBar = document.querySelector(".testimonial_progress_fill");
   if (progressBar) {
-    progressBar.style.transition = "none";
-    progressBar.style.width = "0%";
+    progressBar.style.transition = "none"; // Remove any animation
+    progressBar.style.width = "0%"; // Set width to 0%
   }
 }
 
