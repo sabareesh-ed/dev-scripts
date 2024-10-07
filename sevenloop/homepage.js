@@ -726,40 +726,36 @@ document.addEventListener("DOMContentLoaded", function () {
 // Initialize Swiper4 (with cross-fade effect and custom pagination)
 const swiper4 = new Swiper(".swiper4", {
   direction: "horizontal",
-  loop: true, // Enable looping of slides
+  loop: true,
   spaceBetween: 0,
   speed: 0,
   slidesPerView: 1,
-  effect: "fade", // Use fade effect
+  effect: "fade",
   fadeEffect: {
-    crossFade: true, // Enable cross-fade between slides
+    crossFade: true
   },
   autoplay: {
-    delay: 10000, // 10 seconds per slide
-    disableOnInteraction: false, // Continue autoplay even after user interaction
+    delay: 10000,
+    disableOnInteraction: false,
   },
   pagination: {
-    el: ".testimonial_pagination_wrap", // Custom pagination wrapper
-    clickable: true, // Allow user to click on the pagination bullets
+    el: ".testimonial_pagination_wrap",
+    clickable: true,
     renderBullet: function (index, className) {
-      // Custom SVG for each pagination bullet (removed gradient styling)
-      return <span class="${className} pagination-bullet">
-                  <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path class="svg-path" d="M3.62796 17.2345C2.11431 16.3606 1.22799 14.6798 1.04932 12.6266C0.870746 10.5743 1.40404 8.1741 2.70525 5.92034C4.00646 3.66658 5.81847 2.00462 7.68507 1.13314C9.55255 0.261251 11.4513 0.188434 12.965 1.06234C14.4786 1.93625 15.365 3.61704 15.5436 5.67028C15.7222 7.72253 15.1889 10.1228 13.8877 12.3765C12.5865 14.6303 10.7745 16.2922 8.90787 17.1637C7.04039 18.0356 5.14161 18.1084 3.62796 17.2345Z" stroke="#FF4500" stroke-width="1"/>
-                  </svg>
-                </span>;
+      return `<span class="${className} pagination-bullet">
+                <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path class="svg-path" d="M3.62796 17.2345C2.11431 16.3606 1.22799 14.6798 1.04932 12.6266C0.870746 10.5743 1.40404 8.1741 2.70525 5.92034C4.00646 3.66658 5.81847 2.00462 7.68507 1.13314C9.55255 0.261251 11.4513 0.188434 12.965 1.06234C14.4786 1.93625 15.365 3.61704 15.5436 5.67028C15.7222 7.72253 15.1889 10.1228 13.8877 12.3765C12.5865 14.6303 10.7745 16.2922 8.90787 17.1637C7.04039 18.0356 5.14161 18.1084 3.62796 17.2345Z" stroke="#FF4500" stroke-width="1"/>
+                </svg>
+              </span>`;
     },
   },
   navigation: {
     nextEl: ".testimonial_button_next",
     prevEl: ".testimonial_button_prev",
   },
-
   on: {
     init: function () {
-      startProgressBar(); // Start progress bar on initialization
-      updatePagination(); // Add class to style the initial active slide
-      animateActiveSlide(); // Animate elements in the initial slide
+      this.emit('transitionEnd'); // Emit transitionEnd on init to start the progress bar correctly
     },
     slideChangeTransitionStart: function () {
       resetProgressBar(); // Reset progress bar at the start of slide change
@@ -772,69 +768,45 @@ const swiper4 = new Swiper(".swiper4", {
   },
 });
 
-// Progress Bar: Start from 0% to 100% over 10 seconds
 function startProgressBar() {
   const progressBar = document.querySelector(".testimonial_progress_fill");
   if (progressBar) {
-    progressBar.style.transition = "width 10s linear"; // Animate progress bar over 10 seconds
-    progressBar.style.width = "100%"; // Set progress to 100%
+    progressBar.style.transition = "width 10s linear";
+    progressBar.style.width = "100%";
   }
 }
 
-// Reset progress bar to 0% width
 function resetProgressBar() {
   const progressBar = document.querySelector(".testimonial_progress_fill");
   if (progressBar) {
-    progressBar.style.transition = "none"; // Reset transition
-    progressBar.style.width = "0%"; // Set progress back to 0%
+    progressBar.style.transition = "none";
+    progressBar.style.width = "0%";
   }
 }
 
-// Function to update the pagination and apply custom class to the active slide
 function updatePagination() {
-  // Get all pagination bullets
   const bullets = document.querySelectorAll(".swiper-pagination-bullet");
-
-  // Iterate through each bullet and update its appearance
   bullets.forEach((bullet) => {
     const svgPath = bullet.querySelector(".svg-path");
-
     if (bullet.classList.contains("swiper-pagination-bullet-active")) {
-      // Apply a class for the active bullet to add styles via CSS
       svgPath.classList.add("active-svg-path");
     } else {
-      // Remove the class from inactive bullets
       svgPath.classList.remove("active-svg-path");
     }
   });
 }
 
-// GSAP Animation for active slide elements
 function animateActiveSlide() {
-  // Select the current active slide
-  const activeSlide = document.querySelector(".testimonial_slider_slide.swiper-slide-active");
+  const activeSlide = document.querySelector(".swiper-slide-active");
   if (activeSlide) {
-    // Select the elements that need to be animated within the active slide
-    const clientNameElements = activeSlide.querySelectorAll(".testimonial_client_name");
-    const clientCompanyElements = activeSlide.querySelectorAll(".testimonial_client_company");
-    const testimonialCopyElements = activeSlide.querySelectorAll(".testimonial_copy");
-
-    // Combine all selected elements into a single array
-    const elementsToAnimate = [...clientNameElements, ...clientCompanyElements, ...testimonialCopyElements];
-
-    // If elements exist, apply the animation
-    if (elementsToAnimate.length > 0) {
-      console.log("Animating elements within active slide..."); // Debugging log
+    const elementsToAnimate = activeSlide.querySelectorAll(".animate-element");
+    if (elementsToAnimate.length) {
       gsap.fromTo(
         elementsToAnimate,
         { y: "100%", opacity: 0 },
         { y: "0%", opacity: 1, duration: 0.5, ease: "power2.out", stagger: 0.1 }
-      ) ;
-    } else {
-      console.warn("No elements found to animate in the active slide.");
+      );
     }
-  } else {
-    console.error("No active slide found.");
   }
 }
 
