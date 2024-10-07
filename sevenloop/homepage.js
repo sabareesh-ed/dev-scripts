@@ -3,23 +3,22 @@ document.addEventListener("DOMContentLoaded", function() {
   const preloaderVideo = preloader.querySelector('video');
   const heroContainer = document.querySelector('.hero_visual_wrap');
   const heroVideo = heroContainer.querySelector('video');
+  const body = document.body;
 
-  // Listen for the video to end and then apply the class to hide the preloader
   preloaderVideo.addEventListener('ended', function() {
-      preloader.classList.add('u-display-none');  // Hide preloader
-      heroContainer.style.display = 'block';       // Show hero video container
-      heroVideo.play();                            // Start playing hero video
-  });
+      // Start the fade out
+      preloader.style.opacity = 0;
 
-  // Optionally, use a timeout if you need to force the duration to 12 seconds regardless of video length
-  setTimeout(() => {
-      if (!preloader.classList.contains('u-display-none')) {
-          preloader.classList.add('u-display-none');
-          heroContainer.style.display = 'block';
-          heroVideo.play();
-      }
-  }, 12000); // 12 seconds
+      // Wait for the fade out to finish before applying display none and enabling scroll
+      setTimeout(() => {
+          preloader.classList.add('u-display-none');  // Hide preloader completely
+          body.classList.remove('u-overflow-hidden');         // Enable scrolling on the body
+          heroContainer.style.display = 'block';      // Show hero video container
+          heroVideo.play();                           // Start playing hero video
+      }, 2000); // Wait 2 seconds for the opacity transition to finish
+  });
 });
+
 
 document.addEventListener("DOMContentLoaded", (event) => {
   gsap.registerPlugin(ScrollTrigger);
