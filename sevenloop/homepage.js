@@ -4,19 +4,21 @@ document.addEventListener("DOMContentLoaded", function() {
   const heroContainer = document.querySelector('.hero_visual_wrap');
   const heroVideo = heroContainer.querySelector('video');
 
-  preloaderVideo.addEventListener('ended', transitionToHeroVideo);
+  // Listen for the video to end and then apply the class to hide the preloader
+  preloaderVideo.addEventListener('ended', function() {
+      preloader.classList.add('u-display-none');  // Hide preloader
+      heroContainer.style.display = 'block';       // Show hero video container
+      heroVideo.play();                            // Start playing hero video
+  });
 
-  function transitionToHeroVideo() {
-      // Start fade out
-      preloader.style.opacity = 0;
-
-      // Wait for fade out to finish
-      setTimeout(() => {
-          preloader.classList.add('u-display-none'); // Use the CSS class to hide
+  // Optionally, use a timeout if you need to force the duration to 12 seconds regardless of video length
+  setTimeout(() => {
+      if (!preloader.classList.contains('u-display-none')) {
+          preloader.classList.add('u-display-none');
           heroContainer.style.display = 'block';
           heroVideo.play();
-      }, 2000); // Ensure this time matches the transition time
-  }
+      }
+  }, 12000); // 12 seconds
 });
 
 document.addEventListener("DOMContentLoaded", (event) => {
