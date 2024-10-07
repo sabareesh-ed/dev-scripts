@@ -1,3 +1,26 @@
+document.addEventListener("DOMContentLoaded", function() {
+  const preloader = document.querySelector('[data-preloader]');
+  const preloaderVideo = preloader.querySelector('video');
+  const heroContainer = document.querySelector('[data-hero-visual]');
+  const heroVideo = heroContainer.querySelector('video');
+
+  // Adjust the timing based on the duration you want for the preloader
+  preloaderVideo.addEventListener('ended', transitionToHeroVideo);
+
+  function transitionToHeroVideo() {
+      // Fade out effect
+      preloader.style.transition = 'opacity 2s';
+      preloader.style.opacity = 0;
+
+      // Wait for the fade out to finish before hiding the preloader and starting the hero video
+      setTimeout(() => {
+          preloader.style.display = 'none';
+          heroContainer.style.display = 'block';
+          heroVideo.play();
+      }, 2000); // This duration should match the transition time
+  }
+});
+
 document.addEventListener("DOMContentLoaded", (event) => {
   gsap.registerPlugin(ScrollTrigger);
 
