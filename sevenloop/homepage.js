@@ -1,24 +1,38 @@
 document.addEventListener("DOMContentLoaded", function() {
-  const preloader = document.querySelector('[data-preloader]');
-  const preloaderVideo = preloader.querySelector('video');
-  const heroContainer = document.querySelector('[data-hero-visual]');
-  const heroVideo = heroContainer.querySelector('video');
+  // Elements
+  const pageVisualWrap = document.querySelector('.page_visual_wrap');
+  const preloaderVideo = pageVisualWrap.querySelector('.page_visual_video video');
+  const heroVideoWrap = document.querySelector('[data-hero-visual]');
+  const heroVideo = heroVideoWrap.querySelector('video');
 
-  // Adjust the timing based on the duration you want for the preloader
-  preloaderVideo.addEventListener('ended', transitionToHeroVideo);
+  // Wait for the preloader video to end
+  preloaderVideo.addEventListener('ended', function() {
+      // Fade out the preloader video
+      pageVisualWrap.style.transition = 'opacity 2s';
+      pageVisualWrap.style.opacity = 0;
 
-  function transitionToHeroVideo() {
-      // Fade out effect
-      preloader.style.transition = 'opacity 2s';
-      preloader.style.opacity = 0;
-
-      // Wait for the fade out to finish before hiding the preloader and starting the hero video
-      setTimeout(() => {
-          preloader.style.display = 'none';
-          heroContainer.style.display = 'block';
+      // After fade-out, hide the preloader and show the hero video
+      setTimeout(function() {
+          pageVisualWrap.style.display = 'none';
+          heroVideoWrap.style.display = 'block';
           heroVideo.play();
-      }, 2000); // This duration should match the transition time
+      }, 2000); // This should match the transition duration
+  });
+
+  // Check if preloader video should loop
+  if (preloaderVideo.duration > 12) { // Check if the video is longer than 12 seconds
+      setTimeout(function() {
+          preloaderVideo.pause(); // Stop the video
+          preloaderVideo.currentTime = 0; // Reset video time
+          preloaderVideo.play(); // Play again if needed
+      }, 12000); // 12 seconds until the action is taken
   }
+
+  // Ensure hero video loops indefinitely
+  heroVideo.setAttribute('loop', true);
+
+  // Optional: Ensure hero video is muted if desired
+  heroVideo.muted = true;
 });
 
 document.addEventListener("DOMContentLoaded", (event) => {
