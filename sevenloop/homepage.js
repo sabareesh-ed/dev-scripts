@@ -1,22 +1,31 @@
 document.addEventListener("DOMContentLoaded", function() {
+  const body = document.body;
   const preloader = document.querySelector('.page_visual_wrap');
   const preloaderVideo = preloader.querySelector('video');
   const heroContainer = document.querySelector('.hero_visual_wrap');
   const heroVideo = heroContainer.querySelector('video');
-  const body = document.body;
 
-  preloaderVideo.addEventListener('ended', function() {
-      // Start the fade out
-      preloader.style.opacity = 0;
+  // Initially disable scroll
+  body.classList.add('no-scroll');
 
-      // Wait for the fade out to finish before applying display none and enabling scroll
+  // Function to fade out and then hide preloader
+  function fadeOutPreloader() {
+      preloader.style.opacity = '0';
+
+      // Wait for the fade to complete before hiding the preloader
       setTimeout(() => {
-          preloader.classList.add('u-display-none');  // Hide preloader completely
-          body.classList.remove('u-overflow-hidden');         // Enable scrolling on the body
-          heroContainer.style.display = 'block';      // Show hero video container
-          heroVideo.play();                           // Start playing hero video
-      }, 2000); // Wait 2 seconds for the opacity transition to finish
-  });
+          preloader.classList.add('u-display-none');
+          heroContainer.style.display = 'block';
+          heroVideo.play();
+          body.classList.remove('u-overflow-hidden');  // Enable scrolling
+      }, 2000); // This should match the transition duration
+  }
+
+  // Listen for the video to end
+  preloaderVideo.addEventListener('ended', fadeOutPreloader);
+
+  // Fallback to ensure it runs after 12 seconds if the video ends sooner or is interrupted
+  setTimeout(fadeOutPreloader, 12000);
 });
 
 
