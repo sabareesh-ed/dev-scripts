@@ -692,83 +692,89 @@ document.addEventListener("DOMContentLoaded", function () {
 
   
 
-// Ensure the DOM is fully loaded before initializing Swiper and other functionalities
-document.addEventListener('DOMContentLoaded', function () {
-  // Load GSAP from a CDN or ensure it is included in your project
-  const gsap = window.gsap; // Assuming GSAP is globally available
-
-  // Initialize Swiper
-  const swiper4 = new Swiper(".swiper4", {
-    direction: "horizontal",
-    loop: true,
-    spaceBetween: 0,
-    speed: 500, // Transition speed for visual effect
-    slidesPerView: 1,
-    effect: "fade",
-    fadeEffect: {
-      crossFade: true
-    },
-    autoplay: {
-      delay: 10000, // Delay of 10 seconds per slide
-      disableOnInteraction: false,
-    },
-    pagination: {
-      el: ".testimonial_pagination_wrap",
-      clickable: true,
-    },
-    navigation: {
-      nextEl: ".testimonial_button_next",
-      prevEl: ".testimonial_button_prev",
-    },
-    on: {
-      init: function () {
-        resetProgressBar(); // Reset progress bar initially
-        startProgressBar(); // Start progress bar on initialization
-        animateActiveSlide(); // Animate initial active slide
-      },
-      slideChangeTransitionStart: function () {
-        resetProgressBar(); // Reset progress bar at the start of slide change
-      },
-      slideChangeTransitionEnd: function () {
-        startProgressBar(); // Restart progress bar after slide transition
-        animateActiveSlide(); // Animate the newly active slide
-      },
+// Initialize Swiper4 (with cross-fade effect and custom pagination)
+const swiper4 = new Swiper(".swiper4", {
+  direction: "horizontal",
+  loop: true,
+  spaceBetween: 0,
+  speed: 0,
+  slidesPerView: 1,
+  effect: "fade",
+  fadeEffect: {
+    crossFade: true
+  },
+  autoplay: {
+    delay: 10000,
+    disableOnInteraction: false
+  },
+  pagination: {
+    el: ".testimonial_pagination_wrap",
+    clickable: true,
+    renderBullet: function (index, className) {
+      return `<span class="${className} pagination-bullet">
+                  <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path class="svg-path" d="M3.62796 17.2345C2.11431 16.3606 1.22799 14.6798 1.04932 12.6266C0.870746 10.5743 1.40404 8.1741 2.70525 5.92034C4.00646 3.66658 5.81847 2.00462 7.68507 1.13314C9.55255 0.261251 11.4513 0.188434 12.965 1.06234C14.4786 1.93625 15.365 3.61704 15.5436 5.67028C15.7222 7.72253 15.1889 10.1228 13.8877 12.3765C12.5865 14.6303 10.7745 16.2922 8.90787 17.1637C7.04039 18.0356 5.14161 18.1084 3.62796 17.2345Z" stroke="#FF4500" stroke-width="1"/>
+                  </svg>
+              </span>`;
     }
-  });
-
-  // Function to start the progress bar
-  function startProgressBar() {
-    const progressBar = document.querySelector(".testimonial_progress_fill");
-    if (progressBar) {
-      progressBar.style.transition = "width 10s linear";
-      progressBar.style.width = "100%";
-    }
-  }
-
-  // Function to reset the progress bar
-  function resetProgressBar() {
-    const progressBar = document.querySelector(".testimonial_progress_fill");
-    if (progressBar) {
-      progressBar.style.transition = "none"; // Remove any transition
-      progressBar.style.width = "0%";
-    }
-  }
-
-  // Function to animate active slide elements using GSAP
-  function animateActiveSlide() {
-    const activeSlide = document.querySelector(".swiper-slide-active");
-    if (activeSlide) {
-      const elementsToAnimate = activeSlide.querySelectorAll(".testimonial_client_name, .testimonial_client_company, .testimonial_copy");
-      if (elementsToAnimate.length) {
-        gsap.fromTo(elementsToAnimate,
-          { y: 100, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.5, ease: "power2.out", stagger: 0.1 }
-        );
-      }
-    }
+  },
+  navigation: {
+    nextEl: ".testimonial_button_next",
+    prevEl: ".testimonial_button_prev"
+  },
+  on: {
+    init: function () {
+      startProgressBar(); // Start progress bar on initialization
+      updatePagination(); // Add class to style the initial active slide
+      animateActiveSlide(); // Animate elements in the initial slide
+    },
+    slideChangeTransitionStart: function () {
+      resetProgressBar(); // Reset progress bar at the start of slide change
+    },
+    slideChangeTransitionEnd: function () {
+      startProgressBar(); // Restart progress bar after slide transition
+      updatePagination(); // Update active state styles for pagination bullets
+      animateActiveSlide(); // Animate elements in the active slide
+    },
   }
 });
 
+// Functions related to progress bar and animations
+function startProgressBar() {
+  const progressBar = document.querySelector(".testimonial_progress_fill");
+  progressBar.style.transition = "width 10s linear";
+  progressBar.style.width = "100%";
+}
+
+function resetProgressBar() {
+  const progressBar = document.querySelector(".testimonial_progress_fill");
+  progressBar.style.transition = "none";
+  progressBar.style.width = "0%";
+}
+
+function updatePagination() {
+  const bullets = document.querySelectorAll(".swiper-pagination-bullet");
+  bullets.forEach(bullet => {
+    const svgPath = bullet.querySelector(".svg-path");
+    if (bullet.classList.contains("swiper-pagination-bullet-active")) {
+      svgPath.classList.add("active-svg-path");
+    } else {
+      svgPath.classList.remove("active-svg-path");
+    }
+  });
+}
+
+function animateActiveSlide() {
+  const activeSlide = document.querySelector(".swiper-slide-active");
+  const elementsToAnimate = activeSlide.querySelectorAll(".testimonial_client_name, .testimonial_client_company, .testimonial_copy");
+  if (elementsToAnimate.length > 0) {
+    gsap.fromTo(
+      elementsToAnimate,
+      { y: "100%", opacity: 0 },
+      { y: "0%", opacity: 1, duration: 0.5, ease: "power2.out", stagger: 0.1 }
+    );
+  }
+}
 
 
   
