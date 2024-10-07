@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
-  const preloader = document.querySelector('[data-preloader]');
+  const preloader = document.querySelector('.page_visual_wrap');
   const preloaderVideo = preloader.querySelector('video');
-  const heroContainer = document.querySelector('[data-hero-visual]');
+  const heroContainer = document.querySelector('.hero_visual_wrap');
   const heroVideo = heroContainer.querySelector('video');
 
   preloaderVideo.addEventListener('ended', transitionToHeroVideo);
@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
           preloader.classList.add('u-display-none'); // Use the CSS class to hide
           heroContainer.style.display = 'block';
           heroVideo.play();
-      }, 2000);
+      }, 2000); // Ensure this time matches the transition time
   }
 });
 
