@@ -21,6 +21,11 @@ document.addEventListener("DOMContentLoaded", function() {
       }, 2000); // This should match the transition duration
   }
 
+  // Ensure video starts playing only after it is fully loaded
+  preloaderVideo.addEventListener('canplaythrough', function() {
+      preloaderVideo.play();
+  });
+
   // Listen for the video to end
   preloaderVideo.addEventListener('ended', fadeOutPreloader);
 
