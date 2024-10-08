@@ -547,6 +547,10 @@ const swiper3 = new Swiper(".swiper3", {
   centeredSlides: true, // Ensure the active slide is centered
   allowTouchMove: true, // Allow touch movement on mobile and tablet
   freemode: true,
+  autoplay: {
+    delay: 10000, // Delay of 10 seconds per slide
+    disableOnInteraction: false,
+  },
   breakpoints: {
     480: {
       slidesPerView: "auto", // Always auto on mobile
