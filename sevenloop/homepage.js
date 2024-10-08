@@ -1242,6 +1242,7 @@ function animateGradient(element) {
   });
 }
 
+
 // Create a MutationObserver instance
 const observer = new MutationObserver(mutations => {
   mutations.forEach(mutation => {
@@ -1260,6 +1261,4 @@ document.querySelectorAll('.service_tab_link').forEach(el => {
     attributeFilter: ['class'] // Only observe the 'class' attribute
   });
 });
-
-
 
