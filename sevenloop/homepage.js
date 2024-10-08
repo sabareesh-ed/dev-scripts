@@ -692,7 +692,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   
 
-// Ensure the DOM is fully loaded before initializing Swiper and other functionalities
 document.addEventListener('DOMContentLoaded', function () {
   // Initialize Swiper
   const swiper4 = new Swiper(".swiper4", {
@@ -721,12 +720,15 @@ document.addEventListener('DOMContentLoaded', function () {
       init: function () {
         resetProgressBar(); // Reset progress bar initially
         startProgressBar(); // Start progress bar on initialization
+        animateContentIn(); // Animate content in on initialization
       },
       slideChangeTransitionStart: function () {
         resetProgressBar(); // Reset progress bar at the start of slide change
+        animateContentOut(); // Animate content out before slide transition
       },
       slideChangeTransitionEnd: function () {
         startProgressBar(); // Restart progress bar after slide transition
+        animateContentIn(); // Animate content in after slide transition
       },
     }
   });
@@ -748,7 +750,44 @@ document.addEventListener('DOMContentLoaded', function () {
       progressBar.style.width = "0%";
     }
   }
+
+  // Function to animate content in (from y: 100% to y: 0%)
+  function animateContentIn() {
+    const testimonialCopy = document.querySelector(".testimonial_copy");
+    const testimonialName = document.querySelector(".testimonial_client_name");
+    const testimonialCompany = document.querySelector(".testimonial_client_company");
+
+    if (testimonialCopy && testimonialName && testimonialCompany) {
+      testimonialCopy.style.transform = "translateY(0)";
+      testimonialCopy.style.opacity = "1";
+      
+      testimonialName.style.transform = "translateY(0)";
+      testimonialName.style.opacity = "1";
+
+      testimonialCompany.style.transform = "translateY(0)";
+      testimonialCompany.style.opacity = "1";
+    }
+  }
+
+  // Function to animate content out (from y: 0% to y: 100%)
+  function animateContentOut() {
+    const testimonialCopy = document.querySelector(".testimonial_copy");
+    const testimonialName = document.querySelector(".testimonial_client_name");
+    const testimonialCompany = document.querySelector(".testimonial_client_company");
+
+    if (testimonialCopy && testimonialName && testimonialCompany) {
+      testimonialCopy.style.transform = "translateY(100%)";
+      testimonialCopy.style.opacity = "0";
+      
+      testimonialName.style.transform = "translateY(100%)";
+      testimonialName.style.opacity = "0";
+
+      testimonialCompany.style.transform = "translateY(100%)";
+      testimonialCompany.style.opacity = "0";
+    }
+  }
 });
+
 
 
 
