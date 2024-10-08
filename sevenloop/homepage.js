@@ -779,7 +779,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // Reset animation state for the active slide
       if (name && company && copy) {
-        gsap.set([name, company, copy], { y: "100%", opacity: 0 });
+        gsap.set([name, company, copy], { y: "100%", opacity: 0 } ,0);
       }
     }
   }
@@ -797,7 +797,7 @@ document.addEventListener('DOMContentLoaded', function () {
         gsap.fromTo([name, company, copy], 
           { y: "100%", opacity: 0 }, // From
           { y: "0%", opacity: 1, duration: 1, ease: "power2.out"}  // To
-        ,0 );
+         );
       }
     }
   }
