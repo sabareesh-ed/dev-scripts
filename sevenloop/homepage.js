@@ -776,17 +776,17 @@ function animateActiveSlide() {
       gsap.fromTo(testimonialCopy, 
         { y: "100%", opacity: 0 }, // Initial state (off-screen)
         { y: "0%", opacity: 1, duration: 0.75, ease: "power3.out", delay: 0 } // Final state (on-screen), starts immediately
-      );
+      ,0);
     
       gsap.fromTo(testimonialName, 
         { y: "100%", opacity: 0 }, 
         { y: "0%", opacity: 1, duration: 0.75, ease: "power3.out", delay: 0.1 } // Staggered effect with 0.1s delay
-      );
+      ,0);
     
       gsap.fromTo(testimonialCompany, 
         { y: "100%", opacity: 0 }, 
         { y: "0%", opacity: 1, duration: 0.75, ease: "power3.out", delay: 0.2 } // Staggered effect with 0.2s delay
-      );
+      ,0);
     }    
   }
 }
