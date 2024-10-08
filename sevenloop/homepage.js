@@ -694,9 +694,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Ensure the DOM is fully loaded before initializing Swiper and other functionalities
 document.addEventListener('DOMContentLoaded', function () {
-  // Load GSAP from a CDN or ensure it is included in your project
-  const gsap = window.gsap; // Assuming GSAP is globally available
-
   // Initialize Swiper
   const swiper4 = new Swiper(".swiper4", {
     direction: "horizontal",
@@ -724,14 +721,12 @@ document.addEventListener('DOMContentLoaded', function () {
       init: function () {
         resetProgressBar(); // Reset progress bar initially
         startProgressBar(); // Start progress bar on initialization
-        animateActiveSlide(); // Animate initial active slide
       },
       slideChangeTransitionStart: function () {
         resetProgressBar(); // Reset progress bar at the start of slide change
       },
       slideChangeTransitionEnd: function () {
         startProgressBar(); // Restart progress bar after slide transition
-        animateActiveSlide(); // Animate the newly active slide
       },
     }
   });
@@ -753,21 +748,8 @@ document.addEventListener('DOMContentLoaded', function () {
       progressBar.style.width = "0%";
     }
   }
-
-  // Function to animate active slide elements using GSAP
-  function animateActiveSlide() {
-    const activeSlide = document.querySelector(".swiper-slide-active");
-    if (activeSlide) {
-      const elementsToAnimate = activeSlide.querySelectorAll(".testimonial_client_name, .testimonial_client_company, .testimonial_copy");
-      if (elementsToAnimate.length) {
-        gsap.fromTo(elementsToAnimate,
-          { y: 100, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.5, ease: "power2.out", stagger: 0.1 }
-        );
-      }
-    }
-  }
 });
+
 
 
   
