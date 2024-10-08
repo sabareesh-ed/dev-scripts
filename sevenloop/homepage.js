@@ -1044,22 +1044,23 @@ function expandItem(item, content, zone, host, frontIcon, backIcon, dropPathArro
     });
 
     timeline
-        .set(content, { height: 0 })
-        .to(content, { height: targetHeight * 0.9 }) // Set to 90% height initially
-        .add(() => {
-            const flipState = Flip.getState(zone); // Capture FLIP state slightly before full expansion
+        .set(content, { height: 0 }) // Start from a collapsed state
+        .to(content, { height: targetHeight * 0.8, onComplete: () => {
+            // Capture FLIP state at 80% height
+            const flipState = Flip.getState(zone);
             host.appendChild(zone);
             Flip.from(flipState, {
                 duration: 0.5,
                 onComplete: () => {
-                    gsap.to(content, { height: targetHeight }); // Finish expanding to 100% after FLIP
+                    // Complete the expansion to full height after FLIP
+                    gsap.to(content, { height: targetHeight });
                 }
             });
 
             gsap.to(frontIcon, { opacity: 0, duration: 0.5 });
             gsap.to(backIcon, { opacity: 1, duration: 0.5 });
-        }, "<")
-        .to(dropPathArrow, { rotation: 180 }, "<");
+        }}, "<")
+        .to(dropPathArrow, { rotation: 180 }, "<"); // Rotate the arrow concurrently
 }
 
 
