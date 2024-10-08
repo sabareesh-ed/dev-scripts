@@ -1221,10 +1221,33 @@ document.querySelectorAll("[data-nav-change]").forEach((element) => {
   });
 });
 
-gsap.to(".service_tab_link.swiper-slide-active", {
-  duration: 10,
-  "--start-position": "100%",
-  "--end-position": "100%",
-  ease: "none"
+function animateGradient(element) {
+  gsap.to(element, {
+    duration: 10,
+    "--start-position": "100%",
+    "--end-position": "100%",
+    ease: "none",
+    clearProps: "--start-position, --end-position" // Resets properties after animation
+  });
+}
+
+// Create a MutationObserver instance
+const observer = new MutationObserver(mutations => {
+  mutations.forEach(mutation => {
+    mutation.target.classList.forEach(className => {
+      if (className === "swiper-slide-active" && mutation.target.classList.contains("service_tab_link")) {
+        animateGradient(mutation.target);
+      }
+    });
+  });
 });
+
+// Start observing each .service_tab_link element
+document.querySelectorAll('.service_tab_link').forEach(el => {
+  observer.observe(el, {
+    attributes: true, // Observe changes to attributes
+    attributeFilter: ['class'] // Only observe the 'class' attribute
+  });
+});
+
 
