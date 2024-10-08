@@ -697,29 +697,21 @@ document.addEventListener('DOMContentLoaded', function () {
   const swiper4 = new Swiper(".swiper4", {
     direction: "horizontal",
     loop: true,
+    loopedSlides: 3, // Adjust based on your total number of slides
     spaceBetween: 0,
-    speed: 500, // Transition speed for visual effect
+    speed: 500,
     slidesPerView: 1,
     effect: "fade",
     fadeEffect: {
       crossFade: true
     },
     autoplay: {
-      delay: 10000, // Delay of 10 seconds per slide
+      delay: 10000,
       disableOnInteraction: false,
     },
     pagination: {
       el: ".testimonial_pagination_wrap",
       clickable: true,
-      renderBullet: function (index, className) {
-        return `
-          <span class="${className}">
-            <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3.3306 17.2345C1.81695 16.3606 0.930622 14.6798 0.75196 12.6266C0.573382 10.5743 1.10668 8.1741 2.40788 5.92034C3.70909 3.66658 5.52111 2.00462 7.3877 1.13314C9.25519 0.261251 11.154 0.188434 12.6676 1.06234C14.1813 1.93625 15.0676 3.61704 15.2463 5.67028C15.4248 7.72253 14.8915 10.1228 13.5903 12.3765C12.2891 14.6303 10.4771 16.2922 8.61051 17.1637C6.74303 18.0356 4.84425 18.1084 3.3306 17.2345Z" stroke="#FF4500" stroke-width="0.5"/>
-            </svg>
-          </span>
-        `;
-      }
     },
     navigation: {
       nextEl: ".testimonial_button_next",
@@ -727,21 +719,21 @@ document.addEventListener('DOMContentLoaded', function () {
     },
     on: {
       init: function () {
-        resetProgressBar(); // Reset progress bar initially
-        startProgressBar(); // Start progress bar on initialization
-        setInitialAnimationState(); // Set initial GSAP animation state
-        animateActiveSlide(); // Animate elements on the initial active slide
+        resetProgressBar();
+        startProgressBar();
+        setInitialAnimationState();
+        animateActiveSlide();
       },
       slideChangeTransitionStart: function () {
-        resetProgressBar(); // Reset progress bar at the start of slide change
+        resetProgressBar();
       },
       slideChangeTransitionEnd: function () {
-        startProgressBar(); // Restart progress bar after slide transition
-        animateActiveSlide(); // Animate elements in the new active slide
+        startProgressBar();
+        animateActiveSlide();
       },
     }
   });
-
+  
   // Function to start the progress bar
   function startProgressBar() {
     const progressBar = document.querySelector(".testimonial_progress_fill");
