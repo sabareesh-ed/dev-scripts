@@ -720,15 +720,14 @@ document.addEventListener('DOMContentLoaded', function () {
       init: function () {
         resetProgressBar(); // Reset progress bar initially
         startProgressBar(); // Start progress bar on initialization
-        animateContentIn(); // Animate content in on initialization
+        animateActiveSlide(); // Animate the initial active slide
       },
       slideChangeTransitionStart: function () {
         resetProgressBar(); // Reset progress bar at the start of slide change
-        animateContentOut(); // Animate content out before slide transition
       },
       slideChangeTransitionEnd: function () {
         startProgressBar(); // Restart progress bar after slide transition
-        animateContentIn(); // Animate content in after slide transition
+        animateActiveSlide(); // Animate content in after the slide transition
       },
     }
   });
@@ -751,69 +750,34 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // Function to animate content in using GSAP
-  function animateContentIn() {
-    const testimonialCopy = document.querySelector(".testimonial_copy");
-    const testimonialName = document.querySelector(".testimonial_client_name");
-    const testimonialCompany = document.querySelector(".testimonial_client_company");
+  // Function to animate content in the active slide using GSAP
+  function animateActiveSlide() {
+    // Select the active slide
+    const activeSlide = document.querySelector('.swiper-slide-active .testimonial_slider_slide');
 
-    if (testimonialCopy && testimonialName && testimonialCompany) {
-      // GSAP animation for sliding in and fading in
-      gsap.to(testimonialCopy, { 
-        y: 0, 
-        opacity: 1, 
-        duration: 0.5, 
-        ease: "power3.out" 
-      });
+    if (activeSlide) {
+      // Find the elements within the active slide to animate
+      const testimonialCopy = activeSlide.querySelector(".testimonial_copy");
+      const testimonialName = activeSlide.querySelector(".testimonial_client_name");
+      const testimonialCompany = activeSlide.querySelector(".testimonial_client_company");
 
-      gsap.to(testimonialName, { 
-        y: 0, 
-        opacity: 1, 
-        duration: 0.5, 
-        ease: "power3.out", 
-        delay: 0.1 // slight delay for staggered effect
-      });
+      if (testimonialCopy && testimonialName && testimonialCompany) {
+        // GSAP animation for sliding in and fading in
+        gsap.fromTo(testimonialCopy, 
+          { y: "100%", opacity: 0 }, // Initial state (off-screen)
+          { y: "0%", opacity: 1, duration: 0.75, ease: "power3.out" } // Final state (on-screen)
+        );
 
-      gsap.to(testimonialCompany, { 
-        y: 0, 
-        opacity: 1, 
-        duration: 0.5, 
-        ease: "power3.out", 
-        delay: 0.2 // staggered effect
-      });
-    }
-  }
+        gsap.fromTo(testimonialName, 
+          { y: "100%", opacity: 0 }, 
+          { y: "0%", opacity: 1, duration: 0.75, ease: "power3.out", delay: 0.1 } // Staggered effect
+        );
 
-  // Function to animate content out using GSAP
-  function animateContentOut() {
-    const testimonialCopy = document.querySelector(".testimonial_copy");
-    const testimonialName = document.querySelector(".testimonial_client_name");
-    const testimonialCompany = document.querySelector(".testimonial_client_company");
-
-    if (testimonialCopy && testimonialName && testimonialCompany) {
-      // GSAP animation for sliding out and fading out
-      gsap.to(testimonialCopy, { 
-        y: "100%", 
-        opacity: 0, 
-        duration: 0, 
-        ease: "power3.in" 
-      });
-
-      gsap.to(testimonialName, { 
-        y: "100%", 
-        opacity: 0, 
-        duration: 0, 
-        ease: "power3.in", 
-        delay: 0.1 // slight delay for staggered effect
-      });
-
-      gsap.to(testimonialCompany, { 
-        y: "100%", 
-        opacity: 0, 
-        duration: 0, 
-        ease: "power3.in", 
-        delay: 0.2 // staggered effect
-      });
+        gsap.fromTo(testimonialCompany, 
+          { y: "100%", opacity: 0 }, 
+          { y: "0%", opacity: 1, duration: 0.75, ease: "power3.out", delay: 0.2 } // Staggered effect
+        );
+      }
     }
   }
 });
