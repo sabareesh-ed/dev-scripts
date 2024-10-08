@@ -1017,8 +1017,8 @@ function collapseItem(item, content) {
     const dropPathArrow = item.querySelector('.drop_path_arrow');
     const flipState = Flip.getState(zone);
 
-    gsap.to(frontIcon, { opacity: 1, duration: 0.3 });
-    gsap.to(backIcon, { opacity: 0, duration: 0.3 });
+    gsap.to(frontIcon, { opacity: 1, duration: 0.5 });
+    gsap.to(backIcon, { opacity: 0, duration: 0.5 });
     target.appendChild(zone);
     Flip.from(flipState, { duration: 0.3 });
 
@@ -1045,20 +1045,23 @@ function expandItem(item, content, zone, host, frontIcon, backIcon, dropPathArro
 
     timeline
         .set(content, { height: 0 }) // Reset height to 0 to animate from closed state
-        .to(content, { height: targetHeight, onComplete: () => {
+        .to(content, { height: targetHeight })
+        .to(dropPathArrow, { rotation: 180, duration: 0.5 }, "<") // Rotate arrow to 180 degrees concurrently with content expansion
+        .add(() => {
             // Trigger Flip animation right after content reaches full height
             const flipState = Flip.getState(zone);
-            host.appendChild(zone);
             Flip.from(flipState, {
                 duration: 0.5,
                 onComplete: () => {
-                    gsap.to(frontIcon, { opacity: 0, duration: 0.3 });
-                    gsap.to(backIcon, { opacity: 1, duration: 0.3 });
+                    // After FLIP animation completes, change the opacity of icons
+                    gsap.to(frontIcon, { opacity: 0, duration: 0.5 });
+                    gsap.to(backIcon, { opacity: 1, duration: 0.5 });
                 }
             });
-        }})
-        .to(dropPathArrow, { rotation: 180 }, "<");
+            host.appendChild(zone);
+        }, "<"); // Starts just as the expansion finishes
 }
+
 
 
 
