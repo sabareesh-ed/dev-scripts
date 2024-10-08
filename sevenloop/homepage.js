@@ -1221,4 +1221,10 @@ document.querySelectorAll("[data-nav-change]").forEach((element) => {
   });
 });
 
+gsap.to(".service_tab_link.swiper-slide-active", {
+  duration: 10,
+  "--start-position": "100%",
+  "--end-position": "100%",
+  ease: "none"
+});
 
