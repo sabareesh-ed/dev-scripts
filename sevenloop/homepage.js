@@ -1222,14 +1222,17 @@ document.querySelectorAll("[data-nav-change]").forEach((element) => {
 });
 
 
-gsap.to(".service_tab_link.swiper-slide-active", {
-  duration: 10, // duration of the animation
-  backgroundPosition: "100%", // animate the gradient stop position to 100%
-  ease: "power1.inOut",
-  onUpdate: function() {
-    let percentage = gsap.getProperty(".service_tab_link.swiper-slide-active", "backgroundPosition"); 
-    document.querySelector(".service_tab_link.swiper-slide-active").style.background = 
-      `linear-gradient(90deg, var(--swatch--brand) ${percentage}, var(--swatch--light-secondary) ${percentage}) border-box`;
+gsap.fromTo(".service_tab_link.swiper-slide-active", 
+  {backgroundPosition: "0%"},
+  {
+    duration: 10, // 10 seconds duration
+    backgroundPosition: "100%", // animate the gradient stop position to 100%
+    ease: "power1.inOut",
+    onUpdate: function() {
+      let percentage = gsap.getProperty(".service_tab_link.swiper-slide-active", "backgroundPosition");
+      document.querySelector(".service_tab_link.swiper-slide-active").style.background = 
+        `linear-gradient(90deg, var(--swatch--brand) ${percentage}, var(--swatch--light-secondary) ${percentage}) border-box`;
+    }
   }
-});
+);
 
