@@ -712,7 +712,6 @@ document.addEventListener('DOMContentLoaded', function () {
       el: ".testimonial_pagination_wrap",
       clickable: true,
       renderBullet: function (index, className) {
-        // Return the SVG as a bullet with a wrapper span for the className
         return `
           <span class="${className}">
             <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -730,14 +729,14 @@ document.addEventListener('DOMContentLoaded', function () {
       init: function () {
         resetProgressBar(); // Reset progress bar initially
         startProgressBar(); // Start progress bar on initialization
-        animateActiveSlide(); // Animate the initial active slide
+        animateActiveSlide(); // Animate elements on the initial active slide
       },
       slideChangeTransitionStart: function () {
         resetProgressBar(); // Reset progress bar at the start of slide change
       },
       slideChangeTransitionEnd: function () {
         startProgressBar(); // Restart progress bar after slide transition
-        animateActiveSlide(); // Animate content in after the slide transition
+        animateActiveSlide(); // Animate elements in the new active slide
       },
     }
   });
@@ -760,37 +759,25 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // Function to animate content in the active slide using GSAP
+  // Function to animate elements in the active slide using GSAP
   function animateActiveSlide() {
-    // Select the active slide
-    const activeSlide = document.querySelector('.swiper-slide-active .testimonial_slider_slide');
-
+    const activeSlide = document.querySelector('.swiper-slide-active');
     if (activeSlide) {
-      // Find the elements within the active slide to animate
-      const testimonialCopy = activeSlide.querySelector(".testimonial_copy");
-      const testimonialName = activeSlide.querySelector(".testimonial_client_name");
-      const testimonialCompany = activeSlide.querySelector(".testimonial_client_company");
+      const name = activeSlide.querySelector('.testimonial_client_name');
+      const company = activeSlide.querySelector('.testimonial_client_company');
+      const copy = activeSlide.querySelector('.testimonial_copy');
 
-      if (testimonialCopy && testimonialName && testimonialCompany) {
-        // GSAP animation for sliding in and fading in
-        gsap.fromTo(testimonialCopy, 
-          { y: "100%", opacity: 0 }, // Initial state (off-screen)
-          { y: "0%", opacity: 1, duration: 0.75, ease: "power3.out" } // Final state (on-screen)
-        );
-
-        gsap.fromTo(testimonialName, 
-          { y: "100%", opacity: 0 }, 
-          { y: "0%", opacity: 1, duration: 0.75, ease: "power3.out", delay: 0.1 } // Staggered effect
-        );
-
-        gsap.fromTo(testimonialCompany, 
-          { y: "100%", opacity: 0 }, 
-          { y: "0%", opacity: 1, duration: 0.75, ease: "power3.out", delay: 0.2 } // Staggered effect
+      // Animate elements from y: 100% to y: 0%
+      if (name && company && copy) {
+        gsap.fromTo([name, company, copy], 
+          { y: "100%", opacity: 0 }, // From
+          { y: "0%", opacity: 1, duration: 1, ease: "power2.out" } // To
         );
       }
     }
   }
 });
+
 
 
   
