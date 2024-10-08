@@ -1020,7 +1020,7 @@ function collapseItem(item, content) {
     gsap.to(frontIcon, { opacity: 1, duration: 0.3 });
     gsap.to(backIcon, { opacity: 0, duration: 0. });
     target.appendChild(zone);
-    Flip.from(flipState, { duration: 0.3 });
+    Flip.from(flipState, { duration: 0.2 });
 
     gsap.to(content, {
         height: 0, duration: 0.5, onStart: () => {
