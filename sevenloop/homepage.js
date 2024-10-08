@@ -1226,12 +1226,19 @@ document.querySelectorAll("[data-nav-change]").forEach((element) => {
 });
 
 function animateGradient(element) {
+  // Reset the CSS variables to start from 0%
+  gsap.set(element, {
+    "--start-position": "0%",
+    "--end-position": "0%"
+  });
+
+  // Then animate the gradient
   gsap.to(element, {
     duration: 10,
     "--start-position": "100%",
     "--end-position": "100%",
     ease: "none",
-    clearProps: "--start-position, --end-position" // Resets properties after animation
+    clearProps: "--start-position, --end-position" // Reset the properties after the animation
   });
 }
 
