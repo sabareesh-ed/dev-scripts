@@ -761,35 +761,49 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Function to animate content in the active slide using GSAP
-  function animateActiveSlide() {
-    // Select the active slide
-    const activeSlide = document.querySelector('.testimonial_slider_slide.swiper-slide-active ');
+function animateActiveSlide() {
+  // Select the active slide
+  const activeSlide = document.querySelector('.swiper-slide-active .testimonial_slider_slide');
 
-    if (activeSlide) {
-      // Find the elements within the active slide to animate
-      const testimonialCopy = activeSlide.querySelector(".testimonial_copy");
-      const testimonialName = activeSlide.querySelector(".testimonial_client_name");
-      const testimonialCompany = activeSlide.querySelector(".testimonial_client_company");
+  if (activeSlide) {
+    // Find the elements within the active slide to animate
+    const testimonialCopy = activeSlide.querySelector(".testimonial_copy");
+    const testimonialName = activeSlide.querySelector(".testimonial_client_name");
+    const testimonialCompany = activeSlide.querySelector(".testimonial_client_company");
 
-      if (testimonialCopy && testimonialName && testimonialCompany) {
-        // GSAP animation for sliding in and fading in
-        gsap.fromTo(testimonialCopy, 
-          { y: "100%", opacity: 0 }, // Initial state (off-screen)
-          { y: "0%", opacity: 1, duration: 0.75, ease: "power3.out" } // Final state (on-screen)
-        );
+    // Set initial state (y: 100%, opacity: 0) before animating
+    if (testimonialCopy && testimonialName && testimonialCompany) {
+      gsap.set([testimonialCopy, testimonialName, testimonialCompany], {
+        y: "100%",
+        opacity: 0
+      });
 
-        gsap.fromTo(testimonialName, 
-          { y: "100%", opacity: 0 }, 
-          { y: "0%", opacity: 1, duration: 0.75, ease: "power3.out", delay: 0.1 } // Staggered effect
-        );
+      // GSAP animation for sliding in and fading in
+      gsap.to(testimonialCopy, { 
+        y: "0%", 
+        opacity: 1, 
+        duration: 0.75, 
+        ease: "power3.out" 
+      });
 
-        gsap.fromTo(testimonialCompany, 
-          { y: "100%", opacity: 0 }, 
-          { y: "0%", opacity: 1, duration: 0.75, ease: "power3.out", delay: 0.2 } // Staggered effect
-        );
-      }
+      gsap.to(testimonialName, { 
+        y: "0%", 
+        opacity: 1, 
+        duration: 0.75, 
+        ease: "power3.out", 
+        delay: 0.1 // Staggered effect
+      });
+
+      gsap.to(testimonialCompany, { 
+        y: "0%", 
+        opacity: 1, 
+        duration: 0.75, 
+        ease: "power3.out", 
+        delay: 0.2 // Staggered effect
+      });
     }
   }
+}
 });
 
 
