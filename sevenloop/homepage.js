@@ -751,43 +751,72 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // Function to animate content in (from y: 100% to y: 0%)
+  // Function to animate content in using GSAP
   function animateContentIn() {
     const testimonialCopy = document.querySelector(".testimonial_copy");
     const testimonialName = document.querySelector(".testimonial_client_name");
     const testimonialCompany = document.querySelector(".testimonial_client_company");
 
     if (testimonialCopy && testimonialName && testimonialCompany) {
-      testimonialCopy.style.transform = "translateY(0)";
-      testimonialCopy.style.opacity = "1";
-      
-      testimonialName.style.transform = "translateY(0)";
-      testimonialName.style.opacity = "1";
+      // GSAP animation for sliding in and fading in
+      gsap.to(testimonialCopy, { 
+        y: 0, 
+        opacity: 1, 
+        duration: 0.5, 
+        ease: "power3.out" 
+      });
 
-      testimonialCompany.style.transform = "translateY(0)";
-      testimonialCompany.style.opacity = "1";
+      gsap.to(testimonialName, { 
+        y: 0, 
+        opacity: 1, 
+        duration: 0.5, 
+        ease: "power3.out", 
+        delay: 0.1 // slight delay for staggered effect
+      });
+
+      gsap.to(testimonialCompany, { 
+        y: 0, 
+        opacity: 1, 
+        duration: 0.5, 
+        ease: "power3.out", 
+        delay: 0.2 // staggered effect
+      });
     }
   }
 
-  // Function to animate content out (from y: 0% to y: 100%)
+  // Function to animate content out using GSAP
   function animateContentOut() {
     const testimonialCopy = document.querySelector(".testimonial_copy");
     const testimonialName = document.querySelector(".testimonial_client_name");
     const testimonialCompany = document.querySelector(".testimonial_client_company");
 
     if (testimonialCopy && testimonialName && testimonialCompany) {
-      testimonialCopy.style.transform = "translateY(100%)";
-      testimonialCopy.style.opacity = "0";
-      
-      testimonialName.style.transform = "translateY(100%)";
-      testimonialName.style.opacity = "0";
+      // GSAP animation for sliding out and fading out
+      gsap.to(testimonialCopy, { 
+        y: "100%", 
+        opacity: 0, 
+        duration: 0, 
+        ease: "power3.in" 
+      });
 
-      testimonialCompany.style.transform = "translateY(100%)";
-      testimonialCompany.style.opacity = "0";
+      gsap.to(testimonialName, { 
+        y: "100%", 
+        opacity: 0, 
+        duration: 0, 
+        ease: "power3.in", 
+        delay: 0.1 // slight delay for staggered effect
+      });
+
+      gsap.to(testimonialCompany, { 
+        y: "100%", 
+        opacity: 0, 
+        duration: 0, 
+        ease: "power3.in", 
+        delay: 0.2 // staggered effect
+      });
     }
   }
 });
-
 
 
 
