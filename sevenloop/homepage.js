@@ -1,7 +1,16 @@
 
 
 
+document.addEventListener("DOMContentLoaded", function () {
+  const heroHeaders = document.querySelectorAll(".hero_header");
+
+  heroHeaders.forEach((header) => {
+    header.style.opacity = "1";
+  });
+});
+
 document.addEventListener("DOMContentLoaded", (event) => {
+  console.log("test");
   gsap.registerPlugin(ScrollTrigger);
 
   function animateMaskedSlideUp() {
