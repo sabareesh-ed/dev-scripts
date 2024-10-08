@@ -1032,32 +1032,36 @@ function collapseItem(item, content) {
 }
 
 function expandItem(item, content, zone, host, frontIcon, backIcon, dropPathArrow) {
-    gsap.set(content, { height: "auto" });
-    const targetHeight = content.clientHeight;
+  gsap.set(content, { height: "auto" });
+  const targetHeight = content.clientHeight;
 
-    const timeline = gsap.timeline({
-        defaults: { duration: 0.5 },
-        onComplete: () => {
-            content.style.overflow = "visible";
-            item.style.color = "var(--swatch--brand)";
-        }
-    });
+  const timeline = gsap.timeline({
+      defaults: { duration: 0.5 },
+      onComplete: () => {
+          content.style.overflow = "visible";
+          item.style.color = "var(--swatch--brand)";
+      }
+  });
 
-    timeline
-        .set(content, { height: 0 }) // Reset height to 0 to animate from closed state
-        .to(content, { height: targetHeight, onComplete: () => {
-            // Trigger Flip animation right after content reaches full height
-            const flipState = Flip.getState(zone);
-            host.appendChild(zone);
-            Flip.from(flipState, {
-                duration: 0.5,
-                onComplete: () => {
-                    gsap.to(frontIcon, { opacity: 0, duration: 0.3 });
-                    gsap.to(backIcon, { opacity: 1, duration: 0.3 });
-                }
-            });
-        }})
-        .to(dropPathArrow, { rotation: 180 }, "<");
+  timeline
+      .set(content, { height: 0 }) // Reset height to 0 to animate from closed state
+      .to(content, { height: targetHeight, onComplete: () => {
+          // Start Flip and icon opacity transitions together
+          const flipState = Flip.getState(zone);
+          host.appendChild(zone);
+          Flip.from(flipState, {
+              duration: 0.5,
+              ease: "power1.inOut",
+              onComplete: () => {
+                  // Additional actions after Flip transition, if necessary
+              }
+          });
+
+          // Synchronize icon opacity changes with the Flip animation
+          gsap.to(frontIcon, { opacity: 0, duration: 0.5 });
+          gsap.to(backIcon, { opacity: 1, duration: 0.5 });
+      }})
+      .to(dropPathArrow, { rotation: 180 }, "<");
 }
 
 
