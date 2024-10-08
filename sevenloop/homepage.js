@@ -715,8 +715,8 @@ document.addEventListener('DOMContentLoaded', function () {
         // Return the SVG as a bullet with a wrapper span for the className
         return `
           <span class="${className}">
-            <svg width="16" height="19" viewBox="0 0 16 19" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3.3306 17.2345C1.81695 16.3606 0.930622 14.6798 0.75196 12.6266C0.573382 10.5743 1.10668 8.1741 2.40788 5.92034C3.70909 3.66658 5.52111 2.00462 7.3877 1.13314C9.25519 0.261251 11.154 0.188434 12.6676 1.06234C14.1813 1.93625 15.0676 3.61704 15.2463 5.67028C15.4248 7.72253 14.8915 10.1228 13.5903 12.3765C12.2891 14.6303 10.4771 16.2922 8.61051 17.1637C6.74303 18.0356 4.84425 18.1084 3.3306 17.2345Z" stroke="#FF4500" stroke-width="0.75"/>
+            <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3.3306 17.2345C1.81695 16.3606 0.930622 14.6798 0.75196 12.6266C0.573382 10.5743 1.10668 8.1741 2.40788 5.92034C3.70909 3.66658 5.52111 2.00462 7.3877 1.13314C9.25519 0.261251 11.154 0.188434 12.6676 1.06234C14.1813 1.93625 15.0676 3.61704 15.2463 5.67028C15.4248 7.72253 14.8915 10.1228 13.5903 12.3765C12.2891 14.6303 10.4771 16.2922 8.61051 17.1637C6.74303 18.0356 4.84425 18.1084 3.3306 17.2345Z" stroke="#FF4500" stroke-width="0.5"/>
             </svg>
           </span>
         `;
@@ -761,37 +761,36 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Function to animate content in the active slide using GSAP
-function animateActiveSlide() {
-  // Select the active slide
-  const activeSlide = document.querySelector('.swiper-slide-active .testimonial_slider_slide');
+  function animateActiveSlide() {
+    // Select the active slide
+    const activeSlide = document.querySelector('.swiper-slide-active .testimonial_slider_slide');
 
-  if (activeSlide) {
-    // Find the elements within the active slide to animate
-    const testimonialCopy = activeSlide.querySelector(".testimonial_copy");
-    const testimonialName = activeSlide.querySelector(".testimonial_client_name");
-    const testimonialCompany = activeSlide.querySelector(".testimonial_client_company");
+    if (activeSlide) {
+      // Find the elements within the active slide to animate
+      const testimonialCopy = activeSlide.querySelector(".testimonial_copy");
+      const testimonialName = activeSlide.querySelector(".testimonial_client_name");
+      const testimonialCompany = activeSlide.querySelector(".testimonial_client_company");
 
-    if (testimonialCopy && testimonialName && testimonialCompany) {
-      // GSAP animation for sliding in and fading in
-      gsap.fromTo(testimonialCopy, 
-        { y: "100%", opacity: 0 }, // Initial state (off-screen)
-        { y: "0%", opacity: 1, duration: 0.75, ease: "power3.out", delay: 0 } // Final state (on-screen), starts immediately
-      ,0);
-    
-      gsap.fromTo(testimonialName, 
-        { y: "100%", opacity: 0 }, 
-        { y: "0%", opacity: 1, duration: 0.75, ease: "power3.out", delay: 0.1 } // Staggered effect with 0.1s delay
-      ,0);
-    
-      gsap.fromTo(testimonialCompany, 
-        { y: "100%", opacity: 0 }, 
-        { y: "0%", opacity: 1, duration: 0.75, ease: "power3.out", delay: 0.2 } // Staggered effect with 0.2s delay
-      ,0);
-    }    
+      if (testimonialCopy && testimonialName && testimonialCompany) {
+        // GSAP animation for sliding in and fading in
+        gsap.fromTo(testimonialCopy, 
+          { y: "100%", opacity: 0 }, // Initial state (off-screen)
+          { y: "0%", opacity: 1, duration: 0.75, ease: "power3.out" } // Final state (on-screen)
+        ,0 );
+
+        gsap.fromTo(testimonialName, 
+          { y: "100%", opacity: 0 }, 
+          { y: "0%", opacity: 1, duration: 0.75, ease: "power3.out", delay: 0.1 } // Staggered effect
+        ,0 );
+
+        gsap.fromTo(testimonialCompany, 
+          { y: "100%", opacity: 0 }, 
+          { y: "0%", opacity: 1, duration: 0.75, ease: "power3.out", delay: 0.2 } // Staggered effect
+        ,0 );
+      }
+    }
   }
-}
 });
-
 
 
   
