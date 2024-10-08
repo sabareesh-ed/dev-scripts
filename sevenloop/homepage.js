@@ -1162,3 +1162,23 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   }
 });
+
+
+gsap.registerPlugin(ScrollTrigger);
+
+// Store the initial font color
+const initialFontColor = getComputedStyle(document.querySelector("[data-nav]")).color;
+
+// Select all elements with `[data-nav-change]`
+document.querySelectorAll("[data-nav-change]").forEach((element) => {
+  gsap.to("[data-nav]", {
+    color: "var(--swatch--light-secondary)",
+    duration: 0.3,
+    scrollTrigger: {
+      trigger: element,
+      start: "top 30%", // Start when the top of `data-nav-change` reaches 30% of the viewport
+      end: "bottom top", // End when the bottom of `data-nav-change` reaches the top of the viewport
+      toggleActions: "play reverse play reverse", // Controls animation actions on enter, leave, enter back, and leave back
+    }
+  });
+});
