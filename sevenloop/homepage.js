@@ -1222,24 +1222,14 @@ document.querySelectorAll("[data-nav-change]").forEach((element) => {
 });
 
 
-// GSAP animation
 gsap.to(".service_tab_link.swiper-slide-active", {
   duration: 10, // duration of the animation
-  backgroundPosition: "100% 0%", // animate the gradient background position
-  ease: "power1.inOut", // easing function
-  onStart: function() {
-    // Set initial state for the background gradient
-    gsap.set(".service_tab_link.swiper-slide-active", {
-      backgroundImage: "linear-gradient(90deg, var(--swatch--brand) 0%, var(--swatch--light-secondary) 0%)"
-    });
-  },
+  backgroundPosition: "100%", // animate the gradient stop position to 100%
+  ease: "power1.inOut",
   onUpdate: function() {
-    // Optionally, you can track progress here if needed
-  },
-  onComplete: function() {
-    // Ensure final state after animation completes
-    gsap.set(".service_tab_link.swiper-slide-active", {
-      backgroundImage: "linear-gradient(90deg, var(--swatch--brand) 100%, var(--swatch--light-secondary) 100%)"
-    });
+    let percentage = gsap.getProperty(".service_tab_link.swiper-slide-active", "backgroundPosition"); 
+    document.querySelector(".service_tab_link.swiper-slide-active").style.background = 
+      `linear-gradient(90deg, var(--swatch--brand) ${percentage}, var(--swatch--light-secondary) ${percentage}) border-box`;
   }
 });
+
