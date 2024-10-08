@@ -729,6 +729,7 @@ document.addEventListener('DOMContentLoaded', function () {
       init: function () {
         resetProgressBar(); // Reset progress bar initially
         startProgressBar(); // Start progress bar on initialization
+        setInitialAnimationState(); // Set initial GSAP animation state
         animateActiveSlide(); // Animate elements on the initial active slide
       },
       slideChangeTransitionStart: function () {
@@ -759,6 +760,22 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  // Function to set initial animation state for GSAP
+  function setInitialAnimationState() {
+    // Select all the testimonial elements (name, company, copy)
+    const testimonialSlides = document.querySelectorAll('.testimonial_slider_slide');
+    testimonialSlides.forEach(slide => {
+      const name = slide.querySelector('.testimonial_client_name');
+      const company = slide.querySelector('.testimonial_client_company');
+      const copy = slide.querySelector('.testimonial_copy');
+
+      // Use GSAP to set the initial y position to 100% and opacity to 0
+      if (name && company && copy) {
+        gsap.set([name, company, copy], { y: "100%", opacity: 0 });
+      }
+    });
+  }
+
   // Function to animate elements in the active slide using GSAP
   function animateActiveSlide() {
     const activeSlide = document.querySelector('.testimonial_slider_slide.swiper-slide-active');
@@ -777,6 +794,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 });
+
 
 
 
