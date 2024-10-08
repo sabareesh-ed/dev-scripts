@@ -738,14 +738,15 @@ document.addEventListener('DOMContentLoaded', function () {
       init: function () {
         resetProgressBar(); // Reset progress bar initially
         startProgressBar(); // Start progress bar on initialization
+        resetAnimationState(); // Reset animation state for all slides
         animateActiveSlide(); // Animate elements on the initial active slide
       },
       slideChangeTransitionStart: function () {
         resetProgressBar(); // Reset progress bar at the start of slide change
+        resetAnimationState(); // Reset animation state for all slides
       },
       slideChangeTransitionEnd: function () {
         startProgressBar(); // Restart progress bar after slide transition
-        resetAnimationState(); // Reset GSAP animation state for the new active slide
         animateActiveSlide(); // Animate elements in the new active slide
       },
     }
@@ -769,19 +770,19 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // Function to reset animation state for the active slide
+  // Function to reset animation state for all slides
   function resetAnimationState() {
-    const activeSlide = document.querySelector('.testimonial_slider_slide.swiper-slide-active');
-    if (activeSlide) {
-      const name = activeSlide.querySelector('.testimonial_client_name');
-      const company = activeSlide.querySelector('.testimonial_client_company');
-      const copy = activeSlide.querySelector('.testimonial_copy');
+    const testimonialSlides = document.querySelectorAll('.testimonial_slider_slide');
+    testimonialSlides.forEach(slide => {
+      const name = slide.querySelector('.testimonial_client_name');
+      const company = slide.querySelector('.testimonial_client_company');
+      const copy = slide.querySelector('.testimonial_copy');
 
-      // Reset animation state for the active slide
+      // Reset all slides (non-active) to y: 100% and opacity: 0 without animation
       if (name && company && copy) {
-        gsap.set([name, company, copy], { y: "100%", opacity: 0 } ,0);
+        gsap.set([name, company, copy], { y: "100%", opacity: 0, duration: 0 });
       }
-    }
+    });
   }
 
   // Function to animate elements in the active slide using GSAP
@@ -792,12 +793,12 @@ document.addEventListener('DOMContentLoaded', function () {
       const company = activeSlide.querySelector('.testimonial_client_company');
       const copy = activeSlide.querySelector('.testimonial_copy');
 
-      // Animate elements from y: 100% to y: 0%
+      // Animate elements from y: 100% to y: 0% with duration
       if (name && company && copy) {
         gsap.fromTo([name, company, copy], 
           { y: "100%", opacity: 0 }, // From
           { y: "0%", opacity: 1, duration: 1, ease: "power2.out"}  // To
-         );
+        );
       }
     }
   }
