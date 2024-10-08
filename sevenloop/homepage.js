@@ -760,22 +760,35 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Function to animate elements in the active slide using GSAP
-  function animateActiveSlide() {
-    const activeSlide = document.querySelector('.testimonial_slider_slide.swiper-slide-active');
-    if (activeSlide) {
-      const name = activeSlide.querySelector('.testimonial_client_name');
-      const company = activeSlide.querySelector('.testimonial_client_company');
-      const copy = activeSlide.querySelector('.testimonial_copy');
+function animateActiveSlide() {
+  const allSlides = document.querySelectorAll('.testimonial_slider_slide');
 
-      // Animate elements from y: 100% to y: 0%
+  allSlides.forEach((slide) => {
+    const name = slide.querySelector('.testimonial_client_name');
+    const company = slide.querySelector('.testimonial_client_company');
+    const copy = slide.querySelector('.testimonial_copy');
+
+    if (slide.classList.contains('swiper-slide-active')) {
+      // Forward animation for active slide (y: 100% to y: 0%)
       if (name && company && copy) {
         gsap.fromTo([name, company, copy], 
           { y: "100%", opacity: 0 }, // From
-          { y: "0%", opacity: 1, duration: 1, ease: "power2.out" } ,0 // To
+          { y: "0%", opacity: 1, duration: 1, ease: "power2.out" }, // To
+          0
+        );
+      }
+    } else {
+      // Reverse animation for non-active slides (y: 0% to y: 100%)
+      if (name && company && copy) {
+        gsap.fromTo([name, company, copy], 
+          { y: "0%", opacity: 1 }, // From
+          { y: "100%", opacity: 0, duration: 0 }, // To
+          0
         );
       }
     }
-  }
+  });
+}
 });
 
 
