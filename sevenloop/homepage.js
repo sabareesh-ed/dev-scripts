@@ -771,8 +771,8 @@ document.addEventListener('DOMContentLoaded', function () {
       if (name && company && copy) {
         gsap.fromTo([name, company, copy], 
           { y: "100%", opacity: 0 }, // From
-          { y: "0%", opacity: 1, duration: 1, ease: "power2.out" }  // To
-        );
+          { y: "0%", opacity: 1, duration: 1, ease: "power2.out"}  // To
+        ,0);
       }
     }
   }
