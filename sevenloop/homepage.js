@@ -789,7 +789,7 @@ document.addEventListener('DOMContentLoaded', function () {
         gsap.fromTo([name, company, copy], 
           { y: "100%", opacity: 0 }, // From
           { y: "0%", opacity: 1, duration: 1, ease: "power2.out"}  // To
-        ,0 );
+        );
       }
     }
   }
