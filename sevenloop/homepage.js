@@ -1017,8 +1017,8 @@ function collapseItem(item, content) {
     const dropPathArrow = item.querySelector('.drop_path_arrow');
     const flipState = Flip.getState(zone);
 
-    gsap.to(frontIcon, { opacity: 1, duration: 0.5 });
-    gsap.to(backIcon, { opacity: 0, duration: 0.5 });
+    gsap.to(frontIcon, { opacity: 1, duration: 0.3 });
+    gsap.to(backIcon, { opacity: 0, duration: 0.3 });
     target.appendChild(zone);
     Flip.from(flipState, { duration: 0.3 });
 
@@ -1052,8 +1052,8 @@ function expandItem(item, content, zone, host, frontIcon, backIcon, dropPathArro
             Flip.from(flipState, {
                 duration: 0.5,
                 onComplete: () => {
-                    gsap.to(frontIcon, { opacity: 0, duration: 0.5 });
-                    gsap.to(backIcon, { opacity: 1, duration: 0.5 });
+                    gsap.to(frontIcon, { opacity: 0, duration: 0.3 });
+                    gsap.to(backIcon, { opacity: 1, duration: 0.3 });
                 }
             });
         }})
