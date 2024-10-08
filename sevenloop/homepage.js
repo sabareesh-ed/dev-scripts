@@ -763,7 +763,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Function to animate content in the active slide using GSAP
   function animateActiveSlide() {
     // Select the active slide
-    const activeSlide = document.querySelector('.swiper-slide-active .testimonial_slider_slide');
+    const activeSlide = document.querySelector('.testimonial_slider_slide.swiper-slide-active ');
 
     if (activeSlide) {
       // Find the elements within the active slide to animate
