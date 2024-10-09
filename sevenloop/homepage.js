@@ -448,7 +448,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       // Desktop (default)
       992: {
         pagination: {
-          el: ".testimonial_pagination_wrap",
+          el: ".capa_pagintaion_wrap",
           clickable: true,
           renderBullet: function (index, className) {
             return `
