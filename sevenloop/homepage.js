@@ -412,83 +412,67 @@ document.addEventListener("DOMContentLoaded", (event) => {
   animateScrollWidth();
 });
 
-const swiper1 = new Swiper(".swiper1", {
-  direction: "horizontal",
-  loop: false,
-  spaceBetween: 2,
-  speed: 500,
-  slidesPerView: 1, // Default for mobile and tablet
-  slidesPerGroup: 1, // Default for mobile and tablet
-  centeredSlides: false,
-  allowTouchMove: true, // Ensure touch support on all devices
-  keyboard: {
-    enabled: true,
-    onlyInViewport: true,
-  },
-  navigation: {
-    nextEl: ".capa_button_next",
-    prevEl: ".capa_button_prev",
-  },
-  pagination: {
-    el: ".capa_slider_component .swiper-pagination",
-    type: "fraction", // Default for mobile and tablet
-  },
-  a11y: {
-    enabled: true,
-    prevSlideMessage: 'Previous slide',
-    nextSlideMessage: 'Next slide',
-  },
-  breakpoints: {
-    // For tablets (768px and below)
-    768: {
-      slidesPerView: 1, // Show 1 slide per view on tablet
-      slidesPerGroup: 1, // Move 1 slide per swipe on tablet
-      pagination: {
-        el: ".capa_slider_component .swiper-pagination",
-        type: "fraction", // Use fraction pagination for mobile and tablet
-      },
-    },
-    // Desktop (992px and above)
-    992: {
-      slidesPerView: 2, // Show 2 slides per view on desktop
-      slidesPerGroup: 2, // Move 2 slides per swipe on desktop
-      pagination: {
-        el: ".capa_pagintaion_wrap", // Adjust pagination container for desktop
-        clickable: true, // Make bullets clickable on desktop
-        type: "bullets", // Use bullet pagination for desktop
-        renderBullet: function (index, className) {
-          return `
-            <span class="${className}">
-              <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3.3306 17.2345C1.81695 16.3606 0.930622 14.6798 0.75196 12.6266C0.573382 10.5743 1.10668 8.1741 2.40788 5.92034C3.70909 3.66658 5.52111 2.00462 7.3877 1.13314C9.25519 0.261251 11.154 0.188434 12.6676 1.06234C14.1813 1.93625 15.0676 3.61704 15.2463 5.67028C15.4248 7.72253 14.8915 10.1228 13.5903 12.3765C12.2891 14.6303 10.4771 16.2922 8.61051 17.1637C6.74303 18.0356 4.84425 18.1084 3.3306 17.2345Z" stroke="#FF4500" stroke-opacity="0.7" stroke-width="0.5"/>
-              </svg>
-            </span>
-          `;
-        }
-      },
-    },
-  },
-  on: {
-    // Remove unwanted margins after initialization
-    init: function () {
-      document.querySelector(".swiper1").style.marginLeft = "0";
-      document.querySelector(".swiper1").style.marginRight = "0";
+let swiper1;
 
-      // Check button opacity when swiper initializes
-      toggleButtonOpacity(this);
+function initSwiper() {
+  swiper1 = new Swiper(".swiper1", {
+    direction: "horizontal",
+    loop: false,
+    spaceBetween: 2,
+    speed: 500,
+    slidesPerView: 1, // Default for mobile and tablet
+    slidesPerGroup: 1, // Default for mobile and tablet
+    centeredSlides: false,
+    allowTouchMove: true, // Ensure touch support on all devices
+    keyboard: {
+      enabled: true,
+      onlyInViewport: true,
     },
-    // Adjust button opacity on each slide change
-    slideChange: function () {
-      toggleButtonOpacity(this);
+    navigation: {
+      nextEl: ".capa_button_next",
+      prevEl: ".capa_button_prev",
     },
-    // Force swiper to refresh after window resize
-    resize: function () {
-      this.update(); // Update the swiper instance on resize
-      this.pagination.render(); // Ensure pagination is re-rendered correctly
-      this.pagination.update(); // Force pagination to refresh based on the current breakpoint
-    }
-  },
-});
+    pagination: {
+      el: ".capa_slider_component .swiper-pagination",
+      type: window.innerWidth >= 992 ? "bullets" : "fraction", // Choose type based on initial viewport width
+      clickable: window.innerWidth >= 992, // Only make pagination clickable for desktop
+      renderBullet: function (index, className) {
+        return `
+          <span class="${className}">
+            <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3.3306 17.2345C1.81695 16.3606 0.930622 14.6798 0.75196 12.6266C0.573382 10.5743 1.10668 8.1741 2.40788 5.92034C3.70909 3.66658 5.52111 2.00462 7.3877 1.13314C9.25519 0.261251 11.154 0.188434 12.6676 1.06234C14.1813 1.93625 15.0676 3.61704 15.2463 5.67028C15.4248 7.72253 14.8915 10.1228 13.5903 12.3765C12.2891 14.6303 10.4771 16.2922 8.61051 17.1637C6.74303 18.0356 4.84425 18.1084 3.3306 17.2345Z" stroke="#FF4500" stroke-opacity="0.7" stroke-width="0.5"/>
+            </svg>
+          </span>
+        `;
+      }
+    },
+    a11y: {
+      enabled: true,
+      prevSlideMessage: 'Previous slide',
+      nextSlideMessage: 'Next slide',
+    },
+    breakpoints: {
+      768: {
+        slidesPerView: 1, // Show 1 slide per view on tablet
+        slidesPerGroup: 1, // Move 1 slide per swipe on tablet
+      },
+      992: {
+        slidesPerView: 2, // Show 2 slides per view on desktop
+        slidesPerGroup: 2, // Move 2 slides per swipe on desktop
+      },
+    },
+    on: {
+      init: function () {
+        document.querySelector(".swiper1").style.marginLeft = "0";
+        document.querySelector(".swiper1").style.marginRight = "0";
+        toggleButtonOpacity(this);
+      },
+      slideChange: function () {
+        toggleButtonOpacity(this);
+      },
+    },
+  });
+}
 
 // Function to toggle button opacity
 function toggleButtonOpacity(swiper) {
@@ -509,6 +493,18 @@ function toggleButtonOpacity(swiper) {
     nextButton.style.opacity = "1"; // Restore opacity
   }
 }
+
+// Initialize Swiper
+initSwiper();
+
+// Add resize event listener to reinitialize Swiper on window resize
+window.addEventListener("resize", function () {
+  // Destroy existing Swiper instance
+  if (swiper1) swiper1.destroy(true, true);
+
+  // Re-initialize Swiper with the new configuration based on window size
+  initSwiper();
+});
 
 
   
