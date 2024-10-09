@@ -1,36 +1,3 @@
-document.addEventListener("DOMContentLoaded", function() {
-  const body = document.body;
-  const preloader = document.querySelector('.page_visual_wrap');
-  const preloaderVideo = preloader.querySelector('video');
-  const heroContainer = document.querySelector('.hero_visual_wrap');
-  const heroVideo = heroContainer.querySelector('video');
-
-  // Initially disable scroll
-  body.classList.add('u-overflow-hidden');
-
-  // Ensure video starts playing only after it is fully loaded
-  preloaderVideo.addEventListener('canplaythrough', function() {
-      preloaderVideo.play();
-      preloaderVideo.playbackRate = 6; // Set playback rate to 2x
-  });
-
-  // Function to fade out and then hide preloader
-  function fadeOutPreloader() {
-      preloader.style.opacity = '0';
-
-      // Wait for the fade to complete before hiding the preloader
-      setTimeout(() => {
-          preloader.classList.add('u-display-none');
-          heroContainer.style.display = 'block';
-          heroVideo.play();
-          body.classList.remove('u-overflow-hidden');  // Enable scrolling
-      }, 2000); // This should match the transition duration
-  }
-
-  // Listen for the video to end or ensure it runs after 6 seconds if the video ends sooner or is interrupted
-  preloaderVideo.addEventListener('ended', fadeOutPreloader);
-  setTimeout(fadeOutPreloader, 100); // Adjusted to 6 seconds due to 2x playback rate
-});
 
 
 document.addEventListener("DOMContentLoaded", function () {
