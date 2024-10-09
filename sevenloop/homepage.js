@@ -666,8 +666,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const setInitialValues = () => {
     // Adjusting the trigger points to 90% and 20% of the viewport height
     const viewportHeight = window.innerHeight;
-    startTrigger = stickyVideoWrapper.getBoundingClientRect().top + window.scrollY - viewportHeight * 0.2; // 90% of the viewport
-    endTrigger = stickyVideoWrapper.getBoundingClientRect().top + window.scrollY - viewportHeight * 0.5; // 20% of the viewport
+    startTrigger = stickyVideoWrapper.getBoundingClientRect().top + window.scrollY - viewportHeight * 0.4; // 90% of the viewport
+    endTrigger = stickyVideoWrapper.getBoundingClientRect().top + window.scrollY - viewportHeight * 0.1; // 20% of the viewport
     containerWidth = container.offsetWidth;
   };
 
