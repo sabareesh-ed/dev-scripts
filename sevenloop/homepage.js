@@ -664,8 +664,10 @@ document.addEventListener("DOMContentLoaded", function () {
   let containerWidth = container.offsetWidth;
 
   const setInitialValues = () => {
-    startTrigger = stickyVideoWrapper.offsetTop;
-    endTrigger = startTrigger + stickyVideoWrapper.offsetHeight;
+    // Adjusting the trigger points to 90% and 20% of the viewport height
+    const viewportHeight = window.innerHeight;
+    startTrigger = stickyVideoWrapper.getBoundingClientRect().top + window.scrollY - viewportHeight * 0.9; // 90% of the viewport
+    endTrigger = stickyVideoWrapper.getBoundingClientRect().top + window.scrollY - viewportHeight * 0.2; // 20% of the viewport
     containerWidth = container.offsetWidth;
   };
 
@@ -679,7 +681,7 @@ document.addEventListener("DOMContentLoaded", function () {
         containerWidth -
         (containerWidth - (window.innerWidth * 100) / 100) * scrubProgress;
       let borderRadius = 1.5 - 1.5 * scrubProgress;
-      let height = 82 + (18 * scrubProgress); // Smooth transition from 82% to 100%
+      let height = 82 + 18 * scrubProgress; // Smooth transition from 82% to 100%
 
       videoWrapper.style.minWidth = `${minWidth}px`;
       videoWrapper.style.borderRadius = `${borderRadius}rem`;
