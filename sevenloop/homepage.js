@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Listen for the video to end or ensure it runs after 6 seconds if the video ends sooner or is interrupted
   preloaderVideo.addEventListener('ended', fadeOutPreloader);
-  setTimeout(fadeOutPreloader, 7500); // Adjusted to 6 seconds due to 2x playback rate
+  setTimeout(fadeOutPreloader, 8500); // Adjusted to 6 seconds due to 2x playback rate
 });
 
 
