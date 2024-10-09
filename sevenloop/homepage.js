@@ -434,8 +434,8 @@ function initSwiper() {
     },
     pagination: {
       el: ".capa_slider_component .swiper-pagination",
-      type: window.innerWidth >= 992 ? "bullets" : "fraction", // Choose type based on initial viewport width
-      clickable: window.innerWidth >= 992, // Only make pagination clickable for desktop
+      type: "bullets", // Use bullets pagination everywhere
+      clickable: true, // Make pagination bullets clickable
       renderBullet: function (index, className) {
         return `
           <span class="${className}">
