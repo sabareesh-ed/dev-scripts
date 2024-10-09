@@ -1250,7 +1250,7 @@ document.querySelectorAll("[data-nav-change]").forEach((element) => {
     duration: 0.3,
     scrollTrigger: {
       trigger: element,
-      start: "top 30%", // Start when the top of `data-nav-change` reaches 30% of the viewport
+      start: "top 20%", // Start when the top of `data-nav-change` reaches 30% of the viewport
       end: "bottom top", // End when the bottom of `data-nav-change` reaches the top of the viewport
       toggleActions: "play reverse play reverse", // Controls animation actions on enter, leave, enter back, and leave back
     }
