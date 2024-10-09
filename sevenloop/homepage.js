@@ -418,7 +418,7 @@ function initSwiper() {
   swiper1 = new Swiper(".swiper1", {
     direction: "horizontal",
     loop: false,
-    spaceBetween: 8,
+    spaceBetween: "auto",
     speed: 500,
     slidesPerView: 1, // Default for mobile and tablet
     slidesPerGroup: 1, // Default for mobile and tablet
@@ -454,7 +454,8 @@ function initSwiper() {
     breakpoints: {
       768: {
         slidesPerView: 1, // Show 1 slide per view on tablet
-        slidesPerGroup: 1, // Move 1 slide per swipe on tablet
+        slidesPerGroup: 1,
+        spaceBetween: 2, // Move 1 slide per swipe on tablet
       },
       992: {
         slidesPerView: 2, // Show 2 slides per view on desktop
