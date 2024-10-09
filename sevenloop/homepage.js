@@ -1003,7 +1003,7 @@ document.addEventListener('DOMContentLoaded', function () {
         autoplay: "pause",
       },
       autoScroll: {
-        speed: 10,
+        speed: 20,
       },
     }).mount(window.splide.Extensions);
   });
