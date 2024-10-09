@@ -431,7 +431,7 @@ const swiper1 = new Swiper(".swiper1", {
   },
   pagination: {
     el: ".capa_slider_component .swiper-pagination",
-    type: "fraction",
+    type: "fraction", // Default for mobile and tablet
   },
   a11y: {
     enabled: true,
@@ -443,14 +443,19 @@ const swiper1 = new Swiper(".swiper1", {
     768: {
       slidesPerView: 1, // Show 1 slide per view on tablet
       slidesPerGroup: 1, // Move 1 slide per swipe on tablet
+      pagination: {
+        el: ".capa_slider_component .swiper-pagination",
+        type: "fraction", // Use fraction pagination for mobile and tablet
+      },
     },
     // Desktop (992px and above)
     992: {
       slidesPerView: 2, // Show 2 slides per view on desktop
       slidesPerGroup: 2, // Move 2 slides per swipe on desktop
       pagination: {
-        el: ".capa_pagintaion_wrap",
-        clickable: true,
+        el: ".capa_pagintaion_wrap", // Adjust pagination container for desktop
+        clickable: true, // Make bullets clickable on desktop
+        type: "bullets", // Use bullet pagination for desktop
         renderBullet: function (index, className) {
           return `
             <span class="${className}">
