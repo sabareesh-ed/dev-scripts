@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // Ensure video starts playing only after it is fully loaded
   preloaderVideo.addEventListener('canplaythrough', function() {
       preloaderVideo.play();
-      preloaderVideo.playbackRate = 2.5; // Set playback rate to 2x
+      preloaderVideo.playbackRate = 6; // Set playback rate to 2x
   });
 
   // Function to fade out and then hide preloader
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Listen for the video to end or ensure it runs after 6 seconds if the video ends sooner or is interrupted
   preloaderVideo.addEventListener('ended', fadeOutPreloader);
-  setTimeout(fadeOutPreloader, 10000); // Adjusted to 6 seconds due to 2x playback rate
+  setTimeout(fadeOutPreloader, 100); // Adjusted to 6 seconds due to 2x playback rate
 });
 
 
