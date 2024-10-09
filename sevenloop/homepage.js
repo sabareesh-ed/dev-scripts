@@ -418,7 +418,7 @@ function initSwiper() {
   swiper1 = new Swiper(".swiper1", {
     direction: "horizontal",
     loop: false,
-    spaceBetween: auto,
+    spaceBetween: 'auto',
     speed: 500,
     slidesPerView: 1, // Default for mobile and tablet
     slidesPerGroup: 1, // Default for mobile and tablet
