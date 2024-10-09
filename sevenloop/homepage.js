@@ -517,10 +517,6 @@ const swiper2 = new Swiper(".swiper2", {
   slidesPerView: 1,
   slidesPerGroup: 1,
   effect: "fade",
-  autoplay: {
-    delay: 10000, // Delay of 10 seconds per slide
-    disableOnInteraction: false,
-  },
   fadeEffect: {
     crossFade: true,
   },
