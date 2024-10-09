@@ -481,6 +481,12 @@ const swiper1 = new Swiper(".swiper1", {
     slideChange: function () {
       toggleButtonOpacity(this);
     },
+    // Force swiper to refresh after window resize
+    resize: function () {
+      this.update(); // Update the swiper instance on resize
+      this.pagination.render(); // Ensure pagination is re-rendered correctly
+      this.pagination.update(); // Force pagination to refresh based on the current breakpoint
+    }
   },
 });
 
@@ -503,6 +509,7 @@ function toggleButtonOpacity(swiper) {
     nextButton.style.opacity = "1"; // Restore opacity
   }
 }
+
 
   
   // Initialize Swiper2 (main swiper)
